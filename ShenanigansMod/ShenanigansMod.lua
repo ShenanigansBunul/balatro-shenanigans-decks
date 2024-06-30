@@ -461,38 +461,38 @@ function end_round()
 	if G.GAME.starting_params.grosmicheldeck then
 		eligibles = {}
 		for i = 1, #G.jokers.cards do
-			eligibles[#eligibles+1] = G.jokers.cards[i]
+			if G.jokers.cards[i].config.center.key ~= "j_gros_michel" and not G.jokers.cards[i].ability.eternal then
+				eligibles[#eligibles+1] = G.jokers.cards[i]
+			end
 		end
 		for i = 1, #eligibles do
-			if eligibles[i].config.center.key ~= "j_gros_michel" then
-				local r_val = nil
-				if pseudorandom('grosmicheldeck') < G.GAME.probabilities.normal/6 then
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							play_sound('tarot1')
-							eligibles[i].T.r = -0.2
-							eligibles[i]:juice_up(0.3, 0.4)
-							eligibles[i].states.drag.is = true
-							eligibles[i].children.center.pinch.x = true
-							G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
-								func = function()
-										G.jokers:remove_card(eligibles[i])
-										eligibles[i]:remove()
-										eligibles[i] = nil
-									return true; end})) 
-							return true
-						end
-					})) 
-					r_val = {
-						message = localize('k_extinct_ex')
-					}
-				else
-					r_val = {
-						message = localize('k_safe_ex')
-					}
-				end
-				card_eval_status_text(eligibles[i], 'jokers', nil, nil, nil, r_val)
+			local r_val = nil
+			if pseudorandom('grosmicheldeck') < G.GAME.probabilities.normal/6 then
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						eligibles[i].T.r = -0.2
+						eligibles[i]:juice_up(0.3, 0.4)
+						eligibles[i].states.drag.is = true
+						eligibles[i].children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+							func = function()
+									G.jokers:remove_card(eligibles[i])
+									eligibles[i]:remove()
+									eligibles[i] = nil
+								return true; end})) 
+						return true
+					end
+				})) 
+				r_val = {
+					message = localize('k_extinct_ex')
+				}
+			else
+				r_val = {
+					message = localize('k_safe_ex')
+				}
 			end
+			card_eval_status_text(eligibles[i], 'jokers', nil, nil, nil, r_val)
 		end
 	end
 	shen_end_round()
