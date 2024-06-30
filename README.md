@@ -1,5 +1,6 @@
 # Balatro Shenanigans Mod
-This mod currently adds 12 decks to the game. You can either discover the effects yourself or read below for each deck's description.
+This mod currently adds 12 decks to the game. You can either discover the effects yourself or read below for each deck's description. Requires Steamodded v0.9.8.
+
 
  - **Dusk Deck**: -1 hand per round, but each final hand is retriggered twice
  - **Hieroglyph Deck**: Start at ante 0, but must reach ante 10 to win.
@@ -14,6 +15,8 @@ This mod currently adds 12 decks to the game. You can either discover the effect
  - **Perkeo's Deck**: At the end of each Boss Blind, triggers the Perkeo effect.
  - **Freaky Deck**: Each Joker is assigned as a 'Freaky 6', or 'Freaky 9'. After scoring, any 'Freaky 6' adjacent to a 'Freaky 9' gives 1.5x mult.
 
+
 I have begun testing the mod but not extensively, issues might appear, especially regarding higher stakes as I've only really tested them on white stake so far. I'm planning to try to reach gold stake with each deck and tweak the difficulty of any outliers.
+
 
 Some deck textures taken from https://discord.com/channels/1116389027176787968/1238654488131272729 (Dusk Deck, Gros Michel Deck, Turtle Bean Deck, all the legendary joker decks)
