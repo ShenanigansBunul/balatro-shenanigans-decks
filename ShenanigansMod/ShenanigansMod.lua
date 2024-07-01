@@ -108,7 +108,7 @@ function SMODS.INIT.ShenanigansMod()
 		["name"]="Gros Michel Deck",
 		["text"]={
 			"{C:attention}+2{} Joker slots",
-			"Each Joker has a",
+			"Each other Joker has a",
 			"{C:green}1 in 6{} chance to be",
 			"destroyed at end of round",
 			"Start with a {C:gold}Gros Michel{}" --TODO  T:j_gros_michel, figure out how to use the variables
@@ -339,6 +339,8 @@ function Back.trigger_effect(self, args)
 		end
 	elseif self.effect.config.yorickdeck and args.context == 'final_scoring_step' then
 		G.GAME.starting_params.yorickhandplayed = false
+	elseif self.effect.config.freakydeck and args.context == 'blind_amount' then
+		return 
 	elseif self.effect.config.freakydeck and args.context == 'final_scoring_step' then
 		for i = 1, #G.jokers.cards do
 			if G.jokers.cards[i].ability.freaky_six then
@@ -420,7 +422,7 @@ function Card.calculate_joker(self, context)
 	end
 	if self.ability.set == "Joker" then
 		if context.selling_self then
-			if G.GAME.starting_params.chicotdeck then
+			if G.GAME.starting_params.chicotdeck and G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss')) then
 				card_eval_status_text(self, 'extra', nil, nil, nil, {message = localize('ph_boss_disabled')})
                 G.GAME.blind:disable()
 			end
@@ -449,7 +451,7 @@ end
 
 local shen_draw_from_deck_to_hand = G.FUNCS.draw_from_deck_to_hand
 function G.FUNCS.draw_from_deck_to_hand(e)
-	if G.GAME.starting_params.snakeskindeck and (G.GAME.current_round.hands_played > 0 or G.GAME.current_round.discards_used > 0) then
+	if G.GAME.starting_params.snakeskindeck and (G.GAME.current_round.hands_played > 0 or G.GAME.current_round.discards_used > 0) and not G.booster_pack then
 		shen_draw_from_deck_to_hand(3)
 	else
 		shen_draw_from_deck_to_hand(e)
