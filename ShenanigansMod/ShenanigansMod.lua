@@ -51,12 +51,11 @@ function SMODS.INIT.ShenanigansMod()
 		}
 	}
 
-	local yorickdeck_def = { --WIP, currently only works with purple seals, TODO think of different effect maybe
+	local yorickdeck_def = {
 		["name"]="Yorick's Deck",
 		["text"]={
-			"Played cards trigger",
-			"their discard effects,",
-			"start with a {C:spectral,T:c_medium}Medium{} card"
+			"Discarded cards trigger",
+			"their end of round effects"
 		}
 	}
 
@@ -153,7 +152,7 @@ function SMODS.INIT.ShenanigansMod()
 	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
 	{x = 0, y = 0}, chicotdeck_def)
 	local yorickdeck = SMODS.Deck:new("Yorick's Deck", "yorickdeck", {atlas = "spryorickdeck", yorickdeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0, consumables = {'c_medium'}},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
 	{x = 0, y = 0}, yorickdeck_def)
 	local caniodeck = SMODS.Deck:new("Canio's Deck", "caniodeck", {atlas = "sprcaniodeck", caniodeck = true,
 	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
@@ -294,7 +293,6 @@ function Back.apply_to_run(self)
 		}))
 	elseif self.effect.config.yorickdeck then
 		G.GAME.starting_params.yorickdeck = self.effect.config.yorickdeck
-		G.GAME.starting_params.yorickhandplayed = false
 	elseif self.effect.config.showmandeck then
 		G.GAME.starting_params.showmandeck = self.effect.config.showmandeck
 	elseif self.effect.config.snakeskindeck then
@@ -323,40 +321,45 @@ end
 local shen_Backtriggereffect = Back.trigger_effect
 function Back.trigger_effect(self, args)
 	local nu_chip, nu_mult = shen_Backtriggereffect(self, args)
-	if self.effect.config.turtlebeandeck and args.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss and G.GAME.starting_params.bean_counter < 5 then
-		G.hand:change_size(-1)
-		G.GAME.starting_params.bean_counter = G.GAME.starting_params.bean_counter + 1
-	elseif self.effect.config.perkeodeck and args.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
-		if G.consumeables.cards[1] then
-			G.E_MANAGER:add_event(Event({
-				func = function() 
-					local card = copy_card(pseudorandom_element(G.consumeables.cards, pseudoseed('perkeo_deck')), nil)
-					card:set_edition({negative = true}, true)
-					card:add_to_deck()
-					G.consumeables:emplace(card) 
-					return true
-				end}))
+	if args.context == 'eval' then
+		if self.effect.config.turtlebeandeck and G.GAME.last_blind and G.GAME.last_blind.boss and G.GAME.starting_params.bean_counter < 5 then
+			G.hand:change_size(-1)
+			G.GAME.starting_params.bean_counter = G.GAME.starting_params.bean_counter + 1
+		elseif self.effect.config.perkeodeck and G.GAME.last_blind and G.GAME.last_blind.boss then
+			if G.consumeables.cards[1] then
+				G.E_MANAGER:add_event(Event({
+					func = function() 
+						local card = copy_card(pseudorandom_element(G.consumeables.cards, pseudoseed('perkeo_deck')), nil)
+						card:set_edition({negative = true}, true)
+						card:add_to_deck()
+						G.consumeables:emplace(card) 
+						return true
+					end}))
+			end
 		end
-	elseif self.effect.config.yorickdeck and args.context == 'final_scoring_step' then
-		G.GAME.starting_params.yorickhandplayed = false
-	elseif self.effect.config.freakydeck and args.context == 'blind_amount' then
-		return 
-	elseif self.effect.config.freakydeck and args.context == 'final_scoring_step' then
-		for i = 1, #G.jokers.cards do
-			if G.jokers.cards[i].ability.freaky_six then
-				if i < #G.jokers.cards then
-					if G.jokers.cards[i+1].ability.freaky_nine then
-						card_eval_status_text(G.jokers.cards[i], 'jokers', nil, nil, nil, {
-							message = "Freaky!"
-						})
-						card_eval_status_text(G.jokers.cards[i+1], 'x_mult', 1.5, nil, nil, {
-							message = "Freaky!"
-						})
-						args.mult = args.mult * 1.5
-						update_hand_text({delay = 0}, {mult = args.mult, chips = args.chips})
+	elseif args.context == 'final_scoring_step' then
+		if self.effect.config.freakydeck then
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i].ability.freaky_six then
+					if i < #G.jokers.cards then
+						if G.jokers.cards[i+1].ability.freaky_nine then
+							card_eval_status_text(G.jokers.cards[i], 'jokers', nil, nil, nil, {
+								message = "Freaky!"
+							})
+							card_eval_status_text(G.jokers.cards[i+1], 'x_mult', 1.5, nil, nil, {
+								message = "Freaky!"
+							})
+							args.mult = args.mult * 1.5
+							update_hand_text({delay = 0}, {mult = args.mult, chips = args.chips})
+							nu_mult = args.mult
+						end
 					end
 				end
 			end
+		end
+	elseif args.context == 'blind_amount' then
+		if self.effect.config.freakydeck then
+			return
 		end
 	end
 	return nu_chip, nu_mult
@@ -364,39 +367,7 @@ end
 
 local shen_common_events_createcard = create_card
 function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-	local r_val
-	if G.GAME.starting_params.showmandeck and forced_key == nil then
-		if pseudorandom('showmandeck') < 1/9 then
-			if _type == 'Joker' and #G.jokers.cards > 0 then
-				local dupes = {}
-				for i = 1, #G.jokers.cards do
-					if G.jokers.cards[i].config.center.set == _type and (_rarity == 0 or _rarity == nil or G.jokers.cards[i].config.center.rarity == _rarity) then
-						dupes[#dupes+1] = G.jokers.cards[i]
-					end
-				end
-				if #dupes > 0 then
-					local chosen_joker = pseudorandom_element(dupes, pseudoseed('showmandeck'))
-					r_val = shen_common_events_createcard(_type, area, legendary, _rarity, skip_materialize, soulable, chosen_joker.config.center.key, key_append)
-				end
-			elseif #G.consumeables.cards > 0 then
-				if _type == 'Tarot' or _type == 'Spectral' or _type == 'Planet' then
-					local dupes = {}
-					for i = 1, #G.consumeables.cards do
-						if G.consumeables.cards[i].config.center.set == _type then
-							dupes[#dupes+1] = G.consumeables.cards[i]
-						end
-					end
-					if #dupes > 0 then
-						local chosen_card = pseudorandom_element(dupes, pseudoseed('showmandeck'))
-						r_val = shen_common_events_createcard(_type, area, legendary, _rarity, skip_materialize, soulable, chosen_card.config.center.key, key_append)
-					end
-				end
-			end
-		end
-	end
-	if r_val == nil then
-		r_val = shen_common_events_createcard(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-	end
+	local r_val = shen_common_events_createcard(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
 	if G.GAME.starting_params.freakydeck then
 		if _type == "Joker" then
 			if pseudorandom('freaky') < 1/2 then
@@ -409,17 +380,67 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
 	return r_val
 end
 
+local shen_get_current_pool = get_current_pool
+function get_current_pool(_type, _rarity, _legendary, _append)
+	if G.GAME.starting_params.showmandeck then
+		local rarity
+		if _type == 'Joker' then 
+			rarity = _rarity or pseudorandom('rarity'..G.GAME.round_resets.ante..(_append or '')) 
+		end
+		local p, p_key = shen_get_current_pool(_type, rarity, _legendary, _append)
+		if _type == 'Joker' then
+			rarity = (_legendary and 4) or (rarity > 0.95 and 3) or (rarity > 0.7 and 2) or 1
+		end
+		add = {}
+		for k, _ in pairs(G.GAME.used_jokers) do
+			if k ~= "c_black_hole" and k ~= 'c_soul' then
+				if _type == 'Joker' then
+					for _, j in pairs(G.P_JOKER_RARITY_POOLS[rarity]) do
+						if k == j.key then
+							add[#add+1] = k
+							break
+						end
+					end
+				elseif type == 'Tarot' then
+					for _, j in pairs(G.P_CENTER_POOLS.Tarot) do
+						if k == j.key then
+							add[#add+1] = k
+							break
+						end
+					end
+				elseif type == 'Planet' then
+					for _, j in pairs(G.P_CENTER_POOLS.Planet) do
+						if k == j.key then
+							add[#add+1] = k
+							break
+						end
+					end
+				elseif type == 'Spectral' then
+					for _, j in pairs(G.P_CENTER_POOLS.Spectral) do
+						if k == j.key then
+							add[#add+1] = k
+							break
+						end
+					end
+				end
+			end
+		end
+
+		for i = 1, #add do
+			for _ = 1, 10 do
+				p[#p+1] = add[i]
+			end
+		end
+
+		return p, p_key
+	else
+		return shen_get_current_pool(_type, _rarity, _legendary, _append)
+	end
+end
+
 local shen_Card_calculate_jokerRef = Card.calculate_joker
 function Card.calculate_joker(self, context)
 	local r_val = shen_Card_calculate_jokerRef(self, context)
-	if context.scoring_hand and G.GAME.starting_params.yorickdeck then
-		if not G.GAME.starting_params.yorickhandplayed then
-			G.GAME.starting_params.yorickhandplayed = true
-			for i=1, #context.scoring_hand do
-				context.scoring_hand[i]:calculate_seal({discard = true})
-			end
-		end
-	end
 	if self.ability.set == "Joker" then
 		if context.selling_self then
 			if G.GAME.starting_params.chicotdeck and G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss')) then
@@ -429,6 +450,77 @@ function Card.calculate_joker(self, context)
 		end
 	end
 	return r_val
+end
+
+local shen_discard_cards_from_highlighted = G.FUNCS.discard_cards_from_highlighted
+function G.FUNCS.discard_cards_from_highlighted(e, hook)
+	if G.GAME.starting_params.yorickdeck then
+		-- copied end of round effect from state_events end_round()
+		for i=1, #G.hand.cards do
+			--Check for hand doubling
+			local reps = {1}
+			local j = 1
+			while j <= #reps do
+				local percent = (i-0.999)/(#G.hand.cards-0.998) + (j-1)*0.1
+				if reps[j] ~= 1 then card_eval_status_text((reps[j].jokers or reps[j].seals).card, 'jokers', nil, nil, nil, (reps[j].jokers or reps[j].seals)) end
+
+				--calculate the hand effects
+				local effects = {G.hand.cards[i]:get_end_of_round_effect()}
+				for k=1, #G.jokers.cards do
+					--calculate the joker individual card effects
+					local eval = G.jokers.cards[k]:calculate_joker({cardarea = G.hand, other_card = G.hand.cards[i], individual = true, end_of_round = true})
+					if eval then 
+						table.insert(effects, eval)
+					end
+				end
+
+				if reps[j] == 1 then 
+					--Check for hand doubling
+					--From Red seal
+					local eval = eval_card(G.hand.cards[i], {end_of_round = true,cardarea = G.hand, repetition = true, repetition_only = true})
+					if next(eval) and (next(effects[1]) or #effects > 1)  then 
+						for h = 1, eval.seals.repetitions do
+							reps[#reps+1] = eval
+						end
+					end
+
+					--from Jokers
+					for j=1, #G.jokers.cards do
+						--calculate the joker effects
+						local eval = eval_card(G.jokers.cards[j], {cardarea = G.hand, other_card = G.hand.cards[i], repetition = true, end_of_round = true, card_effects = effects})
+						if next(eval) then 
+							for h  = 1, eval.jokers.repetitions do
+								reps[#reps+1] = eval
+							end
+						end
+					end
+				end
+
+				for ii = 1, #effects do
+					--if this effect came from a joker
+					if effects[ii].card then
+						G.E_MANAGER:add_event(Event({
+							trigger = 'immediate',
+							func = (function() effects[ii].card:juice_up(0.7);return true end)
+						}))
+					end
+					
+					--If dollars
+					if effects[ii].h_dollars then 
+						ease_dollars(effects[ii].h_dollars)
+						card_eval_status_text(G.hand.cards[i], 'dollars', effects[ii].h_dollars, percent)
+					end
+
+					--Any extras
+					if effects[ii].extra then
+						card_eval_status_text(G.hand.cards[i], 'extra', nil, percent, nil, effects[ii].extra)
+					end
+				end
+				j = j + 1
+			end
+		end
+	end
+	shen_discard_cards_from_highlighted(e, hook)
 end
 
 local shen_Drawcard = draw_card
