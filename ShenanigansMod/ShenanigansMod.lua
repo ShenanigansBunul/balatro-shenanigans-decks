@@ -455,20 +455,20 @@ end
 local shen_discard_cards_from_highlighted = G.FUNCS.discard_cards_from_highlighted
 function G.FUNCS.discard_cards_from_highlighted(e, hook)
 	if G.GAME.starting_params.yorickdeck then
-		-- copied end of round effect from state_events end_round()
-		for i=1, #G.hand.cards do
+		-- copied end of round effect from state_events end_round() but iterating highlighted hand instead of all cards
+		for i=1, #G.hand.highlighted do
 			--Check for hand doubling
 			local reps = {1}
 			local j = 1
 			while j <= #reps do
-				local percent = (i-0.999)/(#G.hand.cards-0.998) + (j-1)*0.1
+				local percent = (i-0.999)/(#G.hand.highlighted-0.998) + (j-1)*0.1
 				if reps[j] ~= 1 then card_eval_status_text((reps[j].jokers or reps[j].seals).card, 'jokers', nil, nil, nil, (reps[j].jokers or reps[j].seals)) end
 
 				--calculate the hand effects
-				local effects = {G.hand.cards[i]:get_end_of_round_effect()}
+				local effects = {G.hand.highlighted[i]:get_end_of_round_effect()}
 				for k=1, #G.jokers.cards do
 					--calculate the joker individual card effects
-					local eval = G.jokers.cards[k]:calculate_joker({cardarea = G.hand, other_card = G.hand.cards[i], individual = true, end_of_round = true})
+					local eval = G.jokers.cards[k]:calculate_joker({cardarea = G.hand, other_card = G.hand.highlighted[i], individual = true, end_of_round = true})
 					if eval then 
 						table.insert(effects, eval)
 					end
@@ -477,7 +477,7 @@ function G.FUNCS.discard_cards_from_highlighted(e, hook)
 				if reps[j] == 1 then 
 					--Check for hand doubling
 					--From Red seal
-					local eval = eval_card(G.hand.cards[i], {end_of_round = true,cardarea = G.hand, repetition = true, repetition_only = true})
+					local eval = eval_card(G.hand.highlighted[i], {end_of_round = true,cardarea = G.hand, repetition = true, repetition_only = true})
 					if next(eval) and (next(effects[1]) or #effects > 1)  then 
 						for h = 1, eval.seals.repetitions do
 							reps[#reps+1] = eval
@@ -487,7 +487,7 @@ function G.FUNCS.discard_cards_from_highlighted(e, hook)
 					--from Jokers
 					for j=1, #G.jokers.cards do
 						--calculate the joker effects
-						local eval = eval_card(G.jokers.cards[j], {cardarea = G.hand, other_card = G.hand.cards[i], repetition = true, end_of_round = true, card_effects = effects})
+						local eval = eval_card(G.jokers.cards[j], {cardarea = G.hand, other_card = G.hand.highlighted[i], repetition = true, end_of_round = true, card_effects = effects})
 						if next(eval) then 
 							for h  = 1, eval.jokers.repetitions do
 								reps[#reps+1] = eval
@@ -508,12 +508,12 @@ function G.FUNCS.discard_cards_from_highlighted(e, hook)
 					--If dollars
 					if effects[ii].h_dollars then 
 						ease_dollars(effects[ii].h_dollars)
-						card_eval_status_text(G.hand.cards[i], 'dollars', effects[ii].h_dollars, percent)
+						card_eval_status_text(G.hand.highlighted[i], 'dollars', effects[ii].h_dollars, percent)
 					end
 
 					--Any extras
 					if effects[ii].extra then
-						card_eval_status_text(G.hand.cards[i], 'extra', nil, percent, nil, effects[ii].extra)
+						card_eval_status_text(G.hand.highlighted[i], 'extra', nil, percent, nil, effects[ii].extra)
 					end
 				end
 				j = j + 1
