@@ -304,18 +304,19 @@ end
 
 local shen_Card_calculate_sealRef = Card.calculate_seal
 function Card.calculate_seal(self, context)
-	shen_Card_calculate_sealRef(self, context)
+	local r_val = shen_Card_calculate_sealRef(self, context)
 	if G.GAME.starting_params.duskdeck and G.GAME.current_round.hands_left == 0 and context.repetition then
-		local r = 2
-		if self.seal == 'Red' then
-			r = r + 1
+		if r_val ~= nil and r_val.repetitions ~= nil then
+			r_val.repetitions = r_val.repetitions + 2
+		else
+			return {
+				message = localize('k_again_ex'),
+				repetitions = 2,
+				card = self
+			}
 		end
-		return {
-			message = localize('k_again_ex'),
-			repetitions = r,
-			card = self
-		}
 	end
+	return r_val
 end
 
 local shen_Backtriggereffect = Back.trigger_effect
