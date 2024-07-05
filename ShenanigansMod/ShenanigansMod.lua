@@ -143,43 +143,43 @@ function SMODS.INIT.ShenanigansMod()
 	register_sound("freaky_scream", shen_mod.path, "scream.wav")
 
 	-- local ??deck = SMODS.Deck:new("?? Deck", "??deck", {atlas = "spr??deck", ??deck = true,
-	-- discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	-- discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	-- {x = 0, y = 0}, ??deck_def)
 	local perkeodeck = SMODS.Deck:new("Perkeo's Deck", "perkeodeck", {atlas = "sprperkeodeck", perkeodeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, perkeodeck_def)
 	local chicotdeck = SMODS.Deck:new("Chicot's Deck", "chicotdeck", {atlas = "sprchicotdeck", chicotdeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, chicotdeck_def)
 	local yorickdeck = SMODS.Deck:new("Yorick's Deck", "yorickdeck", {atlas = "spryorickdeck", yorickdeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, yorickdeck_def)
 	local caniodeck = SMODS.Deck:new("Canio's Deck", "caniodeck", {atlas = "sprcaniodeck", caniodeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, caniodeck_def)
 	local duskdeck = SMODS.Deck:new("Dusk Deck", "duskdeck", {atlas = "sprduskdeck", duskdeck = true,
-	discards = 0, hands = -1, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = -1, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, duskdeck_def)
 	local hieroglyphdeck = SMODS.Deck:new("Hieroglyph Deck", "hieroglyphdeck", {atlas = "sprhieroglyphdeck", hieroglyphdeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, hieroglyphdeck_def)
 	local freakydeck = SMODS.Deck:new("Freaky Deck", "freakydeck", {atlas = "sprfreakydeck", freakydeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, freakydeck_def)
 	local showmandeck = SMODS.Deck:new("Showman Deck", "showmandeck", {atlas = "sprshowmandeck", showmandeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
 	{x = 0, y = 0}, showmandeck_def)
 	local grosmicheldeck = SMODS.Deck:new("Gros Michel Deck", "grosmicheldeck", {atlas = "sprgrosmicheldeck", grosmicheldeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0, joker_slot = 2},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1, joker_slot = 2},
 	{x = 0, y = 0}, grosmicheldeck_def)
 	local snakeskindeck = SMODS.Deck:new("Snakeskin Deck", "snakeskindeck", {atlas = "sprsnakeskindeck", snakeskindeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0, joker_slot = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1, joker_slot = 0},
 	{x = 0, y = 0}, snakeskindeck_def)
 	local tribouletdeck = SMODS.Deck:new("Triboulet's Deck", "tribouletdeck", {atlas = "sprtribouletdeck", tribouletdeck = true,
-	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 0, joker_slot = 0},
+	discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1, joker_slot = 0},
 	{x = 0, y = 0}, tribouletdeck_def)
 	local turtlebeandeck = SMODS.Deck:new("Turtle Bean Deck", "turtlebeandeck", {atlas = "sprturtlebeandeck", turtlebeandeck = true,
-	discards = 0, hands = 0, hand_size = 5, extra_hand_bonus = 0, joker_slot = 0},
+	discards = 0, hands = 0, hand_size = 5, extra_hand_bonus = 1, joker_slot = 0},
 	{x = 0, y = 0}, turtlebeandeck_def)
 
 	G.localization.descriptions.Other.freaky_six = {
