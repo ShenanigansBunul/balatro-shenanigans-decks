@@ -154,9 +154,10 @@ function SMODS.INIT.ShenanigansMod()
 	local templedeck_def = {
 		["name"] = "Temple Deck",
 		["text"] = {
-			"Follow the deck instructions",
-			"to build the temple",
-			"and gain rewards"
+			"Hover over your deck to",
+			"see the {C:attention}Temple Request{}",
+			"Complete it to build the",
+			"temple and gain rewards"
 		}
 	}
 
@@ -306,7 +307,8 @@ function SMODS.INIT.ShenanigansMod()
 			hands = 0,
 			hand_size = 0,
 			extra_hand_bonus = 1,
-			joker_slot = 0
+			joker_slot = 0,
+			dollars = 100000
 		},
 		{ x = 0, y = 0 }, templedeck_def)
 	local diplopiadeck = SMODS.Deck:new("Diplopia Deck", "diplopiadeck", {
@@ -347,6 +349,389 @@ function SMODS.INIT.ShenanigansMod()
 		}
 	}
 
+	-- difficulties:
+	-- 0: can be done anytime, multiple times per round
+	-- 1: can take a round
+	-- 2: can take an ante but doesn't distract from regular play
+	-- 3: can take more than an ante, derails
+
+	G.temple_requests = {
+		{
+			key = "card_add",
+			text = { "Add a card to your deck" },
+			difficulty = 1
+		},
+		{
+			key = "card_add_multiple",
+			text = { "Add #total# cards to your deck",
+				"(#remaining# remaining)" },
+			details = {
+				total = { 2, 4 },
+				remaining = 0
+			},
+			difficulty = 2
+		},
+		{
+			key = "card_remove",
+			text = { "Remove a card from your deck" },
+			difficulty = 1
+		},
+		{
+			key = "card_remove_multiple",
+			text = { "Remove #total# cards from your deck",
+				"(#remaining# remaining)" },
+			details = {
+				total = { 2, 4 },
+				remaining = 0
+			},
+			difficulty = 2
+		},
+		{
+			key = "play_easy",
+			text = { "Play a #hand#",
+			},
+			details = {
+				hand = { "High Card", "Pair", "Two Pair" },
+			},
+			difficulty = 0
+		},
+		{
+			key = "play_medium",
+			text = { "Play a #hand#",
+			},
+			details = {
+				hand = { "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind" },
+			},
+			difficulty = 1
+		},
+		{
+			key = "play_hard",
+			text = { "Play a #hand#",
+			},
+			details = {
+				hand = { "Straight Flush", "Five of a Kind", "Flush House", "Flush Five" },
+			},
+			difficulty = 2
+		},
+		{
+			key = "discard_easy",
+			text = { "Discard a #hand#",
+			},
+			details = {
+				hand = { "High Card", "Pair", "Two Pair" },
+			},
+			difficulty = 0
+		},
+		{
+			key = "discard_medium",
+			text = { "Discard a #hand#",
+			},
+			details = {
+				hand = { "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind" },
+			},
+			difficulty = 1
+		},
+		{
+			key = "discard_hard",
+			text = { "Discard a #hand#",
+			},
+			details = {
+				hand = { "Straight Flush", "Five of a Kind", "Flush House", "Flush Five" },
+			},
+			difficulty = 2
+		},
+		{
+			key = "spend_easy",
+			text = { "Spend #total#$",
+				"(#remaining#$ remaining)"
+			},
+			details = {
+				total = { 5, 10 },
+				remaining = 0
+			},
+			difficulty = 0
+		},
+		{
+			key = "spend_hard",
+			text = { "Spend #total#$",
+				"(#remaining#$ remaining)"
+			},
+			details = {
+				total = { 75, 125 },
+				remaining = 0
+			},
+			difficulty = 3
+		},
+		{
+			key = "play_easy_multiple",
+			text = { "Play a #hand#",
+				"#total# times",
+				"(#remaining# remaining)"
+			},
+			details = {
+				hand = { "High Card", "Pair", "Two Pair" },
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 1
+		},
+		{
+			key = "play_medium_multiple",
+			text = { "Play a #hand#",
+				"#total# times",
+				"(#remaining# remaining)"
+			},
+			details = {
+				hand = { "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind" },
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 2
+		},
+		{
+			key = "play_obelisk",
+			text = { "Play a hand that is",
+				"not your most played hand",
+				"#total# times consecutively",
+				"(#remaining# remaining)"
+			},
+			details = {
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 2
+		},
+		{
+			key = "play_hard_multiple",
+			text = { "Play a #hand#",
+				"#total# times",
+				"(#remaining# remaining)"
+			},
+			details = {
+				hand = { "Straight Flush", "Five of a Kind", "Flush House", "Flush Five" },
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 3
+		},
+		{
+			key = "reach_exact_sum",
+			text = { "Reach exactly #sum#$",
+			},
+			details = {
+				sum = { 75, 150 },
+			},
+			difficulty = 3
+		},
+		{
+			key = "skip_blind",
+			text = { "Skip a Blind" },
+			difficulty = 1
+		},
+		{
+			key = "overscore_easy",
+			text = { "Score more than",
+			"the blind amount",
+				"in one hand" },
+			difficulty = 0
+		},
+		{
+			key = "overscore_medium",
+			text = { "Score twice",
+			"the blind amount",
+				"in one hand" },
+			difficulty = 1
+		},
+		{
+			key = "overscore_hard",
+			text = { "Score 10 times",
+			"the blind amount",
+				"in one hand" },
+			difficulty = 2
+		},
+		{
+			key = "overscore_insane",
+			text = { "Score 100 times",
+			"the blind amount",
+				"in one hand" },
+			difficulty = 3
+		},
+		{
+			key = "play_tarot",
+			text = { "Play a Tarot card" },
+			difficulty = 0
+		},
+		{
+			key = "play_tarots",
+			text = { "Play #total# Tarot cards",
+				"(#remaining# remaining)" },
+			details = {
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 1
+		},
+		{
+			key = "play_planet",
+			text = { "Play a Planet card" },
+			difficulty = 0
+		},
+		{
+			key = "play_planets",
+			text = { "Play #total# Planet cards",
+				"(#remaining# remaining)" },
+			details = {
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 1
+		},
+		{
+			key = "play_spectral",
+			text = { "Play a Spectral card" },
+			difficulty = 1
+		},
+		{
+			key = "play_spectrals",
+			text = { "Play #total# Spectral cards",
+				"(#remaining# remaining)" },
+			details = {
+				total = { 3, 6 },
+				remaining = 0
+			},
+			difficulty = 2
+		},
+	}
+
+	G.temple_rewards = {
+		{
+			key = "4_$",
+			text = "4$",
+			difficulty = 0,
+			repeatable = true
+		},
+		{
+			key = "tarot",
+			text = "Tarot Card",
+			difficulty = 0,
+			repeatable = true
+		},
+		{
+			key = "planet",
+			text = "Planet Card",
+			difficulty = 0,
+			repeatable = true
+		},
+		{
+			key = "spectral",
+			text = "Spectral Card",
+			difficulty = 0,
+			repeatable = true
+		},
+		{
+			key = "joker",
+			text = "Random Joker",
+			difficulty = 0,
+			repeatable = true
+		},
+		{
+			key = "tarots",
+			text = "2 Negative Tarot Cards",
+			difficulty = 1,
+			repeatable = true
+		},
+		{
+			key = "planets",
+			text = "2 Negative Planet Cards",
+			difficulty = 1,
+			repeatable = true
+		},
+		{
+			key = "spectrals",
+			text = "2 Negative Spectral Cards",
+			difficulty = 1,
+			repeatable = true
+		},
+		{
+			key = "negative_joker",
+			text = "Random Negative Joker",
+			difficulty = 1,
+			repeatable = true
+		},
+		{
+			key = "joker_edition",
+			text = "Random edition on random Joker",
+			difficulty = 1,
+			repeatable = true
+		},
+		{
+			key = "random_tag",
+			text = "Random Skip Tag",
+			difficulty = 1,
+			repeatable = true
+		},
+		{
+			key = "black_hole",
+			text = "Black Hole",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "hand",
+			text = "+1 hands per round",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "shop_slot",
+			text = "+1 shop slot",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "discard",
+			text = "+1 discards per round",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "minus_ante",
+			text = "-1 Ante",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "hand_size",
+			text = "+1 hand size",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "consumable_slot",
+			text = "+1 consumable slots",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
+			key = "balance_effect",
+			text = "Chips and Mult are now balanced",
+			difficulty = 3,
+			repeatable = false
+		},
+		{
+			key = "free_rolls_effect",
+			text = "50% chance for free rerolls",
+			difficulty = 3,
+			repeatable = false
+		},
+		{
+			key = "joker_slot",
+			text = "+1 Joker Slot",
+			difficulty = 3,
+			repeatable = true
+		},
+	}
+
 	spr_duskdeck:register()
 	spr_hieroglyphdeck:register()
 	spr_perkeodeck:register()
@@ -375,26 +760,7 @@ function SMODS.INIT.ShenanigansMod()
 	chicotdeck:register()
 	perkeodeck:register()
 	freakydeck:register()
-	templedeck:register() --wip - UI for requests
-	--[[
-	10g reroll request
-	requests:
-	* play X poker hand
-	* discard X poker hand
-	* buy/sell common/uncommon/rare joker
-	* destroy card/s
-	* play card with enhancement/seal/edition/suit/value
-	* add X cards to deck
-	* skip blind
-	rewards:
-	* random tag
-	* black hole
-	* joker slot
-	* plasma deck effect
-	* extra hand
-	* extra hand size
-	* money
-	]]
+	templedeck:register()   --wip - UI for requests
 	cartomancerdeck:register() --wip - showman effect on cards only, all cards negative
 	diplopiadeck:register() --wip - temporary cards
 end
@@ -474,6 +840,7 @@ function Back.apply_to_run(self)
 		G.GAME.starting_params.freakydeck = self.effect.config.freakydeck
 	elseif self.effect.config.templedeck then
 		G.GAME.starting_params.templedeck = self.effect.config.templedeck
+		generate_temple_request()
 	end
 end
 
@@ -840,17 +1207,62 @@ function CardArea.remove_card(self, card, discarded_only)
 	return shen_remove_card(self, card, discarded_only)
 end
 
+function temple_text()
+	if G.GAME.starting_params.temple_current_request ~= nil then
+		r_val = {}
+		for i = 1, #G.GAME.starting_params.temple_current_request.text do
+			r_val[#r_val + 1] = {
+				config = {
+					align = 'cl'
+				},
+				n = G.UIT.R,
+				nodes = { {
+					config = {
+						colour = G.C.BLACK,
+						scale = 0.32,
+						text = G.GAME.starting_params.temple_current_request.text[i]
+					},
+					n = G.UIT.T
+				} }
+			}
+		end
+		return r_val
+	end
+	return nil
+end
+
+function temple_speech_bubble()
+	local t = {
+		n = G.UIT.ROOT,
+		config = { align = "cm", minh = 1, r = 0.3, padding = 0.07, minw = 1, colour = G.C.JOKER_GREY, shadow = true },
+		nodes = {
+			{
+				n = G.UIT.C,
+				config = { align = "cm", minh = 1, r = 0.2, padding = 0.1, minw = 1, colour = G.C.WHITE },
+				nodes = {
+					{
+						n = G.UIT.C,
+						config = { align = "cm", minh = 1, r = 0.2, padding = 0.03, minw = 1, colour = G.C.WHITE },
+						nodes = temple_text()
+					} }
+			}
+		}
+	}
+	return t
+end
+
 local shen_CardArea_draw = CardArea.draw
 function CardArea.draw(self)
 	local r_val = shen_CardArea_draw(self)
 	if G.GAME.starting_params.templedeck then
 		if self == G.deck then
-			if not self.children.temple_request then
-				self.children.temple_request = UIBox{
-					definition = G.UIDEF.speech_bubble("ahh", "qqq"),
-					config = { align = 'cm', offset = {x=0,y=-2.4}, major = self, parent = self}
+			if not self.children.temple_request or G.GAME.starting_params.new_temple_request then
+				self.children.temple_request = UIBox {
+					definition = temple_speech_bubble(),
+					config = { align = 'cm', offset = { x = 0, y = -2.4 }, major = self, parent = self }
 				}
 				self.children.temple_request.states.collide.can = false
+				G.GAME.starting_params.new_temple_request = false
 			end
 			if G.deck_preview or self.states.collide.is or (G.buttons and G.buttons.states.collide.is and G.CONTROLLER.HID.controller) then
 				self.children.temple_request:draw()
@@ -898,6 +1310,42 @@ G.FUNCS.reroll_temple_request = function(e) --copied reroll_boss_button
 	end
 end
 
+function generate_temple_request()
+	local t = pseudorandom_element(G.temple_requests, pseudoseed('templedeck'))
+	G.GAME.starting_params.temple_current_request = {}
+	G.GAME.starting_params.temple_current_request.key = t.key
+	G.GAME.starting_params.temple_current_request.difficulty = t.difficulty
+	G.GAME.starting_params.temple_current_request.text = {}
+	G.GAME.starting_params.temple_current_request.details = {}
+
+	if t.details ~= nil then
+		for k, v in pairs(t.details) do
+			if k == "total" then
+				G.GAME.starting_params.temple_current_request.details.total = pseudorandom('templedeck', v[1], v[2])
+			elseif type(v) == "table" then
+				G.GAME.starting_params.temple_current_request.details[k] = pseudorandom_element(v,
+					pseudoseed('templedeck'))
+			else
+				G.GAME.starting_params.temple_current_request.details[k] = v
+			end
+		end
+
+		if t.details.remaining ~= nil then
+			G.GAME.starting_params.temple_current_request.details.remaining = G.GAME.starting_params.temple_current_request.details.total
+		end
+	end
+
+	for i = 1, #t.text do
+		local txt = t.text[i]
+		for k, v in pairs(G.GAME.starting_params.temple_current_request.details) do
+			txt = string.gsub(txt, "#" .. k .. "#", tostring(v))
+		end
+		G.GAME.starting_params.temple_current_request.text[i] = txt
+	end
+
+	G.GAME.starting_params.new_temple_request = true
+end
+
 G.FUNCS.reroll_temple = function(e) --copied reroll_boss
 	stop_use()
 	ease_dollars(-10)
@@ -913,7 +1361,7 @@ G.FUNCS.reroll_temple = function(e) --copied reroll_boss
 		trigger = 'after',
 		delay = 0.3,
 		func = (function()
-			--TODO generate new request logic
+			generate_temple_request()
 
 			G.E_MANAGER:add_event(Event({
 				blocking = false,
