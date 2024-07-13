@@ -352,12 +352,6 @@ function SMODS.INIT.ShenanigansMod()
 		}
 	}
 
-	-- difficulties:
-	-- 0: can be done anytime, multiple times per round
-	-- 1: can take a round
-	-- 2: can take an ante but doesn't distract from regular play
-	-- 3: can take more than an ante, derails
-
 	G.temple_requests = {
 		{
 			key = "card_add",
@@ -788,7 +782,7 @@ function SMODS.INIT.ShenanigansMod()
 	perkeodeck:register()
 	freakydeck:register()
 	templedeck:register()
-	cartomancerdeck:register() --wip - showman effect on tarot/planet/spectral cards only, all cards negative
+	cartomancerdeck:register()
 	--diplopiadeck:register() --wip - temporary cards when playing non temporary cards
 end
 
@@ -1620,8 +1614,7 @@ function complete_temple_request()
 					break
 				end
 			end
-			--if G.GAME.starting_params.temple_current_request.difficulty == G.temple_rewards[i].difficulty and not repeated then
-			if k == 'shop_slot' then
+			if G.GAME.starting_params.temple_current_request.difficulty == G.temple_rewards[i].difficulty and not repeated then
 				filtered_rewards[#filtered_rewards+1] = G.temple_rewards[i]
 			end
 		end
@@ -1690,7 +1683,7 @@ function complete_temple_request()
 			G.GAME.round_resets.hands = G.GAME.round_resets.hands + 1
 		elseif k == 'shop_slot' then
 			G.E_MANAGER:add_event(Event({func = function()
-				change_shop_size(10)
+				change_shop_size(1)
 				return true end }))
 		elseif k == 'joker_slots' then
 			G.jokers.config.card_limit = G.jokers.config.card_limit + 5
@@ -1772,7 +1765,6 @@ function fix_shop_size()
 		if G.shop_jokers and G.shop_jokers.cards then
 			if G.shop_jokers.T.w > math.min(G.GAME.shop.joker_max, 4)*1.01*G.CARD_W then
 				G.shop_jokers.T.w = math.min(G.GAME.shop.joker_max, 4)*1.01*G.CARD_W ---overridden with math.max to prevent shop becoming too large
-				sendDebugMessage("AHHHHHHHHHH", "HHHHHHHHHHHHH")
 				G.shop:recalculate()
 			end
 		end
