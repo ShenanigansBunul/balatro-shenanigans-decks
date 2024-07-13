@@ -121,7 +121,7 @@ function SMODS.INIT.ShenanigansMod()
 			"Each other Joker has a",
 			"{C:green}1 in 6{} chance to be",
 			"destroyed at end of round",
-			"Start with a {C:gold}Gros Michel{}" --TODO  T:j_gros_michel, figure out how to use the variables
+			"Start with a {C:gold}Gros Michel{}"
 		}
 	}
 
@@ -164,9 +164,10 @@ function SMODS.INIT.ShenanigansMod()
 	local cartomancerdeck_def = {
 		["name"] = "Cartomancer Deck",
 		["text"] = {
-			"All {C:tarot}Tarot{}, {C:planet}Planet{}, and {C:spectral}Spectral{}",
-			"cards are {C:dark_edition}Negative{} and may",
-			"appear multiple times",
+			"All consumable cards are",
+			"{C:dark_edition}Negative{} and may appear",
+			"multiple times",
+			"No consumable slot limit"
 		}
 	}
 
@@ -179,6 +180,7 @@ function SMODS.INIT.ShenanigansMod()
 	}
 
 	register_sound("freaky_scream", shen_mod.path, "scream.wav")
+	register_sound("temple", shen_mod.path, "temple.wav")
 
 	-- local ??deck = SMODS.Deck:new("?? Deck", "??deck", {atlas = "spr??deck", ??deck = true,
 	-- discards = 0, hands = 0, hand_size = 0, extra_hand_bonus = 1},
@@ -307,8 +309,8 @@ function SMODS.INIT.ShenanigansMod()
 			hands = 0,
 			hand_size = 0,
 			extra_hand_bonus = 1,
-			joker_slot = 0,
-			dollars = 100000
+			joker_slot = 0
+			--dollars = 100000
 		},
 		{ x = 0, y = 0 }, templedeck_def)
 	local diplopiadeck = SMODS.Deck:new("Diplopia Deck", "diplopiadeck", {
@@ -329,7 +331,8 @@ function SMODS.INIT.ShenanigansMod()
 			hands = 0,
 			hand_size = 0,
 			extra_hand_bonus = 1,
-			joker_slot = 0
+			joker_slot = 0,
+			consumable_slot = 2000000000
 		},
 		{ x = 0, y = 0 }, cartomancerdeck_def)
 
@@ -470,7 +473,7 @@ function SMODS.INIT.ShenanigansMod()
 			},
 			details = {
 				hand = { "High Card", "Pair", "Two Pair" },
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 1
@@ -483,7 +486,7 @@ function SMODS.INIT.ShenanigansMod()
 			},
 			details = {
 				hand = { "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind" },
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 2
@@ -496,7 +499,7 @@ function SMODS.INIT.ShenanigansMod()
 				"(#remaining# remaining)"
 			},
 			details = {
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 2
@@ -509,17 +512,17 @@ function SMODS.INIT.ShenanigansMod()
 			},
 			details = {
 				hand = { "Straight Flush", "Five of a Kind", "Flush House", "Flush Five" },
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 3
 		},
 		{
 			key = "reach_exact_sum",
-			text = { "Reach exactly #sum#$",
+			text = { "Reach exactly #total#$",
 			},
 			details = {
-				sum = { 75, 150 },
+				total = { 75, 150 },
 			},
 			difficulty = 3
 		},
@@ -566,7 +569,7 @@ function SMODS.INIT.ShenanigansMod()
 			text = { "Play #total# Tarot cards",
 				"(#remaining# remaining)" },
 			details = {
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 1
@@ -581,7 +584,7 @@ function SMODS.INIT.ShenanigansMod()
 			text = { "Play #total# Planet cards",
 				"(#remaining# remaining)" },
 			details = {
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 1
@@ -596,7 +599,7 @@ function SMODS.INIT.ShenanigansMod()
 			text = { "Play #total# Spectral cards",
 				"(#remaining# remaining)" },
 			details = {
-				total = { 3, 6 },
+				total = { 3, 5 },
 				remaining = 0
 			},
 			difficulty = 2
@@ -605,26 +608,26 @@ function SMODS.INIT.ShenanigansMod()
 
 	G.temple_rewards = {
 		{
-			key = "4_$",
-			text = "4$",
+			key = "5_dollars",
+			text = "5$",
 			difficulty = 0,
 			repeatable = true
 		},
 		{
 			key = "tarot",
-			text = "Tarot Card",
+			text = "Random Tarot Card",
 			difficulty = 0,
 			repeatable = true
 		},
 		{
 			key = "planet",
-			text = "Planet Card",
+			text = "Random Planet Card",
 			difficulty = 0,
 			repeatable = true
 		},
 		{
 			key = "spectral",
-			text = "Spectral Card",
+			text = "Random Spectral Card",
 			difficulty = 0,
 			repeatable = true
 		},
@@ -636,13 +639,13 @@ function SMODS.INIT.ShenanigansMod()
 		},
 		{
 			key = "tarots",
-			text = "2 Negative Tarot Cards",
+			text = "3 Negative Tarot Cards",
 			difficulty = 1,
 			repeatable = true
 		},
 		{
 			key = "planets",
-			text = "2 Negative Planet Cards",
+			text = "3 Negative Planet Cards",
 			difficulty = 1,
 			repeatable = true
 		},
@@ -713,6 +716,12 @@ function SMODS.INIT.ShenanigansMod()
 			repeatable = true
 		},
 		{
+			key = "joker_slot",
+			text = "+1 Joker Slot",
+			difficulty = 2,
+			repeatable = true
+		},
+		{
 			key = "balance_effect",
 			text = "Chips and Mult are now balanced",
 			difficulty = 3,
@@ -720,16 +729,34 @@ function SMODS.INIT.ShenanigansMod()
 		},
 		{
 			key = "free_rolls_effect",
-			text = "50% chance for free rerolls",
+			text = "90% chance for free rerolls, 100$",
 			difficulty = 3,
 			repeatable = false
 		},
 		{
-			key = "joker_slot",
-			text = "+1 Joker Slot",
+			key = "joker_slots",
+			text = "+5 Joker Slots",
+			difficulty = 3,
+			repeatable = false
+		},
+		{
+			key = "interest_limit_break",
+			text = "$1000 Interest Cap and $1000",
+			difficulty = 3,
+			repeatable = false
+		},
+		{
+			key = "reset_ante",
+			text = "Go to Ante 1",
 			difficulty = 3,
 			repeatable = true
 		},
+		{
+			key = "clone_jokers",
+			text = "Negative clones of all jokers",
+			difficulty = 3,
+			repeatable = true
+		}
 	}
 
 	spr_duskdeck:register()
@@ -760,9 +787,9 @@ function SMODS.INIT.ShenanigansMod()
 	chicotdeck:register()
 	perkeodeck:register()
 	freakydeck:register()
-	templedeck:register()   --wip - UI for requests
-	cartomancerdeck:register() --wip - showman effect on cards only, all cards negative
-	diplopiadeck:register() --wip - temporary cards
+	templedeck:register()
+	cartomancerdeck:register() --wip - showman effect on tarot/planet/spectral cards only, all cards negative
+	--diplopiadeck:register() --wip - temporary cards when playing non temporary cards
 end
 
 function locals()
@@ -780,9 +807,50 @@ function locals()
 	return variables
 end
 
+local shen_start_run = Game.start_run
+function Game.start_run(self, args)
+	shen_start_run(self, args)
+	if not G.GAME.starting_params.shen_runstarted then
+		G.GAME.starting_params.shen_runstarted = true
+		if G.GAME.starting_params.templedeck then
+			generate_temple_request()
+		elseif G.GAME.starting_params.tribouletdeck then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					for i = 1, 4 do
+						local _suit = pseudorandom_element({ 'S', 'H', 'D', 'C' }, pseudoseed('triboulet_deck_create'))
+						local card = copy_card(G.playing_cards[1], nil, 1, G.playing_card)
+						card:set_base(G.P_CARDS[_suit .. "_" .. "Q"])
+						G.deck:emplace(card)
+						G.playing_cards[#G.playing_cards + 1] = card
+					end
+					for i = 1, 4 do
+						local _suit = pseudorandom_element({ 'S', 'H', 'D', 'C' }, pseudoseed('triboulet_deck_create'))
+						local card = copy_card(G.playing_cards[1], nil, 1, G.playing_card)
+						card:set_base(G.P_CARDS[_suit .. "_" .. "K"])
+						G.deck:emplace(card)
+						G.playing_cards[#G.playing_cards + 1] = card
+					end
+					G.starting_deck_size = 58
+					return true
+				end
+			}))
+		end
+	end
+end
+
+local shen_Cardapply_to_runRef = Card.apply_to_run
+function Card.apply_to_run(self, center)
+	shen_Cardapply_to_runRef(self, center)
+	if G.GAME.starting_params.temple_deck_interest_limit_break and G.GAME.interest_cap ~= 5000 then
+		G.GAME.interest_cap = 5000
+	end
+end
+
 local shen_Backapply_to_runRef = Back.apply_to_run
 function Back.apply_to_run(self)
 	shen_Backapply_to_runRef(self)
+	G.GAME.starting_params.shen_runstarted = false
 	if self.effect.config.duskdeck then
 		G.GAME.starting_params.duskdeck = self.effect.config.duskdeck
 	elseif self.effect.config.hieroglyphdeck then
@@ -793,26 +861,7 @@ function Back.apply_to_run(self)
 	elseif self.effect.config.turtlebeandeck then
 		G.GAME.starting_params.bean_counter = 0
 	elseif self.effect.config.tribouletdeck then
-		G.E_MANAGER:add_event(Event({
-			func = function()
-				for i = 1, 4 do
-					local _suit = pseudorandom_element({ 'S', 'H', 'D', 'C' }, pseudoseed('triboulet_deck_create'))
-					local card = copy_card(G.playing_cards[1], nil, 1, G.playing_card)
-					card:set_base(G.P_CARDS[_suit .. "_" .. "Q"])
-					G.deck:emplace(card)
-					G.playing_cards[#G.playing_cards + 1] = card
-				end
-				for i = 1, 4 do
-					local _suit = pseudorandom_element({ 'S', 'H', 'D', 'C' }, pseudoseed('triboulet_deck_create'))
-					local card = copy_card(G.playing_cards[1], nil, 1, G.playing_card)
-					card:set_base(G.P_CARDS[_suit .. "_" .. "K"])
-					G.deck:emplace(card)
-					G.playing_cards[#G.playing_cards + 1] = card
-				end
-				G.starting_deck_size = 58
-				return true
-			end
-		}))
+		G.GAME.starting_params.tribouletdeck = self.effect.config.tribouletdeck
 	elseif self.effect.config.chicotdeck then
 		G.GAME.starting_params.chicotdeck = self.effect.config.chicotdeck
 	elseif self.effect.config.caniodeck then
@@ -840,7 +889,9 @@ function Back.apply_to_run(self)
 		G.GAME.starting_params.freakydeck = self.effect.config.freakydeck
 	elseif self.effect.config.templedeck then
 		G.GAME.starting_params.templedeck = self.effect.config.templedeck
-		generate_temple_request()
+		G.GAME.starting_params.templedeck_effects = {}
+	elseif self.effect.config.cartomancerdeck then
+		G.GAME.starting_params.cartomancerdeck = self.effect.config.cartomancerdeck
 	end
 end
 
@@ -904,6 +955,70 @@ function Back.trigger_effect(self, args)
 					end
 				end
 			end
+		elseif self.effect.config.templedeck then
+			if G.GAME.starting_params.temple_deck_balance_effect then
+				local tot = args.chips + args.mult
+				args.chips = math.floor(tot/2)
+				args.mult = math.floor(tot/2)
+				update_hand_text({delay = 0}, {mult = args.mult, chips = args.chips})
+		
+				G.E_MANAGER:add_event(Event({
+					func = (function()
+						local text = localize('k_balanced')
+						play_sound('gong', 0.94, 0.3)
+						play_sound('gong', 0.94*1.5, 0.2)
+						play_sound('tarot1', 1.5)
+						ease_colour(G.C.UI_CHIPS, {0.8, 0.45, 0.85, 1})
+						ease_colour(G.C.UI_MULT, {0.8, 0.45, 0.85, 1})
+						attention_text({
+							scale = 1.4, text = text, hold = 2, align = 'cm', offset = {x = 0,y = -2.7},major = G.play
+						})
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							blockable = false,
+							blocking = false,
+							delay =  4.3,
+							func = (function() 
+									ease_colour(G.C.UI_CHIPS, G.C.BLUE, 2)
+									ease_colour(G.C.UI_MULT, G.C.RED, 2)
+								return true
+							end)
+						}))
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							blockable = false,
+							blocking = false,
+							no_delete = true,
+							delay =  6.3,
+							func = (function() 
+								G.C.UI_CHIPS[1], G.C.UI_CHIPS[2], G.C.UI_CHIPS[3], G.C.UI_CHIPS[4] = G.C.BLUE[1], G.C.BLUE[2], G.C.BLUE[3], G.C.BLUE[4]
+								G.C.UI_MULT[1], G.C.UI_MULT[2], G.C.UI_MULT[3], G.C.UI_MULT[4] = G.C.RED[1], G.C.RED[2], G.C.RED[3], G.C.RED[4]
+								return true
+							end)
+						}))
+						return true
+					end)
+				}))
+
+				nu_chip = args.chips
+				nu_mult = args.mult
+				delay(0.6)
+			end
+
+			local t_k = G.GAME.starting_params.temple_current_request.key
+			local t = {
+				['overscore_easy'] = 1,
+				['overscore_medium'] = 2,
+				['overscore_hard'] = 10,
+				['overscore_insane'] = 100,
+			}
+			for k, v in pairs(t) do
+				if k == t_k then
+					if args.chips * args.mult >= G.GAME.blind.chips * v then
+						complete_temple_request()
+					end
+				end
+			end
 		end
 	elseif args.context == 'blind_amount' then
 		if self.effect.config.freakydeck then
@@ -924,6 +1039,10 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
 			else
 				r_val.ability.freaky_nine = true
 			end
+		end
+	elseif G.GAME.starting_params.cartomancerdeck then
+		if _type == "Tarot" or _type == "Spectral" or _type == "Planet" or _type == "Tarot_Planet" then
+			r_val:set_edition({ negative = true }, true)
 		end
 	end
 	return r_val
@@ -950,21 +1069,21 @@ function get_current_pool(_type, _rarity, _legendary, _append)
 							break
 						end
 					end
-				elseif type == 'Tarot' then
+				elseif _type == 'Tarot' then
 					for _, j in pairs(G.P_CENTER_POOLS.Tarot) do
 						if k == j.key then
 							add[#add + 1] = k
 							break
 						end
 					end
-				elseif type == 'Planet' then
+				elseif _type == 'Planet' then
 					for _, j in pairs(G.P_CENTER_POOLS.Planet) do
 						if k == j.key then
 							add[#add + 1] = k
 							break
 						end
 					end
-				elseif type == 'Spectral' then
+				elseif _type == 'Spectral' then
 					for _, j in pairs(G.P_CENTER_POOLS.Spectral) do
 						if k == j.key then
 							add[#add + 1] = k
@@ -981,6 +1100,46 @@ function get_current_pool(_type, _rarity, _legendary, _append)
 			end
 		end
 
+		return p, p_key
+	elseif G.GAME.starting_params.cartomancerdeck then
+		local rarity
+		if _type == 'Joker' then
+			rarity = _rarity or pseudorandom('rarity' .. G.GAME.round_resets.ante .. (_append or ''))
+		end
+		local p, p_key = shen_get_current_pool(_type, rarity, _legendary, _append)
+		if _type == 'Joker' then
+			rarity = (_legendary and 4) or (rarity > 0.95 and 3) or (rarity > 0.7 and 2) or 1
+		end
+		add = {}
+		for k, _ in pairs(G.GAME.used_jokers) do
+			if k ~= "c_black_hole" and k ~= 'c_soul' then
+				if _type == 'Tarot' then
+					for _, j in pairs(G.P_CENTER_POOLS.Tarot) do
+						if k == j.key then
+							add[#add + 1] = k
+							break
+						end
+					end
+				elseif _type == 'Planet' then
+					for _, j in pairs(G.P_CENTER_POOLS.Planet) do
+						if k == j.key then
+							add[#add + 1] = k
+							break
+						end
+					end
+				elseif _type == 'Spectral' then
+					for _, j in pairs(G.P_CENTER_POOLS.Spectral) do
+						if k == j.key then
+							add[#add + 1] = k
+							break
+						end
+					end
+				end
+			end
+		end
+		for i = 1, #add do
+			p[#p + 1] = add[i]
+		end
 		return p, p_key
 	else
 		return shen_get_current_pool(_type, _rarity, _legendary, _append)
@@ -1003,7 +1162,15 @@ end
 
 local shen_discard_cards_from_highlighted = G.FUNCS.discard_cards_from_highlighted
 function G.FUNCS.discard_cards_from_highlighted(e, hook)
-	if G.GAME.starting_params.yorickdeck then
+	if G.GAME.starting_params.templedeck then
+		local text,disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+		local k = G.GAME.starting_params.temple_current_request.key
+		if k == 'discard_easy' or k == 'discard_medium' or k == 'discard_hard' then
+			if G.GAME.starting_params.temple_current_request.details.hand == text then
+				complete_temple_request()
+			end
+		end
+	elseif G.GAME.starting_params.yorickdeck then
 		-- copied end of round effect from state_events end_round() but iterating highlighted hand instead of all cards
 		for i = 1, #G.hand.highlighted do
 			--Check for hand doubling
@@ -1209,7 +1376,35 @@ end
 
 function temple_text()
 	if G.GAME.starting_params.temple_current_request ~= nil then
+		local req = "??? Request"
+		local colour = G.C.BLACK
+		if G.GAME.starting_params.temple_current_request.difficulty ~= nil then
+			if G.GAME.starting_params.temple_current_request.difficulty == 0 then
+				req = "Common Request"
+			elseif G.GAME.starting_params.temple_current_request.difficulty == 1 then
+				req = "Uncommon Request"
+			elseif G.GAME.starting_params.temple_current_request.difficulty == 2 then
+				req = "Rare Request"
+			elseif G.GAME.starting_params.temple_current_request.difficulty == 3 then
+				req = "Legendary Request"
+			end
+			colour = G.C.RARITY[G.GAME.starting_params.temple_current_request.difficulty + 1]
+		end
 		r_val = {}
+		r_val[#r_val + 1] = {
+			config = {
+				align = 'cl'
+			},
+			n = G.UIT.R,
+			nodes = { {
+				config = {
+					colour = colour,
+					scale = 0.42,
+					text = req
+				},
+				n = G.UIT.T
+			} }
+		}
 		for i = 1, #G.GAME.starting_params.temple_current_request.text do
 			r_val[#r_val + 1] = {
 				config = {
@@ -1251,27 +1446,6 @@ function temple_speech_bubble()
 	return t
 end
 
-local shen_CardArea_draw = CardArea.draw
-function CardArea.draw(self)
-	local r_val = shen_CardArea_draw(self)
-	if G.GAME.starting_params.templedeck then
-		if self == G.deck then
-			if not self.children.temple_request or G.GAME.starting_params.new_temple_request then
-				self.children.temple_request = UIBox {
-					definition = temple_speech_bubble(),
-					config = { align = 'cm', offset = { x = 0, y = -2.4 }, major = self, parent = self }
-				}
-				self.children.temple_request.states.collide.can = false
-				G.GAME.starting_params.new_temple_request = false
-			end
-			if G.deck_preview or self.states.collide.is or (G.buttons and G.buttons.states.collide.is and G.CONTROLLER.HID.controller) then
-				self.children.temple_request:draw()
-			end
-		end
-	end
-	return r_val
-end
-
 local shen_create_UIBox_blind_select = create_UIBox_blind_select
 function create_UIBox_blind_select()
 	local r_val = shen_create_UIBox_blind_select()
@@ -1310,23 +1484,78 @@ G.FUNCS.reroll_temple_request = function(e) --copied reroll_boss_button
 	end
 end
 
+function generate_temple_request_text()
+	for i = 1, #G.GAME.starting_params.temple_current_request.text_non_replaced do
+		local txt = G.GAME.starting_params.temple_current_request.text_non_replaced[i]
+		for k, v in pairs(G.GAME.starting_params.temple_current_request.details) do
+			txt = string.gsub(txt, "#" .. k .. "#", tostring(v))
+		end
+		G.GAME.starting_params.temple_current_request.text[i] = txt
+	end
+	G.GAME.starting_params.new_temple_request = true
+end
+
+local shen_ease_dollars = ease_dollars
+function ease_dollars(mod, instant)
+	shen_ease_dollars(mod, instant)
+	if G.GAME.starting_params.templedeck then
+		local k = G.GAME.starting_params.temple_current_request.key
+		if k == 'spend_easy' or k == 'spend_hard' then
+			if mod < 0 then
+				G.GAME.starting_params.temple_current_request.details.remaining = G.GAME.starting_params.temple_current_request.details.remaining + mod
+			end
+			if G.GAME.starting_params.temple_current_request.details.remaining <= 0 then
+				complete_temple_request()
+			else
+				generate_temple_request_text()
+			end
+		elseif k == 'reach_exact_sum' then
+			if G.GAME.dollars == G.GAME.starting_params.temple_current_request.details.total then
+				complete_temple_request()
+			end
+		end
+	end
+end
+
 function generate_temple_request()
-	local t = pseudorandom_element(G.temple_requests, pseudoseed('templedeck'))
+	local request_rarity = pseudorandom('templedeck')
+	local filtered_requests = {}
+	local filtered_difficulty = 0
+	if request_rarity > .95 then
+		filtered_difficulty = 3
+	elseif request_rarity > .8 then
+		filtered_difficulty = 2
+	elseif request_rarity > .5 then
+		filtered_difficulty = 1
+	end
+	for i = 1, #G.temple_requests do
+		if G.temple_requests[i].difficulty == filtered_difficulty then
+			filtered_requests[#filtered_requests+1] = G.temple_requests[i]
+		end
+	end
+	local t = pseudorandom_element(filtered_requests, pseudoseed('templedeck'))
 	G.GAME.starting_params.temple_current_request = {}
 	G.GAME.starting_params.temple_current_request.key = t.key
 	G.GAME.starting_params.temple_current_request.difficulty = t.difficulty
 	G.GAME.starting_params.temple_current_request.text = {}
+	G.GAME.starting_params.temple_current_request.text_non_replaced = {}
 	G.GAME.starting_params.temple_current_request.details = {}
 
 	if t.details ~= nil then
 		for k, v in pairs(t.details) do
 			if k == "total" then
-				G.GAME.starting_params.temple_current_request.details.total = pseudorandom('templedeck', v[1], v[2])
+				G.GAME.starting_params.temple_current_request.details[k] = pseudorandom('templedeck', v[1], v[2])
 			elseif type(v) == "table" then
 				G.GAME.starting_params.temple_current_request.details[k] = pseudorandom_element(v,
 					pseudoseed('templedeck'))
 			else
 				G.GAME.starting_params.temple_current_request.details[k] = v
+			end
+		end
+
+		if G.GAME.starting_params.temple_current_request.key == 'reach_exact_sum' then
+			if G.GAME.starting_params.temple_current_request.details.total == G.GAME.dollars then
+				G.GAME.starting_params.temple_current_request.details.total = G.GAME.starting_params.temple_current_request.details.total + 1
 			end
 		end
 
@@ -1337,17 +1566,267 @@ function generate_temple_request()
 
 	for i = 1, #t.text do
 		local txt = t.text[i]
-		for k, v in pairs(G.GAME.starting_params.temple_current_request.details) do
-			txt = string.gsub(txt, "#" .. k .. "#", tostring(v))
-		end
-		G.GAME.starting_params.temple_current_request.text[i] = txt
+		G.GAME.starting_params.temple_current_request.text_non_replaced[i] = txt
 	end
 
-	G.GAME.starting_params.new_temple_request = true
+	generate_temple_request_text()
+end
+
+function temple_congrats(txt)
+	attention_text({scale = 1.4, text = "The Temple Rewards You!", hold = 5, align = 'cm', offset = {x = 0,y = -2.7},major = G.play})
+	attention_text({scale = 1.4, text = txt, hold = 5, align = 'cm', offset = {x = 0,y = -0.7},major = G.play})
+	modded_play_sound("temple", true, 1, 1)
+end
+
+function create_cards(count, neg, type)
+	for i = 1, count do
+		G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+			if G.consumeables.config.card_limit > #G.consumeables.cards or neg then
+				play_sound('timpani')
+				local card = create_card(type, G.consumeables, nil, nil, nil, nil, nil, 'temple_reward')
+				if neg then
+					card:set_edition({ negative = true }, true)
+				end
+				card:add_to_deck()
+				G.consumeables:emplace(card)
+			end
+			return true end }))
+	end
+end
+
+function create_joker(neg)
+	G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+		if G.jokers.config.card_limit > #G.jokers.cards then
+			play_sound('timpani')
+			local card = create_card('Joker', G.jokers, nil, nil, nil, nil, nil, 'temple_reward')
+			if neg then
+				card:set_edition({ negative = true }, true)
+			end
+			card:add_to_deck()
+			G.jokers:emplace(card)
+		end
+		return true end }))
+end
+
+function complete_temple_request()
+	if G.GAME.starting_params.temple_current_request.disabled == nil then
+		local filtered_rewards = {}
+		for i = 1, #G.temple_rewards do
+			local k = G.temple_rewards[i].key
+			local repeated = false
+			for j = 1, #G.GAME.starting_params.templedeck_effects do
+				if k == G.GAME.starting_params.templedeck_effects[j] then
+					repeated = true
+					break
+				end
+			end
+			--if G.GAME.starting_params.temple_current_request.difficulty == G.temple_rewards[i].difficulty and not repeated then
+			if k == 'shop_slot' then
+				filtered_rewards[#filtered_rewards+1] = G.temple_rewards[i]
+			end
+		end
+		local t = pseudorandom_element(filtered_rewards, pseudoseed('templedeck_rewards'))
+		local k = t.key
+		if k == '5_dollars' then
+			ease_dollars(5)
+		elseif k == 'tarot' then
+			create_cards(1, false, 'Tarot')
+		elseif k == 'planet' then
+			create_cards(1, false, 'Planet')
+		elseif k == 'spectral' then
+			create_cards(1, false, 'Spectral')
+		elseif k == 'joker' then
+			create_joker(false)
+		elseif k == 'tarots' then
+			create_cards(3, true, 'Tarot')
+		elseif k == 'planets' then
+			create_cards(3, true, 'Planet')
+		elseif k == 'spectrals' then
+			create_cards(2, true, 'Spectral')
+		elseif k == 'negative_joker' then
+			create_joker(true)
+		elseif k == 'joker_edition' then
+			local temp_pool = {}
+			for k, v in pairs(G.jokers.cards) do
+                if v.ability.set == 'Joker' and (not v.edition) then
+                    table.insert(temp_pool, v)
+                end
+            end
+			if #temp_pool > 0 then
+				G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+					local eligible_card = pseudorandom_element(temp_pool, pseudoseed('templedeck_reward'))
+					local edition = poll_edition('templedeck_reward', nil, true, true)
+					eligible_card:set_edition(edition, true)
+				return true end }))
+			end
+		elseif k == 'random_tag' then
+			G.E_MANAGER:add_event(Event({
+				func = (function()
+					local t_ids = {}
+					for k, v in pairs(G.P_TAGS) do
+						t_ids[#t_ids+1] = k
+					end
+					local t = pseudorandom_element(t_ids, pseudoseed('templedeck_rewards'))
+					add_tag(Tag(t))
+					play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+					play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+					return true
+				end)
+			}))
+		elseif k == 'black_hole' then
+			G.E_MANAGER:add_event(Event({
+				func = (function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, 'c_black_hole', 'deck')
+						card:add_to_deck()
+						G.consumeables:emplace(card)
+						play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+						play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+						return true
+					end
+				end)
+			  }))
+		elseif k == 'hand' then
+			G.GAME.round_resets.hands = G.GAME.round_resets.hands + 1
+		elseif k == 'shop_slot' then
+			G.E_MANAGER:add_event(Event({func = function()
+				change_shop_size(10)
+				return true end }))
+		elseif k == 'joker_slots' then
+			G.jokers.config.card_limit = G.jokers.config.card_limit + 5
+		elseif k == 'discard' then
+			ease_discard(1)
+			G.GAME.round_resets.discards = G.GAME.round_resets.discards + 1
+		elseif k == 'minus_ante' then
+			ease_ante(-1)
+			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - 1
+		elseif k == 'hand_size' then
+			G.hand:change_size(1)
+		elseif k == 'consumable_slot' then
+			G.E_MANAGER:add_event(Event({func = function()
+				G.consumeables.config.card_limit = G.consumeables.config.card_limit + 1
+				return true end }))
+		elseif k == 'joker_slot' then
+			G.jokers.config.card_limit = G.jokers.config.card_limit + 1
+		elseif k == 'balance_effect' then
+			G.GAME.starting_params.temple_deck_balance_effect = true
+		elseif k == 'free_rolls_effect' then
+			G.GAME.starting_params.temple_deck_free_rolls_effect = true
+			ease_dollars(100)
+		elseif k == 'interest_limit_break' then
+			G.GAME.starting_params.temple_deck_interest_limit_break = true
+			G.GAME.interest_cap = 5000
+			ease_dollars(1000)
+		elseif k == 'reset_ante' then
+			local d = G.GAME.round_resets.ante - 1
+			ease_ante(-d)
+			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - d
+		elseif k == 'clone_jokers' then
+			if G.jokers.cards[1] then
+				for i = 1, #G.jokers.cards do
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							local card = copy_card(G.jokers.cards[i], nil)
+							card:set_edition({ negative = true }, true)
+							card:add_to_deck()
+							G.jokers:emplace(card)
+							return true
+						end
+					}))
+				end
+			end
+		end
+		if not t.repeatable then
+			G.GAME.templedeck_effects[#G.GAME.templedeck_effects+1] = t.key
+		end
+		temple_congrats(t.text)
+	else --for rerolls
+		G.GAME.starting_params.temple_current_request.disabled = nil
+	end
+	generate_temple_request()
+end
+
+local shen_calculate_reroll_cost = calculate_reroll_cost
+function calculate_reroll_cost(skip_increment)
+	shen_calculate_reroll_cost(skip_increment)
+	if G.GAME.starting_params.temple_deck_free_rolls_effect and pseudorandom('templedeck_freerolls') > .1 then
+		if not skip_increment then G.GAME.current_round.reroll_cost_increase = G.GAME.current_round.reroll_cost_increase - 1 end
+		G.GAME.current_round.reroll_cost = 0
+	end
+end
+
+local shen_playing_card_joker_effects = playing_card_joker_effects
+function playing_card_joker_effects(cards)
+	shen_playing_card_joker_effects(cards)
+	if G.GAME.starting_params.templedeck then
+		if #cards > 0 then
+			complete_or_increment_request('card_add', 'card_add_multiple', #cards)
+		end
+	end
+end
+
+function fix_shop_size()
+	if G.GAME.starting_params.templedeck then
+		if G.shop_jokers and G.shop_jokers.cards then
+			if G.shop_jokers.T.w > math.min(G.GAME.shop.joker_max, 4)*1.01*G.CARD_W then
+				G.shop_jokers.T.w = math.min(G.GAME.shop.joker_max, 4)*1.01*G.CARD_W ---overridden with math.max to prevent shop becoming too large
+				sendDebugMessage("AHHHHHHHHHH", "HHHHHHHHHHHHH")
+				G.shop:recalculate()
+			end
+		end
+	end
+end
+
+local shen_Game_update_shop = Game.update_shop
+function Game.update_shop(self, dt)
+	shen_Game_update_shop(self, dt)
+	fix_shop_size()
+end
+
+local shen_change_shop_size = change_shop_size
+function change_shop_size(mod)
+	shen_change_shop_size(mod)
+	fix_shop_size()
+end
+
+local shen_modify_hand = Blind.modify_hand
+function Blind.modify_hand(self, cards, poker_hands, text, mult, hand_chips) -- called for hands, around the same time as before context for jokers - but only called once so I can use it for temple deck obelisk checks etc
+	mult, hand_chips, modded = shen_modify_hand(self, cards, poker_hands, text, mult, hand_chips)
+	if G.GAME.starting_params.templedeck then
+		if G.GAME.starting_params.temple_current_request.details.hand ~= nil and G.GAME.starting_params.temple_current_request.details.hand == text then
+			complete_or_increment_request('play_easy', 'play_easy_multiple', 1)
+			complete_or_increment_request('play_medium', 'play_medium_multiple', 1)
+			complete_or_increment_request('play_hard', 'play_hard_multiple', 1)
+		end
+		local k = G.GAME.starting_params.temple_current_request.key
+		if k == 'play_obelisk' then
+			local reset = true
+			local play_more_than = (G.GAME.hands[text].played or 0)
+			for k, v in pairs(G.GAME.hands) do
+				if k ~= text and v.played >= play_more_than and v.visible then
+					reset = false
+				end
+			end
+			if reset then
+				G.GAME.starting_params.temple_current_request.details.remaining = G.GAME.starting_params.temple_current_request.details.total
+			else
+				G.GAME.starting_params.temple_current_request.details.remaining = G.GAME.starting_params.temple_current_request.details.remaining - 1
+			end
+			if G.GAME.starting_params.temple_current_request.details.remaining <= 0 then
+				complete_temple_request()
+			else
+				generate_temple_request_text()
+			end
+		end
+	end
+	return mult, hand_chips, modded
 end
 
 G.FUNCS.reroll_temple = function(e) --copied reroll_boss
 	stop_use()
+	G.GAME.starting_params.temple_current_request.disabled = true
 	ease_dollars(-10)
 	G.CONTROLLER.locks.boss_reroll = true
 	G.E_MANAGER:add_event(Event({
@@ -1378,5 +1857,235 @@ G.FUNCS.reroll_temple = function(e) --copied reroll_boss
 	}))
 end
 
+local shen_skip_blind = G.FUNCS.skip_blind
+function G.FUNCS.skip_blind(e)
+	shen_skip_blind(e)
+	if G.GAME.starting_params.templedeck then
+		if G.GAME.starting_params.temple_current_request.key == "skip_blind" then
+			complete_temple_request()
+		end
+	end
+end
+
+local shen_start_dissolve = Card.start_dissolve
+function Card.start_dissolve(self, dissolve_colours, silent, dissolve_time_fac, no_juice)
+	if G.GAME.starting_params.templedeck then
+		if self.playing_card then
+			complete_or_increment_request('card_remove', 'card_remove_multiple', 1)
+		end
+	end
+	shen_start_dissolve(self, dissolve_colours, silent, dissolve_time_fac, no_juice)
+end
+
+local shen_shatter = Card.shatter
+function Card.shatter(self)
+	if G.GAME.starting_params.templedeck then
+		if self.playing_card then
+			complete_or_increment_request('card_remove', 'card_remove_multiple', 1)
+		end
+	end
+	shen_shatter(self)
+end
+
+function complete_or_increment_request(c_key, i_key, q)
+	local k = G.GAME.starting_params.temple_current_request.key
+	if k == c_key then
+		complete_temple_request()
+	elseif k == i_key then
+		G.GAME.starting_params.temple_current_request.details.remaining = G.GAME.starting_params.temple_current_request.details.remaining - q
+		if G.GAME.starting_params.temple_current_request.details.remaining <= 0 then
+			complete_temple_request()
+		else
+			generate_temple_request_text()
+		end
+	end
+end
+
+local shen_set_consumable_usage = set_consumeable_usage
+function set_consumeable_usage(card)
+	if G.GAME.starting_params.templedeck then
+		if card.config.center.set == 'Tarot' then
+			complete_or_increment_request('play_tarot', 'play_tarots', 1)
+		elseif card.config.center.set == 'Planet' then
+			complete_or_increment_request('play_planet', 'play_planets', 1)
+		elseif card.config.center.set == 'Spectral' then
+			complete_or_increment_request('play_spectral', 'play_spectrals', 1)
+		end
+	end
+	shen_set_consumable_usage(card)
+end
+
+local shen_Cardarea_draw = CardArea.draw -- how 2 be incompatible with anything that modifies this function
+function CardArea.draw(self)
+    if not self.states.visible then return end 
+    if G.VIEWING_DECK and (self==G.deck or self==G.hand or self==G.play) then return end
+
+	--added code
+	if G.GAME.starting_params.templedeck then
+		if self == G.deck then
+			if not self.children.temple_request or G.GAME.starting_params.new_temple_request then
+				self.children.temple_request = UIBox {
+					definition = temple_speech_bubble(),
+					config = { align = 'cm', offset = { x = 0, y = -2.4 }, major = self, parent = self }
+				}
+				self.children.temple_request.states.collide.can = false
+				G.GAME.starting_params.new_temple_request = false
+			end
+			if G.deck_preview or self.states.collide.is or (G.buttons and G.buttons.states.collide.is and G.CONTROLLER.HID.controller) then
+				self.children.temple_request:draw()
+			end
+		end
+	end
+	-- added code
+
+    local state = G.TAROT_INTERRUPT or G.STATE
+
+    self.ARGS.invisible_area_types = self.ARGS.invisible_area_types or {discard=1, voucher=1, play=1, consumeable=1, title = 1, title_2 = 1}
+    if self.ARGS.invisible_area_types[self.config.type] or
+        (self.config.type == 'hand' and ({[G.STATES.SHOP]=1, [G.STATES.TAROT_PACK]=1, [G.STATES.SPECTRAL_PACK]=1, [G.STATES.STANDARD_PACK]=1,[G.STATES.BUFFOON_PACK]=1,[G.STATES.PLANET_PACK]=1, [G.STATES.ROUND_EVAL]=1, [G.STATES.BLIND_SELECT]=1})[state]) or
+        (self.config.type == 'deck' and self ~= G.deck) or
+        (self.config.type == 'shop' and self ~= G.shop_vouchers) then
+    else
+        if not self.children.area_uibox then 
+				--code edit starts here
+				local card_count
+				if self == G.consumeables and G.GAME.starting_params.cartomancerdeck then
+					card_count = self ~= G.shop_vouchers and {n=G.UIT.R, config={align = self == G.jokers and 'cl' or self == G.hand and 'cm' or 'cr', padding = 0.03, no_fill = true}, nodes={
+						{n=G.UIT.B, config={w = 0.1,h=0.1}},
+						{n=G.UIT.T, config={ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE}},
+						{n=G.UIT.B, config={w = 0.1,h=0.1}}
+					}} or nil
+				else
+					card_count = self ~= G.shop_vouchers and {n=G.UIT.R, config={align = self == G.jokers and 'cl' or self == G.hand and 'cm' or 'cr', padding = 0.03, no_fill = true}, nodes={
+						{n=G.UIT.B, config={w = 0.1,h=0.1}},
+						{n=G.UIT.T, config={ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE}},
+						{n=G.UIT.T, config={text = '/', scale = 0.3, colour = G.C.WHITE}},
+						{n=G.UIT.T, config={ref_table = self.config, ref_value = 'card_limit', scale = 0.3, colour = G.C.WHITE}},
+						{n=G.UIT.B, config={w = 0.1,h=0.1}}
+					}} or nil
+				end  
+				-- code edit ends here
+
+                self.children.area_uibox = UIBox{
+                    definition = 
+                        {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR}, nodes={
+                            {n=G.UIT.R, config={minw = self.T.w,minh = self.T.h,align = "cm", padding = 0.1, mid = true, r = 0.1, colour = self ~= G.shop_vouchers and {0,0,0,0.1} or nil, ref_table = self}, nodes={
+                                self == G.shop_vouchers and 
+                                {n=G.UIT.C, config={align = "cm", paddin = 0.1, func = 'shop_voucher_empty', visible = false}, nodes={
+                                    {n=G.UIT.R, config={align = "cm"}, nodes={
+                                        {n=G.UIT.T, config={text = 'DEFEAT', scale = 0.6, colour = G.C.WHITE}}
+                                    }},
+                                    {n=G.UIT.R, config={align = "cm"}, nodes={
+                                        {n=G.UIT.T, config={text = 'BOSS BLIND', scale = 0.4, colour = G.C.WHITE}}
+                                    }},
+                                    {n=G.UIT.R, config={align = "cm"}, nodes={
+                                        {n=G.UIT.T, config={text = 'TO RESTOCK', scale = 0.4, colour = G.C.WHITE}}
+                                    }},
+                                }} or nil,
+                            }},
+                            card_count
+                        }},
+                    config = { align = 'cm', offset = {x=0,y=0}, major = self, parent = self}
+                }
+            end
+        self.children.area_uibox:draw()
+    end
+
+    self:draw_boundingrect()
+    add_to_drawhash(self)
+
+    self.ARGS.draw_layers = self.ARGS.draw_layers or self.config.draw_layers or {'shadow', 'card'}
+    for k, v in ipairs(self.ARGS.draw_layers) do
+        if self.config.type == 'deck' then 
+            for i = #self.cards, 1, -1 do 
+                if self.cards[i] ~= G.CONTROLLER.focused.target then
+                    if i == 1 or i%(self.config.thin_draw or 9) == 0 or i == #self.cards or math.abs(self.cards[i].VT.x - self.T.x) > 1 or math.abs(self.cards[i].VT.y - self.T.y) > 1  then
+                        if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end
+                    end
+                end
+            end
+        end
+
+        if self.config.type == 'joker' or self.config.type == 'consumeable' or self.config.type == 'shop' or self.config.type == 'title_2' then 
+            for i = 1, #self.cards do 
+                if self.cards[i] ~= G.CONTROLLER.focused.target then
+                    if not self.cards[i].highlighted then
+                        if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end
+                    end
+                end
+            end
+            for i = 1, #self.cards do  
+                if self.cards[i] ~= G.CONTROLLER.focused.target then
+                    if self.cards[i].highlighted then
+                        if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end
+                    end
+                end
+            end
+        end
+
+        if self.config.type == 'discard' then 
+            for i = 1, #self.cards do 
+                if self.cards[i] ~= G.CONTROLLER.focused.target then
+                    if math.abs(self.cards[i].VT.x - self.T.x) > 1 then 
+                        if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end
+                    end
+                end
+            end
+        end
+
+        if self.config.type == 'hand' or self.config.type == 'play' or self.config.type == 'title' or self.config.type == 'voucher' then 
+            for i = 1, #self.cards do 
+                if self.cards[i] ~= G.CONTROLLER.focused.target or self == G.hand then
+                    if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end
+                end
+            end
+        end
+    end
+
+    if self == G.deck then
+        if G.CONTROLLER.HID.controller and G.STATE == G.STATES.SELECTING_HAND and not self.children.peek_deck then
+            self.children.peek_deck = UIBox{
+                definition = 
+                    {n=G.UIT.ROOT, config = {align = 'cm', padding = 0.1, r =0.1, colour = G.C.CLEAR}, nodes={
+                        {n=G.UIT.R, config={align = "cm", r =0.1, colour = adjust_alpha(G.C.L_BLACK, 0.5),func = 'set_button_pip', focus_args = {button = 'triggerleft', orientation = 'bm', scale = 0.6, type = 'none'}}, nodes={
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={text = 'PEEK', scale = 0.48, colour = G.C.WHITE, shadow = true}}
+                            }},
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={text = 'DECK', scale = 0.38, colour = G.C.WHITE, shadow = true}}
+                            }},
+                        }},
+                    }},
+                config = { align = 'cl', offset = {x=-0.5,y=0.1}, major = self, parent = self}
+            }
+            self.children.peek_deck.states.collide.can = false
+        elseif (not G.CONTROLLER.HID.controller or G.STATE ~= G.STATES.SELECTING_HAND) and self.children.peek_deck then
+            self.children.peek_deck:remove()
+            self.children.peek_deck = nil
+        end
+        if not self.children.view_deck then 
+            self.children.view_deck = UIBox{
+                definition = 
+                    {n=G.UIT.ROOT, config = {align = 'cm', padding = 0.1, r =0.1, colour = G.C.CLEAR}, nodes={
+                        {n=G.UIT.R, config={align = "cm", padding = 0.05, r =0.1, colour = adjust_alpha(G.C.BLACK, 0.5),func = 'set_button_pip', focus_args = {button = 'triggerright', orientation = 'bm', scale = 0.6}, button = 'deck_info'}, nodes={
+                            {n=G.UIT.R, config={align = "cm", maxw = 2}, nodes={
+                                {n=G.UIT.T, config={text = localize('k_view'), scale = 0.48, colour = G.C.WHITE, shadow = true}}
+                            }},
+                            {n=G.UIT.R, config={align = "cm", maxw = 2}, nodes={
+                                {n=G.UIT.T, config={text = localize('k_deck'), scale = 0.38, colour = G.C.WHITE, shadow = true}}
+                            }},
+                        }},
+                    }},
+                config = { align = 'cm', offset = {x=0,y=0}, major = self.cards[1] or self, parent = self}
+            }
+            self.children.view_deck.states.collide.can = false
+        end
+    if G.deck_preview or self.states.collide.is or (G.buttons and G.buttons.states.collide.is and G.CONTROLLER.HID.controller) then self.children.view_deck:draw() end
+    if self.children.peek_deck then self.children.peek_deck:draw() end
+    end
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
+
+
