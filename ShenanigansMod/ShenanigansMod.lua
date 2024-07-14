@@ -1732,7 +1732,7 @@ function complete_temple_request()
 			end
 		end
 		if not t.repeatable then
-			G.GAME.starging_params.templedeck_effects[#G.GAME.starging_params.templedeck_effects+1] = t.key
+			G.GAME.starting_params.templedeck_effects[#G.GAME.starting_params.templedeck_effects+1] = t.key
 		end
 		temple_congrats(t.text)
 	else --for rerolls
