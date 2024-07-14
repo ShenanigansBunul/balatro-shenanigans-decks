@@ -1590,7 +1590,7 @@ end
 
 function create_joker(neg)
 	G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-		if G.jokers.config.card_limit > #G.jokers.cards then
+		if G.jokers.config.card_limit > #G.jokers.cards or neg then
 			play_sound('timpani')
 			local card = create_card('Joker', G.jokers, nil, nil, nil, nil, nil, 'temple_reward')
 			if neg then
@@ -1732,7 +1732,7 @@ function complete_temple_request()
 			end
 		end
 		if not t.repeatable then
-			G.GAME.templedeck_effects[#G.GAME.templedeck_effects+1] = t.key
+			G.GAME.starging_params.templedeck_effects[#G.GAME.starging_params.templedeck_effects+1] = t.key
 		end
 		temple_congrats(t.text)
 	else --for rerolls
