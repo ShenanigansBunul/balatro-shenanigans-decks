@@ -14,6 +14,8 @@ This mod currently adds 12 decks to the game. You can either discover the effect
  - **Chicot's Deck**: Selling any joker disables the current boss blind.
  - **Perkeo's Deck**: At the end of each Boss Blind, triggers the Perkeo effect.
  - **Freaky Deck**: Each Joker is assigned as a 'Freaky 6', or 'Freaky 9'. After scoring, any 'Freaky 6' adjacent to a 'Freaky 9' gives 1.5x mult.
+ - **Temple Deck**: Get Temple Requests of various types (playing hands, spending money, using tarot cards...). Complete them to earn rewards.
+ - **Cartomancer Deck**: All consumable cards are negative and can appear multiple times. No limit on consumables.
 
 
 I have begun testing the mod but not extensively, issues might appear, especially regarding higher stakes as I've only really tested them on white stake so far. I'm planning to try to reach gold stake with each deck and tweak the difficulty of any outliers.
