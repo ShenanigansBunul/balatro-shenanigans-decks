@@ -1330,9 +1330,9 @@ function end_round()
 end
 
 local shen_generate_card_ui = generate_card_ui
-function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end)
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
 	local r_val = shen_generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start,
-		main_end)
+		main_end, card)
 	if r_val.card_type ~= nil and r_val.card_type == "Joker" then
 		if G.GAME.starting_params.freaky_six_UI == true then
 			G.GAME.starting_params.freaky_six_UI = false
