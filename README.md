@@ -7,6 +7,7 @@ This mod currently adds 15 decks to the game. You can either discover the effect
  - **Yorick Deck**: Discarded cards trigger their end of round effects. This works with Mime/Red Seal.
  - **Chicot Deck**: During the Boss Blind, your rightmost Joker triggers an additional time.
  - **Perkeo's Deck**: Get a Negative copy of every third consumable used.
+
 The other current decks are themed after existing jokers/vouchers:
  - **Dusk Deck**: -1 hand per round, but each final hand is retriggered twice
  - **Gros Michel Deck**: The leftmost non-eternal Joker has a 1 in 6 chance to be destroyed at end of round. Start with a Gros Michel.
