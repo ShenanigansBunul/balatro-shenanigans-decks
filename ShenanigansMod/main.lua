@@ -1,6 +1,6 @@
 SMODS.Atlas({key = "shenDecks", path = "shenDecks.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "shenFreakyDeck", path = "shenFreakyDeck.png", px = 284, py = 380, atlas_table = "ASSET_ATLAS"}):register()
-SMODS.Atlas({key = "shenTempleGames", path = "shenTempleGames.png", px = 284, py = 380, atlas_table = "ASSET_ATLAS"}):register()
+SMODS.Atlas({key = "shenTempleGames", path = "shenTempleGames.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Sound({ key = "freaky_scream", path = "freaky_scream.ogg", pitch = 1, volume = 1})
 SMODS.Sound({ key = "temple", path = "temple.wav", pitch = 1, volume = 1})
 
@@ -16,6 +16,7 @@ SMODS.ConsumableType{
         secondary_colour = G.C.TEMPLE,
         collection_rows = { 7, 6 },
         shop_rate = 0,
+		loc_txt = {},
         default = "temple_after_egypt",
         can_stack = false,
         can_divide = false,
@@ -273,7 +274,7 @@ SMODS.Back{ --Hieroglyph Deck
   end
 }
 
-SMODS.Back{
+SMODS.Back{ --Freaky Deck
     name = "Freaky Deck",
 	key = "freakydeck",  
 	order = 24,
@@ -290,7 +291,7 @@ SMODS.Back{
   end,
   calculate = function(self, back, context)
 	if context.selling_card and context.card.ability.set == 'Joker' then
-		play_sound("shen_temple", 1, 1) --fuck ass
+		play_sound('shen_freaky_scream', pseudorandom('freaker')/5 + .9, 1)
     end
   end
 }
@@ -496,10 +497,10 @@ function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, h
 	if r_val.card_type ~= nil and r_val.card_type == "Joker" then
 		if G.GAME.starting_params.freaky_six_UI == true then
 			G.GAME.starting_params.freaky_six_UI = false
-			ref_generate_card_ui({ key = 'freaky_six', set = 'other' }, r_val)
+			ref_generate_card_ui({ key = 'freaky_six', set = 'Other' }, r_val)
 		elseif G.GAME.starting_params.freaky_nine_UI == true then
 			G.GAME.starting_params.freaky_nine_UI = false
-			ref_generate_card_ui({ key = 'freaky_nine', set = 'other' }, r_val)
+			ref_generate_card_ui({ key = 'freaky_nine', set = 'Other' }, r_val)
 		end
 	end
 	return r_val

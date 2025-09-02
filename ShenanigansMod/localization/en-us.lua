@@ -2,31 +2,31 @@ return {
     misc = {
         dictionary = {
             k_temple_game = "Temple Game",
-            b_temple_games = "Temple Games"
+            b_temple_game_cards = "Temple Games"
         },
         labels = {
             temple_game = "Temple Game"
         }
     },
     descriptions = {
-        ["other"] = {
+        ["Other"] = {
             ["freaky_six"] = {
                 ["name"] = "Freaky 6",
-                ["text"] = {
+                text = {
                     "anybody gonna",
                     "match my freak?"
                 }
             },
             ["freaky_nine"] = {
                 ["name"] = "Freaky 9",
-                ["text"] = {
+                text = {
                     "i'm a freak fr",
                     "just lmk"
                 }
             }
         },
         temple_game = {
-            shen_temple_after_egypt = {
+            c_shen_temple_after_egypt = {
                 name = "After Egypt",
                 text = {
                     "Hello",
@@ -34,7 +34,7 @@ return {
                 }
             }
         },
-        back = {
+        Back = {
             b_shen_caniodeck = {
                 name = "Canio Deck",
                 text = {
