@@ -29,8 +29,69 @@ return {
             c_shen_temple_after_egypt = {
                 name = "After Egypt",
                 text = {
-                    "Hello",
-                    "World!"
+                    "Permanently",
+                    "gain {C:red}+1{} discard",
+                    "each round"
+                }
+            },
+            c_shen_temple_battle_lines = {
+                name = "Battle Lines",
+                text = {
+                    "{C:attention}+1{} card slot",
+                    "available in shop"
+                }
+            },
+            c_shen_temple_bomber_golf = {
+                name = "Bomber Golf",
+                text = {
+                    "{C:attention}+1{} consumable slot"
+                }
+            },
+            c_shen_temple_eagle_dive = {
+                name = "Eagle Dive",
+                text = {
+                    "Permanently",
+                    "gain {C:blue}+1{} hand",
+                    "per round",
+                }
+            },
+            c_shen_temple_strut = {
+                name = "Strut",
+                text = {
+                    "Balance {C:blue}Chips{} and",
+                    "{C:red}Mult{} when calculating",
+                    "score for played hand at",
+                    "{C:blue}640{}:{C:red}480{} ratio"
+                }
+            },
+            c_shen_temple_varoom = {
+                name = "Varoom",
+                text = {
+                    "{C:dark_edition}+1{} Joker Slot"
+                }
+            },
+            c_shen_temple_zone_out = {
+                name = "Zone Out",
+                text = {
+                    "{C:attention}+1{} hand size"
+                }
+            }
+        },
+        Voucher = {
+            c_shen_balance = {
+                name = "Balance",
+                text = {
+                    "{C:temple_game}Temple Games{} can be",
+                    "purchased in the {C:attention}shop{}."
+                }
+            },
+            c_shen_power = {
+                name = "Power",
+                text = {
+                    "{C:temple_game}Temple Games{} in the",
+                    "{C:attention}shop{} can be duplicates.",
+                    "More powerful {C:temple_game}Temple Games{}",
+                    "can appear."
                 }
             }
         },
@@ -86,7 +147,7 @@ return {
                 name = "Gros Michel Deck",
                 text = {
                     "The leftmost non-eternal",
-                    "Joker has a {C:green}1 in 6{} chance to be",
+                    "{C:attention}Joker{} has a {C:green}1 in 6{} chance to be",
                     "destroyed at end of round",
                     "Start with a {C:gold,T:j_gros_michel}#1#{}"
                 }
@@ -129,9 +190,11 @@ return {
                 }
             },
             b_shen_templedeck = {
-                name = "Temple Deck (TODO)",
+                name = "Temple Deck",
                 text = {
-                    "todo think of something",
+                    "Start run with",
+                    "{C:temple_game,T:c_shen_balance}#1#{} and {C:temple_game,T:c_shen_power}#2#{}",
+                    "{C:blue}-1{} hand size",
                 }
             },
             b_shen_cartomancerdeck = {
@@ -145,7 +208,8 @@ return {
             b_shen_diplopiadeck = {
                 name = "Diplopia Deck",
                 text = {
-                    "After defeating each {C:attention}Boss Blind{},",
+                    "After defeating",
+                    "each {C:attention}Boss Blind{},",
                     "gain a {C:dark_edition}Negative{} {C:attention}Perishable{}",
                     "copy of a random {C:attention}Joker{}"
                 }

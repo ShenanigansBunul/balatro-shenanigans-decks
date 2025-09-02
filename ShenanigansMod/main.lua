@@ -1,6 +1,7 @@
 SMODS.Atlas({key = "shenDecks", path = "shenDecks.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "shenFreakyDeck", path = "shenFreakyDeck.png", px = 284, py = 380, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "shenTempleGames", path = "shenTempleGames.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
+SMODS.Atlas({key = "shenVouchers", path = "shenVouchers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Sound({ key = "freaky_scream", path = "freaky_scream.ogg", pitch = 1, volume = 1})
 SMODS.Sound({ key = "temple", path = "temple.wav", pitch = 1, volume = 1})
 
@@ -10,11 +11,35 @@ SMODS.current_mod.optional_features = { retrigger_joker = true }
 
 G.C.TEMPLE = HEX('00AAAA')
 
+SMODS.Consumable{
+        set = 'Voucher',
+		key = "balance",
+        cost = 10,
+        atlas = 'shenVouchers',
+        discovered = true,
+        unlocked = true,
+        available = true,
+        pos = { x = 0, y = 0 },
+        config = {},
+    }
+
+SMODS.Consumable{
+        set = 'Voucher',
+		key = "power",
+        cost = 10,
+        atlas = 'shenVouchers',
+        discovered = true,
+        unlocked = true,
+        available = true,
+        pos = { x = 1, y = 0 },
+        config = {},
+    }
+
 SMODS.ConsumableType{
         key = "temple_game",
         primary_colour = G.C.TEMPLE,
         secondary_colour = G.C.TEMPLE,
-        collection_rows = { 7, 6 },
+        collection_rows = { 4, 3 },
         shop_rate = 0,
 		loc_txt = {},
         default = "temple_after_egypt",
@@ -27,6 +52,78 @@ SMODS.Consumable{
 	set = "temple_game",
 	atlas = 'shenTempleGames',
 	pos = { x = 0, y = 0 },
+	config = {extra = {cost = 15}},
+	discovered = true,
+	use = function(self, card, area, copier)
+		return
+	end,
+}
+
+SMODS.Consumable{
+	key = "temple_battle_lines",
+	set = "temple_game",
+	atlas = 'shenTempleGames',
+	pos = { x = 1, y = 0 },
+	config = {extra = {cost = 15}},
+	discovered = true,
+	use = function(self, card, area, copier)
+		return
+	end,
+}
+
+SMODS.Consumable{
+	key = "temple_bomber_golf",
+	set = "temple_game",
+	atlas = 'shenTempleGames',
+	pos = { x = 2, y = 0 },
+	config = {extra = {cost = 15}},
+	discovered = true,
+	use = function(self, card, area, copier)
+		return
+	end,
+}
+
+SMODS.Consumable{
+	key = "temple_eagle_dive",
+	set = "temple_game",
+	atlas = 'shenTempleGames',
+	pos = { x = 3, y = 0 },
+	config = {extra = {cost = 15}},
+	discovered = true,
+	use = function(self, card, area, copier)
+		return
+	end,
+}
+
+SMODS.Consumable{
+	key = "temple_strut",
+	set = "temple_game",
+	atlas = 'shenTempleGames',
+	pos = { x = 4, y = 0 },
+	config = {extra = {cost = 15}},
+	discovered = true,
+	use = function(self, card, area, copier)
+		return
+	end,
+}
+
+SMODS.Consumable{
+	key = "temple_varoom",
+	set = "temple_game",
+	atlas = 'shenTempleGames',
+	pos = { x = 5, y = 0 },
+	config = {extra = {cost = 15}},
+	discovered = true,
+	use = function(self, card, area, copier)
+		return
+	end,
+}
+
+SMODS.Consumable{
+	key = "temple_zone_out",
+	set = "temple_game",
+	atlas = 'shenTempleGames',
+	pos = { x = 6, y = 0 },
 	config = {extra = {cost = 15}},
 	discovered = true,
 	use = function(self, card, area, copier)
@@ -370,13 +467,14 @@ SMODS.Back{ --Temple Deck
 	order = 28,
   unlocked = true,
   discovered = true,
-	config = { },
+	config = { vouchers = {"c_shen_balance","c_shen_power"} },
   loc_vars = function(self, info_queue, center)
-    return {vars = {}}
+    return {vars = {localize{type = 'name_text', key = 'c_shen_balance', set = 'Voucher'}, localize{type = 'name_text', key = 'c_shen_power', set = 'Voucher'}}}
   end,
 	pos = { x = 10, y = 0 },
 	atlas = "shenDecks",
   apply = function(self, back)
+	G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size - 1
   end,
   calculate = function(self, back, context)
   end
