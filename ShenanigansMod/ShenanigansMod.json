@@ -17,5 +17,5 @@
 	], 
 	"provides": [
 	], 
-	"dump_loc": true
+	"dump_loc": false
 }

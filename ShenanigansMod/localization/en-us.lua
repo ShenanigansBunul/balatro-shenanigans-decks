@@ -2,10 +2,15 @@ return {
     misc = {
         dictionary = {
             k_temple_game = "Temple Game",
-            b_temple_game_cards = "Temple Games"
+            b_temple_game_cards = "Temple Games",
+            k_temple_common = "Common",
+            k_temple_divine = "Divine",
+            k_freaky = "Freaky!",
         },
         labels = {
-            temple_game = "Temple Game"
+            temple_game = "Temple Game",
+            temple_common = "Common",
+            temple_divine = "Divine",
         }
     },
     descriptions = {
@@ -78,20 +83,18 @@ return {
             }
         },
         Voucher = {
-            c_shen_balance = {
+            v_shen_balance = {
                 name = "Balance",
                 text = {
-                    "{C:temple_game}Temple Games{} can be",
-                    "purchased in the {C:attention}shop{}."
+                    "Common {C:temple_game}Temple Games{} can be",
+                    "purchased from the {C:attention}shop{}"
                 }
             },
-            c_shen_power = {
+            v_shen_power = {
                 name = "Power",
                 text = {
-                    "{C:temple_game}Temple Games{} in the",
-                    "{C:attention}shop{} can be duplicates.",
-                    "More powerful {C:temple_game}Temple Games{}",
-                    "can appear."
+                    "{C:dark_edition}Divine{} {C:temple_game}Temple Games{}",
+                    "can be purchased from the {C:attention}shop{}"
                 }
             }
         },
@@ -129,9 +132,9 @@ return {
             b_shen_perkeodeck = {
                 name = "Perkeo Deck",
                 text = {
-                    "Get a {C:dark_edition}Negative{} copy",
-                    "of every third",
-                    "consumable used"
+                    "After using four consumables",
+                    "get a {C:dark_edition}Negative{} copy",
+                    "of one of them"
                 }
             },
             b_shen_duskdeck = {
@@ -212,6 +215,14 @@ return {
                     "each {C:attention}Boss Blind{},",
                     "gain a {C:dark_edition}Negative{} {C:attention}Perishable{}",
                     "copy of a random {C:attention}Joker{}"
+                }
+            },
+            b_shen_riffraffdeck = {
+                name = "Riff-Raff Deck",
+                text = {
+                    "Start with {C:dark_edition}ANY{} random",
+                    "eternal {C:attention}Joker{} that",
+                    "retriggers once",
                 }
             }
         }
