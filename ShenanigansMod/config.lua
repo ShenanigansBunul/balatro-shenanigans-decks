@@ -1,3 +1,3 @@
 return {
-	temple_game_vouchers = true
+	temple_deck = false
 }
