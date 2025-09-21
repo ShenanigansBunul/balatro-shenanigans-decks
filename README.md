@@ -1,5 +1,5 @@
-# Balatro Shenanigans Mod
-This mod currently adds 15 decks to the game. You can either discover the effects yourself or read below for each deck's description. Requires Steamodded v0.9.8.
+# Shenanigans's Decks
+This mod currently adds 15 decks to the game (and 15 corresponding sleeves with unique effects, if using CardSleeves). You can either discover the effects yourself or read below for each deck's description.
 
 5 decks are themed after the legendary jokers:
  - **Canio Deck**: Discarded cards have a 1 in 7 (increasable by Oops! All 6s) chance to be destroyed.
