@@ -5,6 +5,7 @@ SMODS.Atlas({ key = "shenTempleGames", path = "shenTempleGames.png", px = 71, py
 	:register()
 SMODS.Atlas({ key = "shenSleeves", path = "shenSleeves.png", px = 73, py = 95, atlas_table = "ASSET_ATLAS" })
 	:register()
+SMODS.Atlas({ key = "modicon", path = "modicon.png", px = 31, py = 32, atlas_table = "ASSET_ATLAS" }):register()
 SMODS.Atlas({ key = "shenVouchers", path = "shenVouchers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS" }):register()
 SMODS.Sound({ key = "freaky_scream", path = "freaky_scream.ogg", pitch = 1, volume = 1 })
 SMODS.Sound({ key = "temple", path = "temple.wav", pitch = 1, volume = .5 })
