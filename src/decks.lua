@@ -140,20 +140,24 @@ perkeo_deck = SMODS.Back { --Perkeo Deck
                 }))
             elseif (G.GAME.starting_params.consumables_used + 1) % 4 == 0 then
                 local eval = function(card) return (G.GAME.starting_params.consumables_used + 1) % 4 == 0 end
-                for i = 1, #G.consumeables.cards do
-                    if G.consumeables.cards[i].ability
-                        and (G.consumeables.cards[i].ability.set == 'Tarot'
-                            or G.consumeables.cards[i].ability.set == 'Planet'
-                            or G.consumeables.cards[i].ability.set == 'Spectral') then
-                        juice_card_until(G.consumeables.cards[i], eval, true)
+                if G.consumables.cards then
+                    for i = 1, #G.consumeables.cards do
+                        if G.consumeables.cards[i].ability
+                            and (G.consumeables.cards[i].ability.set == 'Tarot'
+                                or G.consumeables.cards[i].ability.set == 'Planet'
+                                or G.consumeables.cards[i].ability.set == 'Spectral') then
+                            juice_card_until(G.consumeables.cards[i], eval, true)
+                        end
                     end
                 end
-                for i = 1, #G.shop_jokers.cards do
-                    if G.shop_jokers.cards[i].ability
-                        and (G.shop_jokers.cards[i].ability.set == 'Tarot'
-                            or G.shop_jokers.cards[i].ability.set == 'Planet'
-                            or G.shop_jokers.cards[i].ability.set == 'Spectral') then
-                        juice_card_until(G.shop_jokers.cards[i], eval, true)
+                if G.shop_jokers.cards then
+                    for i = 1, #G.shop_jokers.cards do
+                        if G.shop_jokers.cards[i].ability
+                            and (G.shop_jokers.cards[i].ability.set == 'Tarot'
+                                or G.shop_jokers.cards[i].ability.set == 'Planet'
+                                or G.shop_jokers.cards[i].ability.set == 'Spectral') then
+                            juice_card_until(G.shop_jokers.cards[i], eval, true)
+                        end
                     end
                 end
             end
@@ -338,7 +342,7 @@ freaky_deck = SMODS.Back { --Freaky Deck
                                     Xmult_mod = 4.2
                                 }
                             end
-                            if j.ability.freaky_effect == 0 
+                            if j.ability.freaky_effect == 0
                                 and G.jokers.cards[idx - 1].ability.freaky_effect
                                 and G.jokers.cards[idx - 1].ability.freaky_effect == 2
                                 and G.jokers.cards[idx - 2]
