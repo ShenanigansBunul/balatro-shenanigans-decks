@@ -376,7 +376,10 @@ showman_deck = SMODS.Back { --Showman Deck
     pos = { x = 8, y = 0 },
     atlas = "shenDecks",
     apply = function(self, back)
-        G.GAME.starting_params.showmandeck = true;
+        G.GAME.starting_params.showmandeck = true
+        G.GAME.starting_hand_size = G.GAME.starting_hand_size or 8
+        G.GAME.hands = G.GAME.hands or {}
+        G.GAME.jokers = G.GAME.jokers or {cards = {}}
     end,
     calculate = function(self, back, context)
     end
