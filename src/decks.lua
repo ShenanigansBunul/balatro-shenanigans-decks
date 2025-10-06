@@ -676,7 +676,7 @@ campfire_deck = SMODS.Back { --Campfire Deck
     end
 }
 
-loyalty_deck = SMODS.Back {     --Loyalty Deck
+loyalty_deck = SMODS.Back { --Loyalty Deck
     name = "Loyalty Deck",
     key = "loyaltydeck",
     order = 37,
@@ -694,38 +694,43 @@ loyalty_deck = SMODS.Back {     --Loyalty Deck
     calculate = function(self, back, context) end
 }
 
-if shenanigans_mod_config.vagabond_deck then
-    vagabond_deck = SMODS.Back { --Vagabond Deck (TODO)
-        name = "Vagabond Deck",
-        key = "vagabonddeck",
-        order = 38,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 6, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-end
+vagabond_deck = SMODS.Back {     --Vagabond Deck (TODO)
+    name = "Vagabond Deck",
+    key = "vagabonddeck",
+    order = 38,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 6, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back) end,
+    calculate = function(self, back, context) end
+}
 
-if shenanigans_mod_config.cloud9_deck then
-    cloud9_deck = SMODS.Back { --Cloud 9 Deck (TODO)
-        name = "Cloud 9 Deck",
-        key = "cloud9deck",
-        order = 39,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 7, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-end
+cloud9_deck = SMODS.Back {
+    name = "Cloud 9 Deck",
+    key = "cloud9deck",
+    order = 39,
+    unlocked = true,
+    discovered = true,
+    config = { hand_size = 1 },
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 7, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.cloud9deck = true
+        G.GAME.starting_params.hand_delta = 0
+    end,
+    calculate = function(self, back, context)
+        -- if context.round_eval then     (while this is probably safer/less prone to issues, the lovely patch is cooler)
+        --     if G.GAME.starting_params.hand_delta ~= 0 then
+        --         ease_dollars(G.GAME.starting_params.hand_delta)
+        --     end
+        -- end
+    end
+}

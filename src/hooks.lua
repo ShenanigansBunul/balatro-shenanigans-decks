@@ -90,6 +90,15 @@ function calculate_reroll_cost(skip_increment)
     return r_val
 end
 
+local ref_change_size = CardArea.change_size
+function CardArea:change_size(delta)
+    if G.GAME.starting_params.cloud9deck and self == G.hand then
+        G.GAME.starting_params.hand_delta = G.GAME.starting_params.hand_delta + delta
+        return 
+    end
+    return ref_change_size(self, delta)
+end
+
 local ref_emplace = CardArea.emplace
 function CardArea.emplace(self, card, location, stay_flipped)
     if G.GAME.starting_params.gift_deck and self == G.shop_jokers and card.ability.set == 'Joker' then

@@ -99,7 +99,6 @@ end
 '''
 match_indent = true
 
-
 [[patches]]
 [patches.pattern]
 target = "functions/button_callbacks.lua"
@@ -115,6 +114,24 @@ if G.GAME.starting_params.snakeskinsleeve then
     G.shop_jokers.T.w = math.min(#G.shop_jokers.cards*1.02*G.CARD_W,4.08*G.CARD_W)
     G.shop:recalculate()
     return true
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''for _, area in ipairs(SMODS.get_card_areas('jokers')) do
+            for _, _card in ipairs(area.cards) do
+            local ret = _card:calculate_dollar_bonus()
+    
+            -- TARGET: calc_dollar_bonus per card'''
+position = "before"
+payload = '''
+if G.GAME.starting_params.cloud9deck and G.GAME.starting_params.hand_delta ~= 0 then
+    add_round_eval_row({dollars = G.GAME.starting_params.hand_delta, bonus = true, name='custom', number = G.GAME.starting_params.hand_delta, text = "Cloud 9 Deck", pitch = pitch})
+    pitch = pitch + 0.06
+    dollars = dollars + G.GAME.starting_params.hand_delta
 end
 '''
 match_indent = true

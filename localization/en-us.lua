@@ -540,8 +540,9 @@ return {
             b_shen_partydeck = {
                 name = "Party Deck",
                 text = {
-                    "{C:dark_edition}Negative{} {C:attention}Jokers{} are more common",
-                    "When you have over {C:attention}2{} {C:dark_edition}Negative{} {C:attention}Jokers{}",
+                    "{C:dark_edition}Negative{} {C:attention}Jokers{} are",
+                    "more common",
+                    "When you have over {C:attention}2{}",
                     "destroy them randomly until",
                     "you remain with {C:attention}2{}"
                 }
