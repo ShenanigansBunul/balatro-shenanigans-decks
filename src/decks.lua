@@ -20,9 +20,7 @@ canio_deck = SMODS.Back { --Canio Deck
                     delay = 0.33,
                     func = function()
                         context.other_card:start_dissolve()
-                        for i = 1, #G.jokers.cards do
-                            G.jokers.cards[i]:calculate_joker({ remove_playing_cards = true, removed = { context.other_card } })
-                        end
+                        SMODS.calculate_context({ remove_playing_cards = true, removed = { context.other_card } })
                         return true
                     end
                 }))
