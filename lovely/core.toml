@@ -18,15 +18,17 @@ if G.GAME.starting_params.showmandeck then
     if pseudorandom('showmandeck', 1, 6) == 1 then
         new_pool = {}
 
-        for r = 1, #_pool do
-            for q = 1, #G.jokers.cards do
-                if _pool[r] == G.jokers.cards[q].config.center.key then
-                    new_pool[#new_pool + 1] = G.jokers.cards[q].config.center.key
+        if _pool and G.jokers and G.jokers.cards then
+            for r = 1, #_pool do
+                for q = 1, #G.jokers.cards do
+                    if _pool[r] == G.jokers.cards[q].config.center.key then
+                        new_pool[#new_pool + 1] = G.jokers.cards[q].config.center.key
+                    end
                 end
-            end
-            for q = 1, #G.consumeables do
-                if _pool[r] == G.consumeables[q].config.center.key then
-                    new_pool[#new_pool + 1] = G.consumeables[q].config.center.key
+                for q = 1, #G.consumeables do
+                    if _pool[r] == G.consumeables[q].config.center.key then
+                        new_pool[#new_pool + 1] = G.consumeables[q].config.center.key
+                    end
                 end
             end
         end
@@ -48,7 +50,7 @@ position = "at"
 payload = '''if G.GAME.starting_params.showmansleeve and showmanned then
     pack_cards[i+1] = card -- this is so hacky lmao
 else
-    pack_cards[i] = card
+    pack_cards[i] = card -- todo better way to replace 1st card in pack??
 end'''
 match_indent = true
 

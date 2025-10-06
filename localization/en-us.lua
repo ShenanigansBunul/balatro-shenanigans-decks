@@ -505,7 +505,7 @@ return {
                 }
             },
             b_shen_templedeck = {
-                name = "Temple Deck (WIP)",
+                name = "Temple Deck",
                 text = {
                     "Start run with",
                     "{C:temple_game,T:c_shen_balance}#1#{} and {C:temple_game,T:c_shen_power}#2#{}",
@@ -535,6 +535,73 @@ return {
                     "eternal {C:attention}Joker{}",
                     "{C:inactive}(Joker must be able{}",
                     "{C:inactive}to spawn as eternal){}"
+                }
+            },
+            b_shen_partydeck = {
+                name = "Party Deck",
+                text = {
+                    "{C:dark_edition}Negative{} {C:attention}Jokers{} are more common",
+                    "For each {C:dark_edition}Negative{} {C:attention}Joker{}",
+                    "over {C:attention}2{}, disable a random {C:attention}Joker{}",
+                    "{C:inactive}(changes every hand){}"
+                }
+            },
+            b_shen_eggdeck = {
+                name = "Egg Deck",
+                text = {
+                    "{C:blue}+9{} chips",
+                    "{C:inactive}hey, it's \"egg\"{}",
+                }
+            },
+            b_shen_giftdeck = {
+                name = "Gift Deck",
+                text = {
+                    "{C:attention}Jokers{} in the shop",
+                    "are replaced by",
+                    "{C:attention}Buffoon Packs{}"
+                }
+            },
+            b_shen_midasdeck = {
+                name = "Midas Deck",
+                text = {
+                    "Instead of their",
+                    "original scoring effect:",
+                    "{C:attention}Foil{} cards give {C:money}$2{}",
+                    "{C:attention}Holographic{} cards give {C:money}$4{}",
+                    "{C:attention}Polychrome{} cards give {C:money}$8{}"
+                }
+            },
+            b_shen_campfiredeck = {
+                name = "Campfire Deck",
+                text = {
+                    "Purchased cards have a",
+                    "{C:green}1 in 4{} chance to be destroyed",
+                    "If they are, gain",
+                    "double their price"
+                }
+            },
+            b_shen_loyaltydeck = {
+                name = "Loyalty Deck",
+                text = {
+                    "Every {C:attention}3rd{} reroll is free"
+                }
+            },
+            b_shen_vagabonddeck = {
+                name = "Vagabond Deck",
+                text = {
+                    "Cards are free",
+                    "Selling cards costs",
+                    "double their price"
+                }
+            },
+            b_shen_cloud9deck = {
+                name = "Cloud 9 Deck",
+                text = {
+                    "Hand Size is always {C:attention}9{}",
+                    "If it would be different,",
+                    "gain or lose {C:money}${} at the",
+                    "end of round equal",
+                    "to the difference"
                 }
             }
         }

@@ -28,15 +28,15 @@ if CardSleeves then
                 if context.cards_destroyed then
                     self.config.extra.cards_removed = self.config.extra.cards_removed + #context.glass_shattered
                     local new_extra_hand_size = math.floor(self.config.extra.cards_removed / 5)
-                    if new_extra_hand_size ~= self.config.extra_hand_size then
-                        G.hand:change_size(new_extra_hand_size - self.config.extra_hand_size)
-                        self.config.extra_hand_size = new_extra_hand_size
+                    if new_extra_hand_size ~= self.config.extra.extra_hand_size then
+                        G.hand:change_size(new_extra_hand_size - self.config.extra.extra_hand_size)
+                        self.config.extra.extra_hand_size = new_extra_hand_size
                     end
                 end
                 if context.remove_playing_cards then
                     self.config.extra.cards_removed = self.config.extra.cards_removed + #context.removed
                     local new_extra_hand_size = math.floor(self.config.extra.cards_removed / 5)
-                    if new_extra_hand_size ~= self.config.extra_hand_size then
+                    if new_extra_hand_size ~= self.config.extra.extra_hand_size then
                         G.hand:change_size(new_extra_hand_size - self.config.extra.extra_hand_size)
                         self.config.extra.extra_hand_size = new_extra_hand_size
                     end

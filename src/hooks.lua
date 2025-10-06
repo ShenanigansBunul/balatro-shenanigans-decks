@@ -42,6 +42,27 @@ function eval_card(card, context)
     return ref_eval_card(card, context)
 end
 
+-- local ref_create_card_for_shop = create_card_for_shop
+-- function create_card_for_shop(area)
+--     local r_val = ref_create_card_for_shop(area)
+--     if G.GAME.starting_params.gift_deck and r_val.ability and r_val.ability.set == 'Joker' then
+--         r_val.config.center = G.P_CENTERS['p_buffoon_normal_'..(math.random(1, 2))]
+--         create_shop_card_ui(r_val, 'Booster', area) --this doesnt work aaaaaa
+--     end
+--     return r_val
+-- end
+--todo deal with gift deck (above or below??)
+local ref_emplace = CardArea.emplace
+function CardArea.emplace(self, card, location, stay_flipped)
+	if G.GAME.starting_params.gift_deck and self == G.shop_jokers and card.ability.set ~= 'Booster' then
+		card:start_dissolve(nil, true, nil, true)
+		local newcard = create_card('Booster', G.shop_jokers)
+		card = newcard
+		create_shop_card_ui(card, card.ability.set, self)
+	end
+	ref_emplace(self, card, location, stay_flipped)
+end
+
 local ref_create_card = create_card
 function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
     local r_val = ref_create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
@@ -65,6 +86,97 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
             juice_card_until(r_val, eval, true)
         end
     end
+    if G.GAME.starting_params.partydeck then
+        if _type == "Joker" then
+            if r_val.edition == nil then
+                if pseudorandom('partydeck_negative',1,8) == 8 then
+                    r_val:set_edition({negative = true}, true)
+                end
+            end
+        end
+    end
+    return r_val
+end
+
+local function owned_negative_jokers()
+    local c = 0
+    for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i].edition and G.jokers.cards[i].edition.negative then
+            c = c + 1
+        end
+    end
+    return c
+end
+
+function party_deck_disabled(reshuffle, selling_negative, selling_chosen)
+    local amount = owned_negative_jokers() - 2
+    if amount > 0 then -- more than 2 jokers to disable
+        local jokers = {}
+        local chosen_count = 0
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i].ability.party_deck_chosen then
+                if reshuffle then -- undebuff current cards
+                    G.jokers.cards[i].ability.party_deck_chosen = nil
+                    if G.jokers.cards[i].debuff then SMODS.recalc_debuff(G.jokers.cards[i]) end
+                else -- or count current debuffed cards
+                    chosen_count = chosen_count + 1
+                end
+            end
+        end
+        if selling_chosen then amount = amount + 1 end
+        if selling_negative then amount = amount - 1 end
+        if chosen_count < amount then -- gotta debuff some extra cards
+            for i = 1, #G.jokers.cards do
+                if not G.jokers.cards[i].debuff then
+                    jokers[#jokers + 1] = G.jokers.cards[i]
+                end
+            end
+            pseudoshuffle(jokers, pseudoseed('party_deck_disabler'))
+            for i = 1, amount - chosen_count do
+                if i <= #jokers then
+                    local _card = jokers[i]
+                    if _card then
+                        _card.ability.party_deck_chosen = true
+                        SMODS.recalc_debuff(_card)
+                        _card:juice_up()
+                    end
+                end
+            end
+        elseif chosen_count > amount then -- too many cards are debuffed
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i].ability.party_deck_chosen then
+                    jokers[#jokers + 1] = G.jokers.cards[i]
+                end
+            end
+            pseudoshuffle(jokers, pseudoseed('party_deck_disabler'))
+            for i = 1, chosen_count - amount do
+                if i <= #jokers then
+                    jokers[i].ability.party_deck_chosen = nil
+                    SMODS.recalc_debuff(jokers[i])
+                end
+            end
+        end
+    else
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i].ability.party_deck_chosen then
+                G.jokers.cards[i].ability.party_deck_chosen = nil
+                if G.jokers.cards[i].debuff then SMODS.recalc_debuff(G.jokers.cards[i]) end
+            end
+        end
+    end
+end
+
+local ref_debuff_card = Blind.debuff_card
+function Blind:debuff_card(card, from_blind)
+    local r_val = ref_debuff_card(self, card, from_blind)
+    if G.GAME.starting_params.partydeck then
+        if card.area == G.jokers then
+            if card.ability.party_deck_chosen then
+                card:set_debuff(true)
+                return
+            end
+        end
+    end
     return r_val
 end
 
@@ -77,6 +189,9 @@ function Card:add_to_deck(from_debuff)
                 self:set_edition({ negative = true }, true)
             end
         end
+    end
+    if G.GAME.starting_params.partydeck then
+        party_deck_disabled(false)
     end
     return r_val
 end
@@ -93,6 +208,29 @@ local freak_keys = {
     ["9"] = 'freaky_nine',
     ["0"] = 'freaky_zero',
 }
+
+local ref_set_edition = Card.set_edition
+function Card:set_edition(edition, immediate, silent, delay)
+    local r_val = ref_set_edition(self, edition, immediate, silent, delay)
+    if G.GAME.starting_params.partydeck then
+        if self.ability.set == 'Joker' then
+            party_deck_disabled(false)
+        end
+    end
+    if G.GAME.starting_params.midasdeck and self.edition then
+        if self.edition.type == 'holo' then
+            self.edition.mult = nil
+            self.edition.dollars = 4
+        elseif self.edition.type == 'foil' then
+            self.edition.chips = nil
+            self.edition.dollars = 2
+        elseif self.edition.type == 'polychrome' then
+            self.edition.x_mult = nil
+            self.edition.dollars = 8
+        end
+    end
+    return r_val
+end
 
 local ref_card_from_control = card_from_control
 function card_from_control(control)
@@ -144,7 +282,8 @@ end
 
 local ref_back_trigger_effect = Back.trigger_effect
 function Back:trigger_effect(args)
-    local r_val = ref_back_trigger_effect(self, args)
+    local o = { ref_back_trigger_effect(self, args) }
+
     if G.GAME.temple_score_balance and args.context == 'final_scoring_step' then
         local tot = args.chips + args.mult
         args.chips = math.floor(tot * .64)
@@ -192,5 +331,6 @@ function Back:trigger_effect(args)
         delay(0.6)
         return args.chips, args.mult
     end
-    return r_val
+
+    return unpack(o)
 end

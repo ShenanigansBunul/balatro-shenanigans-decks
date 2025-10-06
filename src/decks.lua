@@ -376,7 +376,7 @@ showman_deck = SMODS.Back { --Showman Deck
     pos = { x = 8, y = 0 },
     atlas = "shenDecks",
     apply = function(self, back)
-        G.GAME.starting_params.showmandeck = true;
+        G.GAME.starting_params.showmandeck = true
     end,
     calculate = function(self, back, context)
     end
@@ -557,3 +557,190 @@ riffraff_deck = SMODS.Back { --Riff-Raff Deck
     calculate = function(self, back, context)
     end
 }
+
+party_deck = SMODS.Back { --Party Deck
+    name = "Party Deck",
+    key = "partydeck",
+    order = 32,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 2, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.partydeck = true
+    end,
+    calculate = function(self, back, context)
+        if context.card then
+            if (context.selling_card or context.joker_type_destroyed) then
+                if context.card.ability.set == 'Joker' then
+                    party_deck_disabled(false, context.card.edition and context.card.edition.negative,
+                        context.card.ability.party_deck_chosen)
+                end
+            end
+            if context.buying_card then
+                party_deck_disabled(false)
+            end
+        end
+
+        if context.after then
+            party_deck_disabled(true)
+        end
+    end
+}
+
+egg_deck = SMODS.Back { --Egg Deck
+    name = "Egg Deck",
+    key = "eggdeck",
+    order = 33,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 0, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back) end,
+    calculate = function(self, back, context)
+        if context.final_scoring_step then
+            return {
+                message = localize { type = 'variable', key = 'a_chips', vars = { 9 } },
+                chip_mod = 9,
+            }
+        end
+    end
+}
+
+if shenanigans_mod_config.gift_deck then
+    gift_deck = SMODS.Back { --Gift Deck
+        name = "Gift Deck",
+        key = "giftdeck",
+        order = 34,
+        unlocked = true,
+        discovered = true,
+        config = {},
+        loc_vars = function(self, info_queue, center)
+            return { vars = {} }
+        end,
+        pos = { x = 1, y = 1 },
+        atlas = "shenDecks",
+        apply = function(self, back)
+            G.GAME.starting_params.gift_deck = true
+        end,
+        calculate = function(self, back, context) end
+    }
+end
+
+midas_deck = SMODS.Back { --Midas Deck
+    name = "Midas Deck",
+    key = "midasdeck",
+    order = 35,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 3, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.midasdeck = true
+    end,
+    calculate = function(self, back, context)
+        if context.other_joker then
+            if context.other_joker.edition and context.other_joker.edition.dollars then
+                ease_dollars(context.other_joker.edition.dollars)
+                card_eval_status_text(context.other_joker, 'jokers', nil, nil, nil,
+                    { message = "$" .. tostring(context.other_joker.edition.dollars), colour = G.C.MONEY })
+            end
+        elseif context.individual and context.cardarea == G.play then
+            if context.other_card.edition and context.other_card.edition.dollars then
+                ease_dollars(context.other_card.edition.dollars)
+                card_eval_status_text(context.other_card, 'jokers', nil, nil, nil,
+                    { message = "$" .. tostring(context.other_card.edition.dollars), colour = G.C.MONEY })
+            end
+        end
+    end
+}
+
+if shenanigans_mod_config.campfire_deck then
+    campfire_deck = SMODS.Back { --Campfire Deck
+        name = "Campfire Deck",
+        key = "campfiredeck",
+        order = 36,
+        unlocked = true,
+        discovered = true,
+        config = {},
+        loc_vars = function(self, info_queue, center)
+            return { vars = {} }
+        end,
+        pos = { x = 4, y = 1 },
+        atlas = "shenDecks",
+        apply = function(self, back) end,
+        calculate = function(self, back, context)
+            if context.buying_card then
+                if SMODS.pseudorandom_probability(self, pseudoseed('campfiredeck'), 1, 4, 'campfiredeck') then
+                    context.card:start_dissolve(nil, true, nil, true) --todo something else
+                end
+            end
+        end
+    }
+end
+
+if shenanigans_mod_config.loyalty_deck then
+    loyalty_deck = SMODS.Back { --Loyalty Deck (TODO)
+        name = "Loyalty Deck",
+        key = "loyaltydeck",
+        order = 37,
+        unlocked = true,
+        discovered = true,
+        config = {},
+        loc_vars = function(self, info_queue, center)
+            return { vars = {} }
+        end,
+        pos = { x = 5, y = 1 },
+        atlas = "shenDecks",
+        apply = function(self, back) end,
+        calculate = function(self, back, context) end
+    }
+end
+
+if shenanigans_mod_config.vagabond_deck then
+    vagabond_deck = SMODS.Back { --Vagabond Deck (TODO)
+        name = "Vagabond Deck",
+        key = "vagabonddeck",
+        order = 38,
+        unlocked = true,
+        discovered = true,
+        config = {},
+        loc_vars = function(self, info_queue, center)
+            return { vars = {} }
+        end,
+        pos = { x = 6, y = 1 },
+        atlas = "shenDecks",
+        apply = function(self, back) end,
+        calculate = function(self, back, context) end
+    }
+end
+
+if shenanigans_mod_config.cloud9_deck then
+    cloud9_deck = SMODS.Back { --Cloud 9 Deck (TODO)
+        name = "Cloud 9 Deck",
+        key = "cloud9deck",
+        order = 39,
+        unlocked = true,
+        discovered = true,
+        config = {},
+        loc_vars = function(self, info_queue, center)
+            return { vars = {} }
+        end,
+        pos = { x = 7, y = 1 },
+        atlas = "shenDecks",
+        apply = function(self, back) end,
+        calculate = function(self, back, context) end
+    }
+end

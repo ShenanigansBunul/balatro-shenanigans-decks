@@ -13,6 +13,14 @@ SMODS.Sound({ key = "temple", path = "temple.wav", pitch = 1, volume = .5 })
 SMODS.current_mod.optional_features = { retrigger_joker = true }
 shenanigans_mod_config = SMODS.current_mod.config
 
+local logger = require("debugplus.logger")
+
+function LOG(t)
+	if logger ~= nil then
+		logger.log(t)
+	end
+end
+
 SMODS.current_mod.config_tab = function()
 	return {
 		n = G.UIT.ROOT,
@@ -23,9 +31,34 @@ SMODS.current_mod.config_tab = function()
 		},
 		nodes = {
 			create_toggle({
-				label = "Temple Deck & Temple Game Vouchers (restart required)",
+				label = "Temple Deck & Temple Game Vouchers (WIP) (restart required)",
 				ref_table = shenanigans_mod_config,
 				ref_value = "temple_deck",
+			}),
+			create_toggle({
+				label = "Gift Deck (WIP, unfinished)",
+				ref_table = shenanigans_mod_config,
+				ref_value = "gift_deck",
+			}),
+			create_toggle({
+				label = "Campfire Deck (WIP, unfinished)",
+				ref_table = shenanigans_mod_config,
+				ref_value = "campfire_deck",
+			}),
+			create_toggle({
+				label = "Loyalty Deck (WIP, unfinished)",
+				ref_table = shenanigans_mod_config,
+				ref_value = "loyalty_deck",
+			}),
+			create_toggle({
+				label = "Vagabond Deck (WIP, unfinished)",
+				ref_table = shenanigans_mod_config,
+				ref_value = "vagabond_deck",
+			}),
+			create_toggle({
+				label = "Cloud 9 Deck (WIP, unfinished)",
+				ref_table = shenanigans_mod_config,
+				ref_value = "cloud9_deck",
 			}),
 		},
 	}
