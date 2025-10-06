@@ -42,25 +42,73 @@ function eval_card(card, context)
     return ref_eval_card(card, context)
 end
 
--- local ref_create_card_for_shop = create_card_for_shop
--- function create_card_for_shop(area)
---     local r_val = ref_create_card_for_shop(area)
---     if G.GAME.starting_params.gift_deck and r_val.ability and r_val.ability.set == 'Joker' then
---         r_val.config.center = G.P_CENTERS['p_buffoon_normal_'..(math.random(1, 2))]
---         create_shop_card_ui(r_val, 'Booster', area) --this doesnt work aaaaaa
---     end
---     return r_val
--- end
---todo deal with gift deck (above or below??)
+local ref_use_card = G.FUNCS.use_card
+G.FUNCS.use_card = function(e, mute, nosave)
+    if G.GAME.starting_params.campfiredeck and pseudorandom('campfiredeck', 1, 3) == 3 then
+        local card = e.config.ref_table
+        if --[[card.ability.set == 'Tarot' or card.ability.set == 'Planet' or card.ability.set == 'Spectral']] card.ability.consumeable then
+            local prev_state = G.STATE
+            if (prev_state == G.STATES.TAROT_PACK or prev_state == G.STATES.PLANET_PACK or
+                    prev_state == G.STATES.SPECTRAL_PACK or prev_state == G.STATES.STANDARD_PACK or
+                    prev_state == G.STATES.SMODS_BOOSTER_OPENED or
+                    prev_state == G.STATES.BUFFOON_PACK) and G.booster_pack then
+                if G.GAME.pack_choices and G.GAME.pack_choices > 1 then
+                    if G.booster_pack.alignment.offset.py then
+                        G.booster_pack.alignment.offset.y = G.booster_pack.alignment.offset.py
+                        G.booster_pack.alignment.offset.py = nil
+                    end
+                    G.GAME.pack_choices = G.GAME.pack_choices - 1
+                else
+                    G.CONTROLLER.interrupt.focus = true
+                    G.FUNCS.end_consumeable(nil, .2)
+                end
+            end
+            return G.FUNCS.sell_card(e)
+        end
+    end
+    return ref_use_card(e, mute, nosave)
+end
+
+local ref_reroll_shop = G.FUNCS.reroll_shop
+G.FUNCS.reroll_shop = function(e)
+    if G.GAME.starting_params.loyaltydeck then
+        if (G.GAME.round_scores.times_rerolled.amt + 1) % 3 == 0 then
+            G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+        end 
+    end
+    return ref_reroll_shop(e)
+end
+
+local ref_calculate_reroll_cost = calculate_reroll_cost
+function calculate_reroll_cost(skip_increment)
+    local r_val = ref_calculate_reroll_cost(skip_increment)
+    if G.GAME.starting_params.loyaltydeck then
+        if (G.GAME.round_scores.times_rerolled.amt + 1) % 3 == 0 then
+            G.GAME.current_round.reroll_cost = 0
+        end
+    end
+    return r_val
+end
+
 local ref_emplace = CardArea.emplace
 function CardArea.emplace(self, card, location, stay_flipped)
-	if G.GAME.starting_params.gift_deck and self == G.shop_jokers and card.ability.set ~= 'Booster' then
-		card:start_dissolve(nil, true, nil, true)
-		local newcard = create_card('Booster', G.shop_jokers)
-		card = newcard
-		create_shop_card_ui(card, card.ability.set, self)
-	end
-	ref_emplace(self, card, location, stay_flipped)
+    if G.GAME.starting_params.gift_deck and self == G.shop_jokers and card.ability.set == 'Joker' then
+        local p_key = 'p_buffoon_normal_1'
+        if card:is_rarity("Common") then
+            if pseudorandom('giftdeck', 1, 2) == 2 then
+                p_key = 'p_buffoon_normal_2'
+            end
+        elseif card:is_rarity("Uncommon") then
+            p_key = 'p_buffoon_jumbo_1'
+        elseif card:is_rarity("Rare") then
+            p_key = 'p_buffoon_mega_1'
+        end
+        card:start_dissolve(nil, true, .000001, true)
+        local newcard = create_card('Booster', G.shop_jokers, nil, nil, nil, nil, p_key)
+        card = newcard
+        create_shop_card_ui(card, card.ability.set, self)
+    end
+    ref_emplace(self, card, location, stay_flipped)
 end
 
 local ref_create_card = create_card
@@ -89,8 +137,8 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
     if G.GAME.starting_params.partydeck then
         if _type == "Joker" then
             if r_val.edition == nil then
-                if pseudorandom('partydeck_negative',1,8) == 8 then
-                    r_val:set_edition({negative = true}, true)
+                if pseudorandom('partydeck_negative', 1, 6) == 6 then
+                    r_val:set_edition({ negative = true }, true)
                 end
             end
         end
@@ -98,86 +146,34 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
     return r_val
 end
 
-local function owned_negative_jokers()
-    local c = 0
-    for i = 1, #G.jokers.cards do
-        if G.jokers.cards[i].edition and G.jokers.cards[i].edition.negative then
-            c = c + 1
-        end
+function party_deck_check(new_card)
+    local negatives = {}
+    if new_card and new_card.edition and new_card.edition.negative then
+        negatives[#negatives + 1] = new_card
     end
-    return c
-end
-
-function party_deck_disabled(reshuffle, selling_negative, selling_chosen)
-    local amount = owned_negative_jokers() - 2
-    if amount > 0 then -- more than 2 jokers to disable
-        local jokers = {}
-        local chosen_count = 0
+    if G.jokers and G.jokers.cards then
         for i = 1, #G.jokers.cards do
-            if G.jokers.cards[i].ability.party_deck_chosen then
-                if reshuffle then -- undebuff current cards
-                    G.jokers.cards[i].ability.party_deck_chosen = nil
-                    if G.jokers.cards[i].debuff then SMODS.recalc_debuff(G.jokers.cards[i]) end
-                else -- or count current debuffed cards
-                    chosen_count = chosen_count + 1
-                end
-            end
-        end
-        if selling_chosen then amount = amount + 1 end
-        if selling_negative then amount = amount - 1 end
-        if chosen_count < amount then -- gotta debuff some extra cards
-            for i = 1, #G.jokers.cards do
-                if not G.jokers.cards[i].debuff then
-                    jokers[#jokers + 1] = G.jokers.cards[i]
-                end
-            end
-            pseudoshuffle(jokers, pseudoseed('party_deck_disabler'))
-            for i = 1, amount - chosen_count do
-                if i <= #jokers then
-                    local _card = jokers[i]
-                    if _card then
-                        _card.ability.party_deck_chosen = true
-                        SMODS.recalc_debuff(_card)
-                        _card:juice_up()
-                    end
-                end
-            end
-        elseif chosen_count > amount then -- too many cards are debuffed
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i].ability.party_deck_chosen then
-                    jokers[#jokers + 1] = G.jokers.cards[i]
-                end
-            end
-            pseudoshuffle(jokers, pseudoseed('party_deck_disabler'))
-            for i = 1, chosen_count - amount do
-                if i <= #jokers then
-                    jokers[i].ability.party_deck_chosen = nil
-                    SMODS.recalc_debuff(jokers[i])
-                end
-            end
-        end
-    else
-        for i = 1, #G.jokers.cards do
-            if G.jokers.cards[i].ability.party_deck_chosen then
-                G.jokers.cards[i].ability.party_deck_chosen = nil
-                if G.jokers.cards[i].debuff then SMODS.recalc_debuff(G.jokers.cards[i]) end
+            if G.jokers.cards[i].edition and G.jokers.cards[i].edition.negative then
+                negatives[#negatives + 1] = G.jokers.cards[i]
             end
         end
     end
-end
-
-local ref_debuff_card = Blind.debuff_card
-function Blind:debuff_card(card, from_blind)
-    local r_val = ref_debuff_card(self, card, from_blind)
-    if G.GAME.starting_params.partydeck then
-        if card.area == G.jokers then
-            if card.ability.party_deck_chosen then
-                card:set_debuff(true)
-                return
+    pseudoshuffle(negatives, pseudoseed('partydeck!!!'))
+    if #negatives > 2 then
+        table.remove(negatives, #negatives)
+        table.remove(negatives, #negatives)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'before',
+            delay = 0.75,
+            func = function()
+                for k, v in pairs(negatives) do
+                    v.getting_sliced = true
+                    v:start_dissolve(nil)
+                end
+                return true
             end
-        end
+        }))
     end
-    return r_val
 end
 
 local ref_card_add_to_deck = Card.add_to_deck
@@ -191,7 +187,7 @@ function Card:add_to_deck(from_debuff)
         end
     end
     if G.GAME.starting_params.partydeck then
-        party_deck_disabled(false)
+        party_deck_check(self)
     end
     return r_val
 end
@@ -214,7 +210,7 @@ function Card:set_edition(edition, immediate, silent, delay)
     local r_val = ref_set_edition(self, edition, immediate, silent, delay)
     if G.GAME.starting_params.partydeck then
         if self.ability.set == 'Joker' then
-            party_deck_disabled(false)
+            party_deck_check()
         end
     end
     if G.GAME.starting_params.midasdeck and self.edition then

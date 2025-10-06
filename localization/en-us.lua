@@ -541,9 +541,9 @@ return {
                 name = "Party Deck",
                 text = {
                     "{C:dark_edition}Negative{} {C:attention}Jokers{} are more common",
-                    "For each {C:dark_edition}Negative{} {C:attention}Joker{}",
-                    "over {C:attention}2{}, disable a random {C:attention}Joker{}",
-                    "{C:inactive}(changes every hand){}"
+                    "When you have over {C:attention}2{} {C:dark_edition}Negative{} {C:attention}Jokers{}",
+                    "destroy them randomly until",
+                    "you remain with {C:attention}2{}"
                 }
             },
             b_shen_eggdeck = {
@@ -574,10 +574,10 @@ return {
             b_shen_campfiredeck = {
                 name = "Campfire Deck",
                 text = {
-                    "Purchased cards have a",
-                    "{C:green}1 in 4{} chance to be destroyed",
-                    "If they are, gain",
-                    "double their price"
+                    "{C:attention}+2{} consumable slots",
+                    "When using a consumable",
+                    "{C:green}1 in 3{} chance",
+                    "to sell it instead"
                 }
             },
             b_shen_loyaltydeck = {

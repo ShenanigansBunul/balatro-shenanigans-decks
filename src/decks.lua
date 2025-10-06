@@ -572,20 +572,8 @@ party_deck = SMODS.Back { --Party Deck
         G.GAME.starting_params.partydeck = true
     end,
     calculate = function(self, back, context)
-        if context.card then
-            if (context.selling_card or context.joker_type_destroyed) then
-                if context.card.ability.set == 'Joker' then
-                    party_deck_disabled(false, context.card.edition and context.card.edition.negative,
-                        context.card.ability.party_deck_chosen)
-                end
-            end
-            if context.buying_card then
-                party_deck_disabled(false)
-            end
-        end
-
-        if context.after then
-            party_deck_disabled(true)
+        if context.buying_card then
+            party_deck_check()
         end
     end
 }
@@ -613,25 +601,23 @@ egg_deck = SMODS.Back { --Egg Deck
     end
 }
 
-if shenanigans_mod_config.gift_deck then
-    gift_deck = SMODS.Back { --Gift Deck
-        name = "Gift Deck",
-        key = "giftdeck",
-        order = 34,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 1, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back)
-            G.GAME.starting_params.gift_deck = true
-        end,
-        calculate = function(self, back, context) end
-    }
-end
+gift_deck = SMODS.Back { --Gift Deck
+    name = "Gift Deck",
+    key = "giftdeck",
+    order = 34,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 1, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.gift_deck = true
+    end,
+    calculate = function(self, back, context) end
+}
 
 midas_deck = SMODS.Back { --Midas Deck
     name = "Midas Deck",
@@ -665,47 +651,48 @@ midas_deck = SMODS.Back { --Midas Deck
     end
 }
 
-if shenanigans_mod_config.campfire_deck then
-    campfire_deck = SMODS.Back { --Campfire Deck
-        name = "Campfire Deck",
-        key = "campfiredeck",
-        order = 36,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 4, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context)
-            if context.buying_card then
-                if SMODS.pseudorandom_probability(self, pseudoseed('campfiredeck'), 1, 4, 'campfiredeck') then
-                    context.card:start_dissolve(nil, true, nil, true) --todo something else
-                end
+campfire_deck = SMODS.Back { --Campfire Deck
+    name = "Campfire Deck",
+    key = "campfiredeck",
+    order = 36,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 4, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.campfiredeck = true
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.consumeables.config.card_limit = G.consumeables.config.card_limit + 2
+                return true
             end
-        end
-    }
-end
+        }))
+    end,
+    calculate = function(self, back, context)
+    end
+}
 
-if shenanigans_mod_config.loyalty_deck then
-    loyalty_deck = SMODS.Back { --Loyalty Deck (TODO)
-        name = "Loyalty Deck",
-        key = "loyaltydeck",
-        order = 37,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 5, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-end
+loyalty_deck = SMODS.Back {     --Loyalty Deck
+    name = "Loyalty Deck",
+    key = "loyaltydeck",
+    order = 37,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 5, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.loyaltydeck = true
+    end,
+    calculate = function(self, back, context) end
+}
 
 if shenanigans_mod_config.vagabond_deck then
     vagabond_deck = SMODS.Back { --Vagabond Deck (TODO)
