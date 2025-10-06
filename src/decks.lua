@@ -140,20 +140,22 @@ perkeo_deck = SMODS.Back { --Perkeo Deck
                 local eval = function(card) return (G.GAME.starting_params.consumables_used + 1) % 4 == 0 end
                 if G.consumables.cards then
                     for i = 1, #G.consumeables.cards do
-                        if G.consumeables.cards[i].ability
-                            and (G.consumeables.cards[i].ability.set == 'Tarot'
-                                or G.consumeables.cards[i].ability.set == 'Planet'
-                                or G.consumeables.cards[i].ability.set == 'Spectral') then
+                        -- if G.consumeables.cards[i].ability
+                        --     and (G.consumeables.cards[i].ability.set == 'Tarot'
+                        --         or G.consumeables.cards[i].ability.set == 'Planet'
+                        --         or G.consumeables.cards[i].ability.set == 'Spectral') then
+                        if G.consumeables.cards[i].ability.consumeable then
                             juice_card_until(G.consumeables.cards[i], eval, true)
                         end
                     end
                 end
                 if G.shop_jokers.cards then
                     for i = 1, #G.shop_jokers.cards do
-                        if G.shop_jokers.cards[i].ability
-                            and (G.shop_jokers.cards[i].ability.set == 'Tarot'
-                                or G.shop_jokers.cards[i].ability.set == 'Planet'
-                                or G.shop_jokers.cards[i].ability.set == 'Spectral') then
+                        -- if G.shop_jokers.cards[i].ability
+                        --     and (G.shop_jokers.cards[i].ability.set == 'Tarot'
+                        --         or G.shop_jokers.cards[i].ability.set == 'Planet'
+                        --         or G.shop_jokers.cards[i].ability.set == 'Spectral') then
+                        if G.consumeables.cards[i].ability.consumeable then
                             juice_card_until(G.shop_jokers.cards[i], eval, true)
                         end
                     end
