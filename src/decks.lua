@@ -616,7 +616,7 @@ gift_deck = SMODS.Back { --Gift Deck
     pos = { x = 1, y = 1 },
     atlas = "shenDecks",
     apply = function(self, back)
-        G.GAME.starting_params.gift_deck = true
+        G.GAME.starting_params.giftdeck = true
     end,
     calculate = function(self, back, context) end
 }
@@ -708,7 +708,11 @@ vagabond_deck = SMODS.Back {     --Vagabond Deck (TODO)
     end,
     pos = { x = 6, y = 1 },
     atlas = "shenDecks",
-    apply = function(self, back) end,
+    apply = function(self, back)
+        G.GAME.starting_params.vagabonddeck = true
+        G.GAME.starting_params.vagabonddeck_positive = true
+        G.GAME.bankrupt_at = G.GAME.bankrupt_at - 2147483647
+    end,
     calculate = function(self, back, context) end
 }
 

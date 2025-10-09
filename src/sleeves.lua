@@ -609,4 +609,210 @@ if CardSleeves then
         end,
         calculate = function(self, sleeve, context) end
     }
+    CardSleeves.Sleeve {
+        key = "egg",
+        name = "Egg Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 2, y = 3 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_eggdeck", stake = "stake_black" },
+        loc_vars = function(self)
+            local key
+            local vars
+            if unique_effect(self) then
+                key = self.key .. "_alt"
+                vars = { localize { type = 'name_text', key = 'j_egg', set = 'Joker' } }
+            else
+                key = self.key
+                vars = {}
+            end
+            return { key = key, vars = vars }
+        end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.joker_buffer = 1
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        local card = create_card('Joker', G.jokers, nil, 0, nil, nil, 'j_egg')
+                        card:add_to_deck()
+                        card:set_edition(nil, true)
+                        G.jokers:emplace(card)
+                        card:start_materialize()
+                        G.GAME.joker_buffer = 0
+                        return true
+                    end
+                }))
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+
+            else
+                return egg_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "gift",
+        name = "Gift Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 7, y = 0 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_giftdeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.giftsleeve = true
+            else
+                return gift_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context) end
+    }
+    CardSleeves.Sleeve {
+        key = "party",
+        name = "Party Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 4, y = 3 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_partydeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.partysleeve = true
+            else
+                return party_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+
+            else
+                return party_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "midas",
+        name = "Midas Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 3, y = 3 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_midasdeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.midassleeve = true
+            else
+                return midas_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context) end
+    }
+    CardSleeves.Sleeve {
+        key = "campfire",
+        name = "Campfire Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 5, y = 0 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_campfiredeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.campfiresleeve = true
+            else
+                return campfire_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) and context.buying_card then
+                if context.card and context.card.ability.set == "Joker" then
+                    if pseudorandom('campfiresleeve', 1, 4) == 4 then
+                        context.card:sell_card()
+                    end
+                end
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "loyalty",
+        name = "Loyalty Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 6, y = 0 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_loyaltydeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.loyaltysleeve = true
+                G.GAME.starting_params.total_purchases = 0
+            else
+                return loyalty_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) and (context.buying_card or context.open_booster) then
+                G.GAME.starting_params.total_purchases = G.GAME.starting_params.total_purchases + 1
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        for k, v in pairs(G.shop_jokers.cards) do
+                            if v.set_cost then v:set_cost() end
+                        end
+                        for k, v in pairs(G.shop_booster.cards) do
+                            if v.set_cost then v:set_cost() end
+                        end
+                        for k, v in pairs(G.shop_vouchers.cards) do
+                            if v.set_cost then v:set_cost() end
+                        end
+                        return true
+                    end
+                }))
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "vagabond",
+        name = "Vagabond Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 9, y = 0 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_vagabonddeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.vagabondsleeve = true
+                G.GAME.levels_lost_this_round = 0
+            else
+                return vagabond_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context) end
+    }
+    CardSleeves.Sleeve {
+        key = "cloud9",
+        name = "Cloud 9 Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 8, y = 0 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_cloud9deck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.win_ante = 9
+                G.GAME.starting_params.cloud9sleeve = true
+            else
+                G.hand:change_size(1)
+                return cloud9_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context) end
+    }
 end

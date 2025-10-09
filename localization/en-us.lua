@@ -406,7 +406,139 @@ return {
                     "Otherwise, get {C:dark_edition}ANY{} other",
                     "random eternal {C:attention}Joker{}"
                 }
-            }
+            },
+            sleeve_shen_egg_alt = {
+                name = "Egg Sleeve",
+                text = {
+                    [1] = "Start with {C:attention,T:j_egg}#1#{}",
+                },
+            },
+            sleeve_shen_egg = {
+                name = "Egg Sleeve",
+                text = {
+                    [1] = "{C:blue}+9{} chips",
+                    [2] = "{C:inactive}hey, it's \"egg\"{}",
+                },
+            },
+            sleeve_shen_midas_alt = {
+                name = "Midas Sleeve",
+                text = {
+                    [1] = "Scoring cards give {C:money}$1{}",
+                    [2] = "instead of chips"
+                },
+            },
+            sleeve_shen_midas = {
+                name = "Midas Sleeve",
+                text = {
+                    [1] = "Instead of their",
+                    [2] = "original scoring effect:",
+                    [3] = "{C:attention}Foil{} cards give {C:money}$2{}",
+                    [4] = "{C:attention}Holographic{} cards give {C:money}$4{}",
+                    [5] = "{C:attention}Polychrome{} cards give {C:money}$8{}",
+                },
+            },
+            sleeve_shen_campfire = {
+                name = "Campfire Sleeve",
+                text = {
+                    [1] = "{C:attention}+2{} consumable slots",
+                    [2] = "Consumables are {C:attention}free{}",
+                    [3] = "and have a {C:green}1 in 4{} chance",
+                    [4] = "to be sold instead",
+                    [5] = "of being used",
+                },
+            },
+            sleeve_shen_campfire_alt = {
+                name = "Campfire Sleeve",
+                text = {
+                    [1] = "Jokers are {C:attention}free{}",
+                    [2] = "and have a {C:green}1 in 4{} chance",
+                    [3] = "to be sold when purchased",
+                },
+            },
+            sleeve_shen_loyalty = {
+                name = "Loyalty Sleeve",
+                text = {
+                    [1] = "Every {C:attention}3rd{} reroll is free",
+                },
+            },
+            sleeve_shen_loyalty_alt = {
+                name = "Loyalty Sleeve",
+                text = {
+                    [1] = "Every {C:attention}3rd{} purchase",
+                    [2] = "in the shop is free",
+                },
+            },
+            sleeve_shen_gift = {
+                name = "Gift Sleeve",
+                text = {
+                    [1] = "{C:attention}Jokers{} in the shop",
+                    [2] = "are replaced by",
+                    [3] = "{C:attention}Buffoon Packs{}",
+                },
+            },
+            sleeve_shen_gift_alt = {
+                name = "Gift Sleeve",
+                text = {
+                    [1] = "{C:purple}Tarot{} and {C:blue}Planet{} cards",
+                    [2] = "in the shop are replaced by",
+                    [3] = "{C:purple}Arcana Packs{} and",
+                    [4] = "{C:blue}Celestial Packs{}",
+                },
+            },
+            sleeve_shen_cloud9 = {
+                name = "Cloud 9 Sleeve",
+                text = {
+                    [1] = "Hand size is always {C:attention}9{}",
+                    [2] = "If it would be different,",
+                    [3] = "gain or lose {C:money}${} at the",
+                    [4] = "end of round equal",
+                    [5] = "to the difference",
+                },
+            },
+            sleeve_shen_cloud9_alt = {
+                name = "Cloud 9 Sleeve",
+                text = {
+                    [1] = "Win on {C:attention}Ante 9{}",
+                    [2] = "{C:attention}+1{} hand size after",
+                    [3] = "playing {C:attention}9{} hands",
+                },
+            },
+            sleeve_shen_party = {
+                name = "Party Sleeve",
+                text = {
+                    [1] = "{C:dark_edition}Negative{} {C:attention}Jokers{} are",
+                    [2] = "more common",
+                    [3] = "When you have over {C:attention}2{}",
+                    [4] = "destroy them randomly until",
+                    [5] = "you remain with {C:attention}2{}",
+                },
+            },
+            sleeve_shen_party_alt = {
+                name = "Party Sleeve",
+                text = {
+                    [1] = "{C:attention}Polychrome Jokers{}",
+                    [2] = "increase the {C:dark_edition}Negative{} {C:attention}Joker{}",
+                    [3] = "limit by {C:attention}1{}",
+                },
+            },
+            sleeve_shen_vagabond_alt = {
+                name = "Vagabond Sleeve",
+                text = {
+                    [1] = "Before scoring a hand",
+                    [2] = "it loses all levels",
+                    [3] = "At the end of the round gain",
+                    [4] = "{C:money}$3{} for each level lost",
+                },
+            },
+            sleeve_shen_vagabond = {
+                name = "Vagabond Sleeve",
+                text = {
+                    [1] = "Purchases can make you go",
+                    [2] = "in debt if you have over {C:money}$0{}",
+                    [3] = "If you are in debt",
+                    [4] = "gain max {C:attention}Interest{}",
+                },
+            },
         },
         Back = {
             b_shen_caniodeck = {
@@ -576,9 +708,10 @@ return {
                 name = "Campfire Deck",
                 text = {
                     "{C:attention}+2{} consumable slots",
-                    "When using a consumable",
-                    "{C:green}1 in 3{} chance",
-                    "to sell it instead"
+                    "Consumables are {C:attention}free{}",
+                    "and have a {C:green}1 in 4{} chance",
+                    "to be sold instead",
+                    "of being used"
                 }
             },
             b_shen_loyaltydeck = {
@@ -590,15 +723,16 @@ return {
             b_shen_vagabonddeck = {
                 name = "Vagabond Deck",
                 text = {
-                    "Cards are free",
-                    "Selling cards costs",
-                    "double their price"
+                    "Purchases can make you go",
+                    "in debt if you have over {C:money}$0{}",
+                    "If you are in debt",
+                    "gain max {C:attention}Interest{}"
                 }
             },
             b_shen_cloud9deck = {
                 name = "Cloud 9 Deck",
                 text = {
-                    "Hand Size is always {C:attention}9{}",
+                    "Hand size is always {C:attention}9{}",
                     "If it would be different,",
                     "gain or lose {C:money}${} at the",
                     "end of round equal",

@@ -27,6 +27,15 @@ function G.FUNCS.discard_cards_from_highlighted(e, hook)
     return r_val
 end
 
+local ref_play_cards_from_highlighted = G.FUNCS.play_cards_from_highlighted
+function G.FUNCS.play_cards_from_highlighted(e)
+    if (G.GAME.hands_played + 1) % 9 == 0 and G.GAME.starting_params.cloud9sleeve then
+        G.hand:change_size(1)
+    end
+    local r_val = ref_play_cards_from_highlighted(e)
+    return r_val
+end
+
 local ref_eval_card = eval_card
 function eval_card(card, context)
     if G.GAME.starting_params.yorickdeck and context.trigger_yorick_effect then
@@ -42,9 +51,28 @@ function eval_card(card, context)
     return ref_eval_card(card, context)
 end
 
+local ref_ease_dollars = ease_dollars
+function ease_dollars(mod, instant)
+    if G.GAME.starting_params.vagabonddeck then
+        if G.GAME.dollars + mod >= 0 then
+            if not G.GAME.starting_params.vagabonddeck_positive then
+                G.GAME.starting_params.vagabonddeck_positive = true
+                G.GAME.bankrupt_at = G.GAME.bankrupt_at - 2147483647
+            end
+        else
+            if G.GAME.starting_params.vagabonddeck_positive then
+                G.GAME.starting_params.vagabonddeck_positive = false
+                G.GAME.bankrupt_at = G.GAME.bankrupt_at + 2147483647
+            end
+        end
+    end
+    local r_val = ref_ease_dollars(mod, instant)
+    return r_val
+end
+
 local ref_use_card = G.FUNCS.use_card
 G.FUNCS.use_card = function(e, mute, nosave)
-    if G.GAME.starting_params.campfiredeck and pseudorandom('campfiredeck', 1, 3) == 3 then
+    if G.GAME.starting_params.campfiredeck and pseudorandom('campfiredeck', 1, 4) == 4 then
         local card = e.config.ref_table
         if --[[card.ability.set == 'Tarot' or card.ability.set == 'Planet' or card.ability.set == 'Spectral']] card.ability.consumeable then
             local prev_state = G.STATE
@@ -52,15 +80,17 @@ G.FUNCS.use_card = function(e, mute, nosave)
                     prev_state == G.STATES.SPECTRAL_PACK or prev_state == G.STATES.STANDARD_PACK or
                     prev_state == G.STATES.SMODS_BOOSTER_OPENED or
                     prev_state == G.STATES.BUFFOON_PACK) and G.booster_pack then
-                if G.GAME.pack_choices and G.GAME.pack_choices > 1 then
-                    if G.booster_pack.alignment.offset.py then
-                        G.booster_pack.alignment.offset.y = G.booster_pack.alignment.offset.py
-                        G.booster_pack.alignment.offset.py = nil
+                if card.area == G.pack_cards then
+                    if G.GAME.pack_choices and G.GAME.pack_choices > 1 then
+                        if G.booster_pack.alignment.offset.py then
+                            G.booster_pack.alignment.offset.y = G.booster_pack.alignment.offset.py
+                            G.booster_pack.alignment.offset.py = nil
+                        end
+                        G.GAME.pack_choices = G.GAME.pack_choices - 1
+                    else
+                        G.CONTROLLER.interrupt.focus = true
+                        G.FUNCS.end_consumeable(nil, .2)
                     end
-                    G.GAME.pack_choices = G.GAME.pack_choices - 1
-                else
-                    G.CONTROLLER.interrupt.focus = true
-                    G.FUNCS.end_consumeable(nil, .2)
                 end
             end
             return G.FUNCS.sell_card(e)
@@ -74,7 +104,7 @@ G.FUNCS.reroll_shop = function(e)
     if G.GAME.starting_params.loyaltydeck then
         if (G.GAME.round_scores.times_rerolled.amt + 1) % 3 == 0 then
             G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
-        end 
+        end
     end
     return ref_reroll_shop(e)
 end
@@ -94,14 +124,14 @@ local ref_change_size = CardArea.change_size
 function CardArea:change_size(delta)
     if G.GAME.starting_params.cloud9deck and self == G.hand then
         G.GAME.starting_params.hand_delta = G.GAME.starting_params.hand_delta + delta
-        return 
+        return
     end
     return ref_change_size(self, delta)
 end
 
 local ref_emplace = CardArea.emplace
 function CardArea.emplace(self, card, location, stay_flipped)
-    if G.GAME.starting_params.gift_deck and self == G.shop_jokers and card.ability.set == 'Joker' then
+    if G.GAME.starting_params.giftdeck and self == G.shop_jokers and card.ability.set == 'Joker' then
         local p_key = 'p_buffoon_normal_1'
         if card:is_rarity("Common") then
             if pseudorandom('giftdeck', 1, 2) == 2 then
@@ -116,6 +146,23 @@ function CardArea.emplace(self, card, location, stay_flipped)
         local newcard = create_card('Booster', G.shop_jokers, nil, nil, nil, nil, p_key)
         card = newcard
         create_shop_card_ui(card, card.ability.set, self)
+    end
+    if G.GAME.starting_params.giftsleeve and self == G.shop_jokers then
+        if card.ability.set == 'Tarot' then
+            local t = pseudorandom('giftsleeve', 1, 4)
+            local t_key = 'p_arcana_normal_' .. tostring(t)
+            card:start_dissolve(nil, true, .000001, true)
+            local newcard = create_card('Booster', G.shop_jokers, nil, nil, nil, nil, t_key)
+            card = newcard
+            create_shop_card_ui(card, card.ability.set, self)
+        elseif card.ability.set == 'Planet' then
+            local p = pseudorandom('giftsleeve', 1, 4)
+            local p_key = 'p_celestial_normal_' .. tostring(p)
+            card:start_dissolve(nil, true, .000001, true)
+            local newcard = create_card('Booster', G.shop_jokers, nil, nil, nil, nil, p_key)
+            card = newcard
+            create_shop_card_ui(card, card.ability.set, self)
+        end
     end
     ref_emplace(self, card, location, stay_flipped)
 end
@@ -157,18 +204,27 @@ end
 
 function party_deck_check(new_card)
     local negatives = {}
-    if new_card and new_card.edition and new_card.edition.negative then
-        negatives[#negatives + 1] = new_card
+    local polychromes = {}
+    if new_card and new_card.edition then
+        if new_card.edition.negative then
+            negatives[#negatives + 1] = new_card
+        elseif new_card.edition.polychrome and G.GAME.starting_params.partysleeve then
+            polychromes[#polychromes + 1] = new_card
+        end
     end
     if G.jokers and G.jokers.cards then
         for i = 1, #G.jokers.cards do
-            if G.jokers.cards[i].edition and G.jokers.cards[i].edition.negative then
-                negatives[#negatives + 1] = G.jokers.cards[i]
+            if G.jokers.cards[i].edition then
+                if G.jokers.cards[i].edition.negative then
+                    negatives[#negatives + 1] = G.jokers.cards[i]
+                elseif G.jokers.cards[i].edition.polychrome and G.GAME.starting_params.partysleeve then
+                    polychromes[#polychromes + 1] = G.jokers.cards[i]
+                end
             end
         end
     end
     pseudoshuffle(negatives, pseudoseed('partydeck!!!'))
-    if #negatives > 2 then
+    if #negatives - #polychromes > 2 then
         table.remove(negatives, #negatives)
         table.remove(negatives, #negatives)
         G.E_MANAGER:add_event(Event({
@@ -201,6 +257,21 @@ function Card:add_to_deck(from_debuff)
     return r_val
 end
 
+local ref_card_set_cost = Card.set_cost
+function Card:set_cost()
+    local r_val = ref_card_set_cost(self)
+    if G.GAME.starting_params.campfiredeck and self.ability.consumeable then
+        self.cost = 0
+    end
+    if G.GAME.starting_params.campfiresleeve and self.ability.set == 'Joker' then
+        self.cost = 0
+    end
+    if G.GAME.starting_params.loyaltysleeve and (G.GAME.starting_params.total_purchases + 1) % 3 == 0 then
+        self.cost = 0
+    end
+    return r_val
+end
+
 local freak_keys = {
     ["1"] = 'freaky_one',
     ["2"] = 'freaky_two',
@@ -213,6 +284,15 @@ local freak_keys = {
     ["9"] = 'freaky_nine',
     ["0"] = 'freaky_zero',
 }
+
+local ref_calculate_individual_effect = SMODS.calculate_individual_effect
+function SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+    if G.GAME.starting_params.midassleeve and key == 'chips' then
+        key = 'dollars'
+        amount = 1
+    end
+    return ref_calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+end
 
 local ref_set_edition = Card.set_edition
 function Card:set_edition(edition, immediate, silent, delay)
@@ -282,6 +362,20 @@ function Card:calculate_joker(context)
             }
         end
     end
+    return r_val
+end
+
+local ref_debuff_hand = Blind.debuff_hand
+function Blind:debuff_hand(cards, hand, handname, check)
+    if G.GAME.starting_params.vagabondsleeve and not check then
+        if G.GAME.hands[handname].level > 1 then
+            G.GAME.levels_lost_this_round = G.GAME.levels_lost_this_round + (G.GAME.hands[handname].level - 1)
+            LOG(tostring(G.GAME.levels_lost_this_round))
+            level_up_hand(self.children.animatedSprite, handname, nil, -(G.GAME.hands[handname].level - 1))
+            self:wiggle()
+        end
+    end
+    local r_val = ref_debuff_hand(self, cards, hand, handname, check)
     return r_val
 end
 
