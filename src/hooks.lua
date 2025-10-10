@@ -370,7 +370,6 @@ function Blind:debuff_hand(cards, hand, handname, check)
     if G.GAME.starting_params.vagabondsleeve and not check then
         if G.GAME.hands[handname].level > 1 then
             G.GAME.levels_lost_this_round = G.GAME.levels_lost_this_round + (G.GAME.hands[handname].level - 1)
-            LOG(tostring(G.GAME.levels_lost_this_round))
             level_up_hand(self.children.animatedSprite, handname, nil, -(G.GAME.hands[handname].level - 1))
             self:wiggle()
         end
