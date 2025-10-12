@@ -138,7 +138,7 @@ perkeo_deck = SMODS.Back { --Perkeo Deck
                 }))
             elseif (G.GAME.starting_params.consumables_used + 1) % 4 == 0 then
                 local eval = function(card) return (G.GAME.starting_params.consumables_used + 1) % 4 == 0 end
-                if G.consumables.cards then
+                if G.consumeables.cards then
                     for i = 1, #G.consumeables.cards do
                         -- if G.consumeables.cards[i].ability
                         --     and (G.consumeables.cards[i].ability.set == 'Tarot'
@@ -640,13 +640,13 @@ midas_deck = SMODS.Back { --Midas Deck
         if context.other_joker then
             if context.other_joker.edition and context.other_joker.edition.dollars then
                 ease_dollars(context.other_joker.edition.dollars)
-                card_eval_status_text(context.other_joker, 'dollars', nil, nil, nil,
+                card_eval_status_text(context.other_joker, 'dollars', context.other_joker.edition.dollars, nil, nil,
                     { message = "$" .. tostring(context.other_joker.edition.dollars), colour = G.C.MONEY })
             end
         elseif context.individual and context.cardarea == G.play then
             if context.other_card.edition and context.other_card.edition.dollars then
                 ease_dollars(context.other_card.edition.dollars)
-                card_eval_status_text(context.other_card, 'dollars', nil, nil, nil,
+                card_eval_status_text(context.other_card, 'dollars', context.other_card.edition.dollars, nil, nil,
                     { message = "$" .. tostring(context.other_card.edition.dollars), colour = G.C.MONEY })
             end
         end
