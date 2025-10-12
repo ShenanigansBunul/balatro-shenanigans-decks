@@ -287,7 +287,7 @@ local freak_keys = {
 
 local ref_calculate_individual_effect = SMODS.calculate_individual_effect
 function SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
-    if G.GAME.starting_params.midassleeve and key == 'chips' then
+    if G.GAME.starting_params.midassleeve and key == 'chips' and not effect.card then
         key = 'dollars'
         amount = 1
     end

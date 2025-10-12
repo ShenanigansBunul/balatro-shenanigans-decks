@@ -640,13 +640,13 @@ midas_deck = SMODS.Back { --Midas Deck
         if context.other_joker then
             if context.other_joker.edition and context.other_joker.edition.dollars then
                 ease_dollars(context.other_joker.edition.dollars)
-                card_eval_status_text(context.other_joker, 'jokers', nil, nil, nil,
+                card_eval_status_text(context.other_joker, 'dollars', nil, nil, nil,
                     { message = "$" .. tostring(context.other_joker.edition.dollars), colour = G.C.MONEY })
             end
         elseif context.individual and context.cardarea == G.play then
             if context.other_card.edition and context.other_card.edition.dollars then
                 ease_dollars(context.other_card.edition.dollars)
-                card_eval_status_text(context.other_card, 'jokers', nil, nil, nil,
+                card_eval_status_text(context.other_card, 'dollars', nil, nil, nil,
                     { message = "$" .. tostring(context.other_card.edition.dollars), colour = G.C.MONEY })
             end
         end
