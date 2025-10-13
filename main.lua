@@ -13,7 +13,11 @@ SMODS.Sound({ key = "temple", path = "temple.wav", pitch = 1, volume = .5 })
 SMODS.current_mod.optional_features = { retrigger_joker = true }
 shenanigans_mod_config = SMODS.current_mod.config
 
-local logger = require("debugplus.logger")
+local logger = nil
+
+--if DebugPlus then
+	logger = require("debugplus.logger")
+--end
 
 function LOG(t)
 	if logger ~= nil then

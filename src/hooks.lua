@@ -1,3 +1,28 @@
+local foil_ref = G.P_CENTERS['e_foil'].loc_vars --jank
+local holo_ref = G.P_CENTERS['e_holo'].loc_vars
+local polychrome_ref = G.P_CENTERS['e_polychrome'].loc_vars
+G.P_CENTERS['e_foil'].loc_vars = function(self, info_queue, card)
+    if G.GAME.starting_params.midasdeck then
+        return { key = "e_midas_foil", vars = { card.edition.dollars or 2 } }
+    else
+        return foil_ref(self, info_queue, card)
+    end
+end
+G.P_CENTERS['e_holo'].loc_vars = function(self, info_queue, card)
+    if G.GAME.starting_params.midasdeck then
+        return { key = "e_midas_holo", vars = { card.edition.dollars or 4 } }
+    else
+        return holo_ref(self, info_queue, card)
+    end
+end
+G.P_CENTERS['e_polychrome'].loc_vars = function(self, info_queue, card)
+    if G.GAME.starting_params.midasdeck then
+        return { key = "e_midas_polychrome", vars = { card.edition.dollars or 8 } }
+    else
+        return polychrome_ref(self, info_queue, card)
+    end
+end
+
 local ref_showman = SMODS.showman
 function SMODS.showman(card_key)
     if G.GAME.starting_params.showmandeck then

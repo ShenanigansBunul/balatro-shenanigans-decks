@@ -16,6 +16,26 @@ return {
         }
     },
     descriptions = {
+        ["Edition"] = {
+            e_midas_foil = {
+                name = "Foil",
+                text = {
+                    "Gain {C:money}$#1#{}"
+                }
+            },
+            e_midas_holo = {
+                name = "Holographic",
+                text = {
+                    "Gain {C:money}$#1#{}"
+                }
+            },
+            e_midas_polychrome = {
+                name = "Polychrome",
+                text = {
+                    "Gain {C:money}$#1#{}"
+                }
+            },
+        },
         ["Other"] = {
             ["freaky_zero"] = {
                 ["name"] = "Freaky 0",
