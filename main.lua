@@ -34,32 +34,7 @@ SMODS.current_mod.config_tab = function()
 				label = "Temple Deck & Temple Game Vouchers (WIP) (restart required)",
 				ref_table = shenanigans_mod_config,
 				ref_value = "temple_deck",
-			}),
-			create_toggle({
-				label = "Gift Deck (WIP, unfinished)",
-				ref_table = shenanigans_mod_config,
-				ref_value = "gift_deck",
-			}),
-			create_toggle({
-				label = "Campfire Deck (WIP, unfinished)",
-				ref_table = shenanigans_mod_config,
-				ref_value = "campfire_deck",
-			}),
-			create_toggle({
-				label = "Loyalty Deck (WIP, unfinished)",
-				ref_table = shenanigans_mod_config,
-				ref_value = "loyalty_deck",
-			}),
-			create_toggle({
-				label = "Vagabond Deck (WIP, unfinished)",
-				ref_table = shenanigans_mod_config,
-				ref_value = "vagabond_deck",
-			}),
-			create_toggle({
-				label = "Cloud 9 Deck (WIP, unfinished)",
-				ref_table = shenanigans_mod_config,
-				ref_value = "cloud9_deck",
-			}),
+			})
 		},
 	}
 end

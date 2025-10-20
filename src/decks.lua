@@ -281,7 +281,28 @@ hieroglyph_deck = SMODS.Back { --Hieroglyph Deck
         if CardSleeves and G.GAME.selected_sleeve == "sleeve_shen_hieroglyph" and G.GAME.selected_back_key.key == "b_shen_hieroglyphdeck" then
             m = 2
         end
-        ease_ante(-m)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'immediate',
+            func = function()
+                local ante_UI = G.hand_text_area.ante
+                local col = G.C.RED
+                G.GAME.round_resets.ante = G.GAME.round_resets.ante - m
+                ante_UI.config.object:update()
+                G.HUD:recalculate()
+                attention_text({
+                    text = '-' .. tostring(m),
+                    scale = 1,
+                    hold = 0.7,
+                    cover = ante_UI.parent,
+                    cover_colour = col,
+                    align = 'cm',
+                })
+                --Play a chip sound
+                play_sound('highlight2', 0.685, 0.2)
+                play_sound('generic1')
+                return true
+            end
+        }))
         G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
         G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - m
     end,
@@ -573,11 +594,7 @@ party_deck = SMODS.Back { --Party Deck
     apply = function(self, back)
         G.GAME.starting_params.partydeck = true
     end,
-    calculate = function(self, back, context)
-        if context.buying_card then
-            party_deck_check()
-        end
-    end
+    calculate = function(self, back, context) end
 }
 
 egg_deck = SMODS.Back { --Egg Deck
@@ -696,7 +713,7 @@ loyalty_deck = SMODS.Back { --Loyalty Deck
     calculate = function(self, back, context) end
 }
 
-vagabond_deck = SMODS.Back {     --Vagabond Deck (TODO)
+vagabond_deck = SMODS.Back { --Vagabond Deck (TODO)
     name = "Vagabond Deck",
     key = "vagabonddeck",
     order = 38,

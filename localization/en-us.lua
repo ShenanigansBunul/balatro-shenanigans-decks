@@ -519,18 +519,18 @@ return {
                 name = "Cloud 9 Sleeve",
                 text = {
                     [1] = "Win on {C:attention}Ante 9{}",
-                    [2] = "{C:attention}+1{} hand size after",
-                    [3] = "playing {C:attention}9{} hands",
+                    [2] = "Gain {C:attention}+1{} hand size after",
+                    [3] = "every {C:attention}9{} hands played",
                 },
             },
             sleeve_shen_party = {
                 name = "Party Sleeve",
                 text = {
-                    [1] = "{C:dark_edition}Negative{} {C:attention}Jokers{} are",
-                    [2] = "more common",
-                    [3] = "When you have over {C:attention}2{}",
-                    [4] = "destroy them randomly until",
-                    [5] = "you remain with {C:attention}2{}",
+                    "{C:dark_edition}Negative{} {C:attention}Jokers{} are more",
+                    "common and never {C:attention}Eternal{}",
+                    "When you have over {C:attention}2{}",
+                    "destroy them randomly until",
+                    "you remain with {C:attention}2{}"
                 },
             },
             sleeve_shen_party_alt = {
@@ -692,8 +692,8 @@ return {
             b_shen_partydeck = {
                 name = "Party Deck",
                 text = {
-                    "{C:dark_edition}Negative{} {C:attention}Jokers{} are",
-                    "more common",
+                    "{C:dark_edition}Negative{} {C:attention}Jokers{} are more",
+                    "common and never {C:attention}Eternal{}",
                     "When you have over {C:attention}2{}",
                     "destroy them randomly until",
                     "you remain with {C:attention}2{}"

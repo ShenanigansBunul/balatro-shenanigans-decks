@@ -220,7 +220,10 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
             if r_val.edition == nil then
                 if pseudorandom('partydeck_negative', 1, 6) == 6 then
                     r_val:set_edition({ negative = true }, true)
+                    r_val:set_eternal(false)
                 end
+            elseif r_val.edition.negative then
+                r_val:set_eternal(false)
             end
         end
     end
@@ -248,15 +251,20 @@ function party_deck_check(new_card)
             end
         end
     end
+    local limit = #polychromes + 2
     pseudoshuffle(negatives, pseudoseed('partydeck!!!'))
-    if #negatives - #polychromes > 2 then
-        table.remove(negatives, #negatives)
-        table.remove(negatives, #negatives)
+    local sliced = {}
+    for i = limit + 1, #negatives do
+        if negatives[i] then
+            table.insert(sliced, negatives[i])
+        end
+    end
+    if #sliced > 0 then
         G.E_MANAGER:add_event(Event({
             trigger = 'before',
             delay = 0.75,
             func = function()
-                for k, v in pairs(negatives) do
+                for k, v in pairs(sliced) do
                     v.getting_sliced = true
                     v:start_dissolve(nil)
                 end
