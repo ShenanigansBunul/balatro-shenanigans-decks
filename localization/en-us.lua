@@ -559,6 +559,286 @@ return {
                     [4] = "gain max {C:attention}Interest{}",
                 },
             },
+            sleeve_shen_coughingbaby = {
+                name = "Coughing Baby Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_coughingbaby_alt = {
+                name = "Coughing Baby Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_hydrogenbomb = {
+                name = "Hydrogen Bomb Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_hydrogenbomb_alt = {
+                name = "Hydrogen Bomb Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_satellite = {
+                name = "Satellite Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_satellite_alt = {
+                name = "Satellite Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_sedma = {
+                name = "Sedma Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_sedma_alt = {
+                name = "Sedma Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_grabber = {
+                name = "Grabber Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_grabber_alt = {
+                name = "Grabber Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_acrobat = {
+                name = "Acrobat Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_acrobat_alt = {
+                name = "Acrobat Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altred = {
+                name = "Alt. Red Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altred_alt = {
+                name = "Alt. Red Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altblue = {
+                name = "Alt. Blue Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altblue_alt = {
+                name = "Alt. Blue Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altgreen = {
+                name = "Alt. Green Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altgreen_alt = {
+                name = "Alt. Green Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altyellow = {
+                name = "Alt. Yellow Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altyellow_alt = {
+                name = "Alt. Yellow Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altblack = {
+                name = "Alt. Black Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altblack_alt = {
+                name = "Alt. Black Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altpurple = {
+                name = "Alt. Purple Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altpurple_alt = {
+                name = "Alt. Purple Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altgrey = {
+                name = "Alt. Grey Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altgrey_alt = {
+                name = "Alt. Grey Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altteal = {
+                name = "Alt. Teal Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_altteal_alt = {
+                name = "Alt. Teal Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_purple = {
+                name = "Purple Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_purple_alt = {
+                name = "Purple Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_grey = {
+                name = "Grey Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_grey_alt = {
+                name = "Grey Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_teal = {
+                name = "Teal Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_teal_alt = {
+                name = "Teal Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_treasure = {
+                name = "Treasure Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_treasure_alt = {
+                name = "Treasure Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_throwback = {
+                name = "Throwback Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_throwback_alt = {
+                name = "Throwback Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_steam = {
+                name = "Steam Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            sleeve_shen_steam_alt = {
+                name = "Steam Sleeve",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
         },
         Back = {
             b_shen_caniodeck = {
@@ -758,7 +1038,147 @@ return {
                     "end of round equal",
                     "to the difference"
                 }
-            }
+            },
+            b_shen_coughingbabydeck = {
+                name = "Coughing Baby Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_hydrogenbombdeck = {
+                name = "Hydrogen Bomb Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_satellitedeck = {
+                name = "Satellite Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_sedmadeck = {
+                name = "Sedma Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_grabberdeck = {
+                name = "Grabber Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_acrobatdeck = {
+                name = "Acrobat Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altreddeck = {
+                name = "Alt. Red Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altbluedeck = {
+                name = "Alt. Blue Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altgreendeck = {
+                name = "Alt. Green Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altyellowdeck = {
+                name = "Alt. Yellow Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altblackdeck = {
+                name = "Alt. Black Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altpurpledeck = {
+                name = "Alt. Purple Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_altgreydeck = {
+                name = "Alt. Grey Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_alttealdeck = {
+                name = "Alt. Teal Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_purpledeck = {
+                name = "Purple Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_greydeck = {
+                name = "Grey Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_tealdeck = {
+                name = "Teal Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_treasuredeck = {
+                name = "Treasure Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_throwbackdeck = {
+                name = "Throwback Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
+            b_shen_steamdeck = {
+                name = "Steam Deck",
+                text = {
+                    "description",
+                    "description!"
+                }
+            },
         }
     }
 }

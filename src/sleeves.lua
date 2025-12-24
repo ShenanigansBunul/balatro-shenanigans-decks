@@ -815,4 +815,246 @@ if CardSleeves then
         end,
         calculate = function(self, sleeve, context) end
     }
+    if logger ~= nil then
+        CardSleeves.Sleeve {
+            key = "coughingbaby",
+            name = "Coughing Baby Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_coughingbabydeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "hydrogenbomb",
+            name = "Hydrogen Bomb Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_hydrogenbombdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "satellite",
+            name = "Satellite Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_satellitedeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "sedma",
+            name = "Sedma Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_sedmadeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "grabber",
+            name = "Grabber Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_grabberdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "acrobat",
+            name = "Acrobat Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_acrobatdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altred",
+            name = "Alt. Red Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altreddeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altblue",
+            name = "Alt. Blue Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altbluedeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altgreen",
+            name = "Alt. Green Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altgreendeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altyellow",
+            name = "Alt. Yellow Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altyellowdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altblack",
+            name = "Alt. Black Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altblackdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altpurple",
+            name = "Alt. Purple Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altpurpledeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altgrey",
+            name = "Alt. Grey Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_altgreydeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "altteal",
+            name = "Alt. Teal Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_alttealdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "purple",
+            name = "Purple Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_purpledeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "grey",
+            name = "Grey Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_greydeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "teal",
+            name = "Teal Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_tealdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "treasure",
+            name = "Treasure Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_treasuredeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "throwback",
+            name = "Throwback Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 0, y = 0 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_throwbackdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+        CardSleeves.Sleeve {
+            key = "steam",
+            name = "Steam Sleeve",
+            atlas = "shenSleeves",
+            pos = { x = 5, y = 1 },
+            config = {},
+            unlocked = false,
+            unlock_condition = { deck = "b_shen_steamdeck", stake = "stake_black" },
+            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+            apply = function(self, sleeve) end,
+            calculate = function(self, sleeve, context) end
+        }
+    end
 end
