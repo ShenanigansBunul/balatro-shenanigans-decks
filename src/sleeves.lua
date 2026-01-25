@@ -12,7 +12,57 @@ local function card_sleeve_key(q)
     return key
 end
 
+local function in_sedma_deck(rank)
+    return not (rank == '2' or rank == '3' or rank == '4' or rank == '5' or rank == '6')
+end
+
+function get_random_hand(ignore, seed, allowhidden)
+    --From JenLib's get_random_hand
+    local chosen_hand
+    ignore = ignore or {}
+    seed = seed or "randomhand"
+    if type(ignore) ~= "table" then
+        ignore = { ignore }
+    end
+    while true do
+        chosen_hand = pseudorandom_element(G.handlist, pseudoseed(seed))
+        if G.GAME.hands[chosen_hand].visible or allowhidden then
+            local safe = true
+            for _, v in pairs(ignore) do
+                if v == chosen_hand then
+                    safe = false
+                end
+            end
+            if safe then
+                break
+            end
+        end
+    end
+    return chosen_hand
+end
+
 if CardSleeves then
+    local ref_carddsleeves_apply = CardSleeves.Sleeve.apply
+    function CardSleeves.Sleeve:apply(sleeve)
+        ref_carddsleeves_apply(self, sleeve)
+        if self.config.jokers then
+            if not self.config.consumables then --hack
+                delay(0.4)
+            end
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    for _, joker_key in pairs(self.config.jokers) do
+                        local card = SMODS.create_card { key = joker_key, area = G.jokers }
+                        card:add_to_deck()
+                        G.jokers:emplace(card)
+                        card:start_materialize()
+                    end
+                    return true
+                end
+            }))
+        end
+    end
+
     CardSleeves.Sleeve {
         key = "canio",
         name = "Canio Sleeve",
@@ -276,14 +326,14 @@ if CardSleeves then
         name = "Gros Michel Sleeve",
         atlas = "shenSleeves",
         pos = { x = 2, y = 1 },
-        config = {}, -- different so do it in apply
         unlocked = false,
         unlock_condition = { deck = "b_shen_grosmicheldeck", stake = "stake_black" },
         loc_vars = function(self)
-            self.config = { jokers = { "j_gros_michel" }, extra = { odds = 6 } }
             if unique_effect(self) then
                 G.GAME.starting_params.grosmichelsleeve = true
                 self.config = { joker_slot = 1 }
+            else
+                self.config = { jokers = { "j_gros_michel" }, extra = { odds = 6 } }
             end
             return { key = card_sleeve_key(self), vars = { localize { type = 'name_text', key = 'j_gros_michel', set = 'Joker' } } }
         end,
@@ -309,8 +359,8 @@ if CardSleeves then
             if unique_effect(self) then
 
             else
-                G.GAME.win_ante = 10 -- taken event from ease_ante because there's smod ease_ante override leads to a crash...
-                G.E_MANAGER:add_event(Event({
+                G.GAME.win_ante = 10 -- taken event from ease_ante because the smod ease_ante override leads to a crash...
+                G.E_MANAGER:add_event(Event({ -- maybe it doesn't anymore, todo check if it still crashes
                     trigger = 'immediate',
                     func = function()
                         local ante_UI = G.hand_text_area.ante
@@ -347,8 +397,8 @@ if CardSleeves then
     CardSleeves.Sleeve {
         key = "freaky",
         name = "Freaky Sleeve",
-        atlas = "shenSleeves",
-        pos = { x = 4, y = 1 },
+        atlas = "shenFreakySleeve",
+        pos = { x = 0, y = 0 },
         config = {},
         unlocked = false,
         unlock_condition = { deck = "b_shen_freakydeck", stake = "stake_black" },
@@ -815,246 +865,329 @@ if CardSleeves then
         end,
         calculate = function(self, sleeve, context) end
     }
-    if logger ~= nil then
-        CardSleeves.Sleeve {
-            key = "coughingbaby",
-            name = "Coughing Baby Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_coughingbabydeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "hydrogenbomb",
-            name = "Hydrogen Bomb Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_hydrogenbombdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "satellite",
-            name = "Satellite Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_satellitedeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "sedma",
-            name = "Sedma Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_sedmadeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "grabber",
-            name = "Grabber Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_grabberdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "acrobat",
-            name = "Acrobat Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_acrobatdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altred",
-            name = "Alt. Red Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altreddeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altblue",
-            name = "Alt. Blue Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altbluedeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altgreen",
-            name = "Alt. Green Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altgreendeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altyellow",
-            name = "Alt. Yellow Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altyellowdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altblack",
-            name = "Alt. Black Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altblackdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altpurple",
-            name = "Alt. Purple Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altpurpledeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altgrey",
-            name = "Alt. Grey Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_altgreydeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "altteal",
-            name = "Alt. Teal Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_alttealdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "purple",
-            name = "Purple Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_purpledeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "grey",
-            name = "Grey Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_greydeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "teal",
-            name = "Teal Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_tealdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "treasure",
-            name = "Treasure Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_treasuredeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "throwback",
-            name = "Throwback Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 0, y = 0 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_throwbackdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-        CardSleeves.Sleeve {
-            key = "steam",
-            name = "Steam Sleeve",
-            atlas = "shenSleeves",
-            pos = { x = 5, y = 1 },
-            config = {},
-            unlocked = false,
-            unlock_condition = { deck = "b_shen_steamdeck", stake = "stake_black" },
-            loc_vars = function(self) return { key = card_sleeve_key(self) } end,
-            apply = function(self, sleeve) end,
-            calculate = function(self, sleeve, context) end
-        }
-    end
+    CardSleeves.Sleeve {
+        key = "coughingbaby",
+        name = "Coughing Baby Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 9, y = 1 },
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_coughingbabydeck", stake = "stake_black" },
+        loc_vars = function(self)
+            if unique_effect(self) then
+                G.GAME.starting_params.coughingbabysleeve = true
+            else
+                self.config = { jokers = { "j_ice_cream" } }
+            end
+            return { key = card_sleeve_key(self), vars = { localize { type = 'name_text', key = 'j_ice_cream', set = 'Joker' } } }
+        end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+            else
+                self.config = { jokers = { "j_ice_cream" } }
+                G.E_MANAGER:add_event(Event({ -- above doesnt work. whatever
+                    func = function()
+                        local card = SMODS.create_card { key = "j_ice_cream", area = G.jokers }
+                        card:add_to_deck()
+                        G.jokers:emplace(card)
+                        card:start_materialize()
+                        return true
+                    end
+                }))
+                return coughingbaby_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context) end
+    }
+    CardSleeves.Sleeve {
+        key = "hydrogenbomb",
+        name = "Hydrogen Bomb Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 5, y = 2 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_hydrogenbombdeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.hydrogenbombsleeve = true
+            else
+                return hydrogenbomb_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+
+            else
+                return hydrogenbomb_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "satellite",
+        name = "Satellite Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 4, y = 1 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_satellitedeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve) end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+                if context.using_consumeable and context.consumeable.ability.set == 'Planet' then
+                    local satellite_hand = get_random_hand(nil, "satdeck" .. G.GAME.round_resets.ante) --Random poker hand
+                    update_hand_text({ sound = "button", volume = 0.7, pitch = 0.8, delay = 0.3 }, {
+                        handname = localize(satellite_hand, "poker_hands"),
+                        chips = G.GAME.hands[satellite_hand].chips,
+                        mult = G.GAME.hands[satellite_hand].mult,
+                        level = G.GAME.hands[satellite_hand].level,
+                    })
+                    level_up_hand(context.consumeable, satellite_hand, nil, 1)
+                    update_hand_text(
+                        { sound = "button", volume = 0.7, pitch = 1.1, delay = 0 },
+                        { mult = 0, chips = 0, handname = "", level = "" }
+                    )
+                end
+            else
+                return satellite_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "sedma",
+        name = "Sedma Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 7, y = 1 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_sedmadeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.sedmasleeve = true
+                if self.allowed_card_centers == nil then
+                    self.allowed_card_centers = {}
+                    self.incantation_allowed_card_centers = {}
+                    self.skip_trigger_effect = true
+                    for _, card_center in pairs(G.P_CARDS) do
+                        if in_sedma_deck(card_center.value) then
+                            self.allowed_card_centers[#self.allowed_card_centers + 1] = card_center
+
+                            local card_instance = Card(0, 0, 0, 0, card_center, G.P_CENTERS.c_base)
+                            if not SMODS.Ranks[card_instance.base.value].face and SMODS.Ranks[card_instance.base.value].card_key ~= "A" then
+                                self.incantation_allowed_card_centers[#self.incantation_allowed_card_centers + 1] =
+                                    card_center
+                            end
+                        end
+                    end
+                    self.get_rank_after_ace = function() return "7" end
+                    self.skip_trigger_effect = false
+                end
+            else
+                G.GAME.starting_params.sedmadeck = true
+            end
+        end,
+        calculate = function(self, sleeve, context) --copied code from triboulet sleeve
+            if unique_effect(self) then             --which is copied from cardsleeves abandoned sleeve
+                if sleeve.skip_trigger_effect then  --maybe make something mmore generic for removing ranks from decks??????
+                    return
+                end
+                if sleeve.allowed_card_centers == nil then
+                    sleeve:apply(sleeve)
+                end
+
+                -- handle Strength and Ouija
+                local card = context.card
+                local is_playing_card = card and (card.ability.set == "Default" or card.ability.set == "Enhanced") and
+                    card.config.card_key
+                if context.before_use_consumable and card then
+                    if card.ability.name == 'Strength' then
+                        sleeve.in_strength = true
+                    elseif card.ability.name == "Ouija" then
+                        sleeve.in_ouija = true
+                    elseif card.ability.name == "Incantation" then
+                        sleeve.in_incantation = true
+                    end
+                    if sleeve.in_strength and sleeve.in_ouija then
+                        print_warning("cannot be in both strength and ouija!")
+                    end
+                elseif context.after_use_consumable then
+                    sleeve.in_strength = nil
+                    sleeve.in_ouija = nil
+                    sleeve.ouija_rank = nil
+                elseif (context.create_card or context.modify_playing_card) and card and is_playing_card then
+                    if SMODS.Ranks[card.base.value] and not in_sedma_deck(SMODS.Ranks[card.base.value].shorthand) then
+                        local initial = G.GAME.blind == nil or context.create_card
+                        if sleeve.in_strength then
+                            local base_key = SMODS.Suits[card.base.suit].card_key ..
+                                "_" .. sleeve.get_rank_after_ace()
+                            card:set_base(G.P_CARDS[base_key], initial)
+                        elseif sleeve.in_ouija then
+                            if sleeve.ouija_rank == nil then
+                                local random_base = pseudorandom_element(sleeve.allowed_card_centers,
+                                    pseudoseed("sedmasleeve"))
+                                local card_instance = Card(0, 0, 0, 0, random_base, G.P_CENTERS.c_base)
+                                sleeve.ouija_rank = SMODS.Ranks[card_instance.base.value]
+                                card_instance:remove()
+                            end
+                            local base_key = SMODS.Suits[card.base.suit].card_key ..
+                                "_" .. sleeve.ouija_rank.card_key
+                            card:set_base(G.P_CARDS[base_key], initial)
+                        elseif sleeve.in_incantation then
+                            local random_base = pseudorandom_element(sleeve.incantation_allowed_card_centers,
+                                pseudoseed("sedmasleeve"))
+                            card:set_base(random_base, initial)
+                        else
+                            local random_base = pseudorandom_element(sleeve.allowed_card_centers,
+                                pseudoseed("sedmasleeve"))
+                            card:set_base(random_base, initial)
+                        end
+                    end
+                end
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "acrobat",
+        name = "Acrobat Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 6, y = 1 },
+        unlocked = false,
+        config = {},
+        unlock_condition = { deck = "b_shen_acrobatdeck", stake = "stake_black" },
+        loc_vars = function(self)
+            return { key = card_sleeve_key(self) }
+        end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.acrobatsleeve = true
+                G.GAME.modifiers.money_per_hand = 0
+            else
+                G.GAME.starting_params.acrobatdeck = true
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+
+            else
+                return acrobat_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "treasure",
+        name = "Treasure Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 6, y = 2 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_treasuredeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if not unique_effect(self) then
+                return treasure_deck.apply(self, sleeve)
+            else
+                G.GAME.starting_params.voucher_given = false
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+                if context.buying_card then
+                    if context.card.ability.set == "Voucher" and not G.GAME.starting_params.voucher_given then
+                        SMODS.add_voucher_to_shop()
+                        G.GAME.starting_params.voucher_given = true
+                    end
+                elseif context.round_eval and G.GAME.last_blind and G.GAME.last_blind.boss then
+                    G.GAME.starting_params.voucher_given = false
+                end
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "throwback",
+        name = "Throwback Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 8, y = 1 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_throwbackdeck", stake = "stake_black" },
+        loc_vars = function(self) return { key = card_sleeve_key(self) } end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+            else
+                return throwback_deck.apply(self, sleeve)
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if unique_effect(self) then
+                if context.skip_blind then
+                    if (G.GAME.skips % 3 == 0) then
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'immediate',
+                            func = function()
+                                local ante_UI = G.hand_text_area.ante
+                                local col = G.C.RED
+                                G.GAME.round_resets.ante = G.GAME.round_resets.ante - 1
+                                ante_UI.config.object:update()
+                                G.HUD:recalculate()
+                                attention_text({
+                                    text = '-1',
+                                    scale = 1,
+                                    hold = 0.7,
+                                    cover = ante_UI.parent,
+                                    cover_colour = col,
+                                    align = 'cm',
+                                })
+                                --Play a chip sound
+                                play_sound('highlight2', 0.685, 0.2)
+                                play_sound('generic1')
+                                return true
+                            end
+                        }))
+                        G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+                        G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - 1
+                        G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling * 1.25
+                    end
+                end
+            else
+                return throwback_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
+    CardSleeves.Sleeve {
+        key = "steam",
+        name = "Steam Sleeve",
+        atlas = "shenSleeves",
+        pos = { x = 5, y = 1 },
+        config = {},
+        unlocked = false,
+        unlock_condition = { deck = "b_shen_steamdeck", stake = "stake_black" },
+        loc_vars = function(self)
+            if unique_effect(self) then
+                return { key = card_sleeve_key(self), vars = { localize { type = 'name_text', key = 'v_clearance_sale', set = 'Voucher' }, localize { type = 'name_text', key = 'v_liquidation', set = 'Voucher' } } }
+            else
+                return { key = card_sleeve_key(self), vars = { localize { type = 'name_text', key = 'tag_coupon', set = 'Tag' } } }
+            end
+        end,
+        apply = function(self, sleeve)
+            if unique_effect(self) then
+                G.GAME.starting_params.steamsleeve = true
+                G.GAME.used_vouchers['v_clearance_sale'] = true
+                G.GAME.used_vouchers['v_liquidation'] = true
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 2
+                        Card.apply_to_run(nil, G.P_CENTERS['v_clearance_sale'])
+                        Card.apply_to_run(nil, G.P_CENTERS['v_liquidation'])
+                        return true
+                    end
+                }))
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            if not unique_effect(self) then
+                return steam_deck.calculate(self, sleeve, context)
+            end
+        end
+    }
 end

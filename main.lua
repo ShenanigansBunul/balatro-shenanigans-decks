@@ -2,6 +2,8 @@ SMODS.Atlas({ key = "shenDecks", path = "shenDecks.png", px = 71, py = 95, atlas
 SMODS.Atlas({ key = "shenDecks2x", path = "shenDecks2x.png", px = 142, py = 190, atlas_table = "ASSET_ATLAS" }):register()
 SMODS.Atlas({ key = "shenFreakyDeck", path = "shenFreakyDeck.png", px = 284, py = 380, atlas_table = "ASSET_ATLAS" })
 	:register()
+SMODS.Atlas({ key = "shenFreakySleeve", path = "shenFreakySleeve.png", px = 292, py = 380, atlas_table = "ASSET_ATLAS" })
+	:register()
 SMODS.Atlas({ key = "shenTempleGames", path = "shenTempleGames.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS" })
 	:register()
 SMODS.Atlas({ key = "shenSleeves", path = "shenSleeves.png", px = 73, py = 95, atlas_table = "ASSET_ATLAS" })
@@ -14,13 +16,13 @@ SMODS.Sound({ key = "temple", path = "temple.wav", pitch = 1, volume = .5 })
 SMODS.current_mod.optional_features = { retrigger_joker = true }
 shenanigans_mod_config = SMODS.current_mod.config
 
-logger = require("debugplus.logger")
+--[[logger = require("debugplus.logger")
 
 function LOG(t)
 	if logger ~= nil then
 		logger.log(t)
 	end
-end
+end]]
 
 SMODS.current_mod.config_tab = function()
 	return {

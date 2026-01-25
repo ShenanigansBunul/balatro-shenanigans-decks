@@ -140,10 +140,6 @@ perkeo_deck = SMODS.Back { --Perkeo Deck
                 local eval = function(card) return (G.GAME.starting_params.consumables_used + 1) % 4 == 0 end
                 if G.consumeables.cards then
                     for i = 1, #G.consumeables.cards do
-                        -- if G.consumeables.cards[i].ability
-                        --     and (G.consumeables.cards[i].ability.set == 'Tarot'
-                        --         or G.consumeables.cards[i].ability.set == 'Planet'
-                        --         or G.consumeables.cards[i].ability.set == 'Spectral') then
                         if G.consumeables.cards[i].ability.consumeable then
                             juice_card_until(G.consumeables.cards[i], eval, true)
                         end
@@ -151,10 +147,6 @@ perkeo_deck = SMODS.Back { --Perkeo Deck
                 end
                 if G.shop_jokers.cards then
                     for i = 1, #G.shop_jokers.cards do
-                        -- if G.shop_jokers.cards[i].ability
-                        --     and (G.shop_jokers.cards[i].ability.set == 'Tarot'
-                        --         or G.shop_jokers.cards[i].ability.set == 'Planet'
-                        --         or G.shop_jokers.cards[i].ability.set == 'Spectral') then
                         if G.consumeables.cards[i].ability.consumeable then
                             juice_card_until(G.shop_jokers.cards[i], eval, true)
                         end
@@ -713,7 +705,7 @@ loyalty_deck = SMODS.Back { --Loyalty Deck
     calculate = function(self, back, context) end
 }
 
-vagabond_deck = SMODS.Back { --Vagabond Deck (TODO)
+vagabond_deck = SMODS.Back { --Vagabond Deck
     name = "Vagabond Deck",
     key = "vagabonddeck",
     order = 38,
@@ -728,7 +720,7 @@ vagabond_deck = SMODS.Back { --Vagabond Deck (TODO)
     apply = function(self, back)
         G.GAME.starting_params.vagabonddeck = true
         G.GAME.starting_params.vagabonddeck_positive = true
-        G.GAME.bankrupt_at = G.GAME.bankrupt_at - 2147483647
+        G.GAME.bankrupt_at = G.GAME.bankrupt_at - 1e200
     end,
     calculate = function(self, back, context) end
 }
@@ -758,324 +750,228 @@ cloud9_deck = SMODS.Back {
     end
 }
 
-if logger ~= nil then
-    coughingbaby_deck = SMODS.Back {
-        name = "Coughing Baby Deck",
-        key = "coughingbabydeck",
-        order = 40,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 9, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+coughingbaby_deck = SMODS.Back {
+    name = "Coughing Baby Deck",
+    key = "coughingbabydeck",
+    order = 40,
+    unlocked = true,
+    discovered = true,
+    config = { jokers = { "j_ice_cream" } },
+    loc_vars = function(self, info_queue, center)
+        return { vars = { localize { type = 'name_text', key = 'j_ice_cream', set = 'Joker' } } }
+    end,
+    pos = { x = 9, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        local args = { level_up = -1, instant = true }
+        SMODS.upgrade_poker_hands(args)
+    end,
+    calculate = function(self, back, context) end
+}
 
-    hydrogenbomb_deck = SMODS.Back {
-        name = "Hydrogen Bomb Deck",
-        key = "hydrogenbombdeck",
-        order = 41,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 10, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+hydrogenbomb_deck = SMODS.Back {
+    name = "Hydrogen Bomb Deck",
+    key = "hydrogenbombdeck",
+    order = 41,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 10, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.hydrogenbombdeck = true
+        G.GAME.starting_params.hydrogenbombtriggers = 0
+    end,
+    calculate = function(self, back, context)
+        if context.stay_flipped and context.to_area == G.hand and
+            (SMODS.pseudorandom_probability(self, pseudoseed('hydrogenbombdeck'), 1, 6)
+                or (G.GAME.starting_params.hydrogenbombsleeve and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0)) then
+            return {
+                stay_flipped = true
+            }
+        elseif context.individual and context.cardarea == G.play then
+            if context.other_card then
+                if context.other_card.the_bomb then
+                    G.GAME.starting_params.hydrogenbombtriggers = G.GAME.starting_params.hydrogenbombtriggers + 1
+                    return {
+                        x_mult = 1 + (G.GAME.starting_params.hydrogenbombtriggers - 1) * .1
+                    }
+                end
+            end
+        elseif context.after then
+            for i = 1, #G.play.cards do
+                if G.play.cards[i].the_bomb then
+                    G.play.cards[i].the_bomb = nil
+                end
+            end
+        elseif context.modify_scoring_hand then
+            if context.other_card.the_bomb then
+                return {
+                    add_to_hand = true
+                }
+            end
+        end
+    end
+}
 
-    satellite_deck = SMODS.Back {
-        name = "Satellite Deck",
-        key = "satellitedeck",
-        order = 42,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 12, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+satellite_deck = SMODS.Back {
+    name = "Satellite Deck",
+    key = "satellitedeck",
+    order = 42,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 12, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back) end,
+    calculate = function(self, back, context)
+        if context.using_consumeable and context.consumeable.ability.set == 'Planet' then
+            if context.consumeable.edition and context.consumeable.edition.negative then
+                return
+            end
+            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+            G.E_MANAGER:add_event(Event({
+                func = (function()
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            local card = create_card('Planet', G.consumeables, nil, nil, nil, nil, nil,
+                                'satellitedeck')
+                            card:set_edition({ negative = true }, true)
+                            card:add_to_deck()
+                            G.consumeables:emplace(card)
+                            G.GAME.consumeable_buffer = 0
+                            return true
+                        end
+                    }))
+                    return true
+                end)
+            }))
+            return {
+                message = localize('k_plus_planet'),
+                colour = G.C.PURPLE,
+            }
+        end
+    end
+}
 
-    sedma_deck = SMODS.Back {
-        name = "Sedma Deck",
-        key = "sedmadeck",
-        order = 43,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 13, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+sedma_deck = SMODS.Back {
+    name = "Sedma Deck",
+    key = "sedmadeck",
+    order = 43,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 13, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.sedmadeck = true
+    end,
+    calculate = function(self, back, context) end
+}
 
-    grabber_deck = SMODS.Back {
-        name = "Grabber Deck",
-        key = "grabberdeck",
-        order = 44,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 14, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+acrobat_deck = SMODS.Back {
+    name = "Acrobat Deck",
+    key = "acrobatdeck",
+    order = 45,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 0, y = 2 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.acrobatdeck = true
+    end,
+    calculate = function(self, back, context)
+        if context.end_of_round and context.main_eval then
+            if G.GAME.chips > G.GAME.blind.chips then
+                local val = math.floor((G.GAME.chips / G.GAME.blind.chips - 1) / .4)
+                if not G.GAME.starting_params.acrobatsleeve then
+                    G.GAME.acrobat_deck_bonus = math.min(val, 10)
+                else
+                    G.GAME.acrobat_deck_bonus = val
+                end
+            end
+        end
+    end
+}
 
-    acrobat_deck = SMODS.Back {
-        name = "Acrobat Deck",
-        key = "acrobatdeck",
-        order = 45,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 0, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+treasure_deck = SMODS.Back {
+    name = "Treasure Deck",
+    key = "treasuredeck",
+    order = 57,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 8, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.treasuredeck = true
+    end,
+    calculate = function(self, back, context)
+    end
+}
 
-    altred_deck = SMODS.Back {
-        name = "Alt. Red Deck",
-        key = "altreddeck",
-        order = 46,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 1, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
+throwback_deck = SMODS.Back {
+    name = "Throwback Deck",
+    key = "throwbackdeck",
+    order = 58,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = {} }
+    end,
+    pos = { x = 11, y = 1 },
+    atlas = "shenDecks",
+    apply = function(self, back)
+        G.GAME.starting_params.throwbackdeck = true
+        G.GAME.starting_params.throwback_shop_available = true
+    end,
+    calculate = function(self, back, context)
+        if context.round_eval and G.GAME.last_blind and G.GAME.last_blind.boss then
+            G.GAME.starting_params.throwback_shop_available = true
+        end
+    end
+}
 
-    altblue_deck = SMODS.Back {
-        name = "Alt. Blue Deck",
-        key = "altbluedeck",
-        order = 47,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 2, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    altgreen_deck = SMODS.Back {
-        name = "Alt. Green Deck",
-        key = "altgreendeck",
-        order = 48,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 4, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    altyellow_deck = SMODS.Back {
-        name = "Alt. Yellow Deck",
-        key = "altyellowdeck",
-        order = 49,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 3, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    altblack_deck = SMODS.Back {
-        name = "Alt. Black Deck",
-        key = "altblackdeck",
-        order = 50,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 5, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    altpurple_deck = SMODS.Back {
-        name = "Alt. Purple Deck",
-        key = "altpurpledeck",
-        order = 51,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 7, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    altgrey_deck = SMODS.Back {
-        name = "Alt. Grey Deck",
-        key = "altgreydeck",
-        order = 52,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 8, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    altteal_deck = SMODS.Back {
-        name = "Alt. Teal Deck",
-        key = "alttealdeck",
-        order = 53,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 6, y = 2 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    purple_deck = SMODS.Back {
-        name = "Purple Deck",
-        key = "purpledeck",
-        order = 54,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 7, y = 3 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    grey_deck = SMODS.Back {
-        name = "Grey Deck",
-        key = "greydeck",
-        order = 55,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 8, y = 3 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    teal_deck = SMODS.Back {
-        name = "Teal Deck",
-        key = "tealdeck",
-        order = 56,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 6, y = 3 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    treasure_deck = SMODS.Back {
-        name = "Treasure Deck",
-        key = "treasuredeck",
-        order = 57,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 8, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    throwback_deck = SMODS.Back {
-        name = "Throwback Deck",
-        key = "throwbackdeck",
-        order = 58,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 11, y = 1 },
-        atlas = "shenDecks",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-
-    steam_deck = SMODS.Back {
-        name = "Steam Deck",
-        key = "steamdeck",
-        order = 59,
-        unlocked = true,
-        discovered = true,
-        config = {},
-        loc_vars = function(self, info_queue, center)
-            return { vars = {} }
-        end,
-        pos = { x = 0, y = 0 },
-        atlas = "shenDecks2x",
-        apply = function(self, back) end,
-        calculate = function(self, back, context) end
-    }
-end
+steam_deck = SMODS.Back {
+    name = "Steam Deck",
+    key = "steamdeck",
+    order = 59,
+    unlocked = true,
+    discovered = true,
+    config = {},
+    loc_vars = function(self, info_queue, center)
+        return { vars = { localize { type = 'name_text', key = 'tag_coupon', set = 'Tag' } } }
+    end,
+    pos = { x = 0, y = 0 },
+    atlas = "shenDecks2x",
+    apply = function(self, back) end,
+    calculate = function(self, back, context)
+        if context.round_eval and G.GAME.last_blind and G.GAME.last_blind.boss then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    add_tag(Tag('tag_coupon'))
+                    play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                    play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                    return true
+                end
+            }))
+        end
+    end
+}

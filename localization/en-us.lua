@@ -562,64 +562,67 @@ return {
             sleeve_shen_coughingbaby = {
                 name = "Coughing Baby Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Start with {C:blue,T:j_ice_cream}#1#{}",
+                    "All {C:attention}poker hands{} start",
+                    "at {C:attention}level 0{}"
                 }
             },
             sleeve_shen_coughingbaby_alt = {
                 name = "Coughing Baby Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Second {C:attention}Joker{}",
+                    "is disabled"
                 }
             },
             sleeve_shen_hydrogenbomb = {
                 name = "Hydrogen Bomb Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "{C:green}1 in 6{} cards get",
+                    "drawn face down",
+                    "Face down cards always count",
+                    "while scoring, give {X:mult,C:white}X1{} Mult",
+                    "and increase this by {X:mult,C:white}X0.1{} Mult",
                 }
             },
             sleeve_shen_hydrogenbomb_alt = {
                 name = "Hydrogen Bomb Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "First hand is drawn",
+                    "face down"
                 }
             },
             sleeve_shen_satellite = {
                 name = "Satellite Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Gain a random {C:dark}Negative{}",
+                    "{C:blue}Planet{} card when a",
+                    "non-{C:dark}Negative{} {C:blue}Planet{} card",
+                    "is used"
                 }
             },
             sleeve_shen_satellite_alt = {
                 name = "Satellite Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Upgrade level of a",
+                    "random {C:attention}poker hand{}",
+                    "when a {C:blue}Planet{} card",
+                    "is used"
                 }
             },
             sleeve_shen_sedma = {
                 name = "Sedma Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Start run without",
+                    "cards {C:attention}2{} through {C:attention}6{}",
+                    "in your deck"
                 }
             },
             sleeve_shen_sedma_alt = {
                 name = "Sedma Sleeve",
                 text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_grabber = {
-                name = "Grabber Sleeve",
-                text = {
-                    "description",
-                    "description!"
+                    "Cards {C:attention}2{} through {C:attention}6{}",
+                    "will no longer",
+                    "appear during the run"
                 }
             },
             sleeve_shen_grabber_alt = {
@@ -632,211 +635,69 @@ return {
             sleeve_shen_acrobat = {
                 name = "Acrobat Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Earn {C:money}$1{} for each {C:attention}40%{}",
+                    "of required chips scored",
+                    "over required chips",
+                    "{C:inactive}(up to $10){}"
                 }
             },
             sleeve_shen_acrobat_alt = {
                 name = "Acrobat Sleeve",
                 text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altred = {
-                name = "Alt. Red Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altred_alt = {
-                name = "Alt. Red Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altblue = {
-                name = "Alt. Blue Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altblue_alt = {
-                name = "Alt. Blue Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altgreen = {
-                name = "Alt. Green Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altgreen_alt = {
-                name = "Alt. Green Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altyellow = {
-                name = "Alt. Yellow Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altyellow_alt = {
-                name = "Alt. Yellow Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altblack = {
-                name = "Alt. Black Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altblack_alt = {
-                name = "Alt. Black Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altpurple = {
-                name = "Alt. Purple Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altpurple_alt = {
-                name = "Alt. Purple Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altgrey = {
-                name = "Alt. Grey Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altgrey_alt = {
-                name = "Alt. Grey Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altteal = {
-                name = "Alt. Teal Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_altteal_alt = {
-                name = "Alt. Teal Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_purple = {
-                name = "Purple Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_purple_alt = {
-                name = "Purple Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_grey = {
-                name = "Grey Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_grey_alt = {
-                name = "Grey Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_teal = {
-                name = "Teal Sleeve",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            sleeve_shen_teal_alt = {
-                name = "Teal Sleeve",
-                text = {
-                    "description",
-                    "description!"
+                    "The {C:attention}Acrobat Deck{} has",
+                    "{C:dark_edition}NO{} money cap",
+                    "Earn no money",
+                    "per remaining {C:blue}Hand",
                 }
             },
             sleeve_shen_treasure = {
                 name = "Treasure Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "When you purchase a card",
+                    "add a card to the shop"
                 }
             },
             sleeve_shen_treasure_alt = {
                 name = "Treasure Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "When you purchase a {C:attention}Voucher{}",
+                    "add a {C:attention}Voucher{} to the shop",
+                    "{C:inactive}(once per Ante){}"
                 }
             },
             sleeve_shen_throwback = {
                 name = "Throwback Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Enter the {C:attention}shop{}",
+                    "when skipping a {C:attention}Blind{}",
+                    "{C:inactive}(once per Ante){}"
                 }
             },
             sleeve_shen_throwback_alt = {
                 name = "Throwback Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "{C:attention}-1{} Ante and",
+                    "{C:red}X1.25{} blind size",
+                    "for each 3 {C:attention}Blinds{}",
+                    "skipped this run"
                 }
             },
             sleeve_shen_steam = {
                 name = "Steam Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "After defeating each",
+                    "{C:attention}Boss Blind{}, gain a",
+                    "{C:attention,T:tag_coupon}#1#{}"
                 }
             },
             sleeve_shen_steam_alt = {
                 name = "Steam Sleeve",
                 text = {
-                    "description",
-                    "description!"
+                    "Start run with",
+                    "{C:money,T:v_clearance_sale}#1#{}",
+                    "and {C:attention,T:v_liquidation}#2#{}",
+                    "Rerolls are {C:attention}50%{} off",
+                    "{C:inactive}(rounded up){}"
                 }
             },
         },
@@ -1042,141 +903,68 @@ return {
             b_shen_coughingbabydeck = {
                 name = "Coughing Baby Deck",
                 text = {
-                    "description",
-                    "description!"
+                    "Start with {C:blue,T:j_ice_cream}#1#{}",
+                    "All hands start",
+                    "at {c:attention}Level 0{}"
                 }
             },
             b_shen_hydrogenbombdeck = {
                 name = "Hydrogen Bomb Deck",
                 text = {
-                    "description",
-                    "description!"
+                    "{C:green}1 in 6{} cards get",
+                    "drawn face down",
+                    "Face down cards always count",
+                    "while scoring, give {X:mult,C:white}X1{} Mult",
+                    "and increase this by {X:mult,C:white}X0.1{} Mult",
                 }
             },
             b_shen_satellitedeck = {
                 name = "Satellite Deck",
                 text = {
-                    "description",
-                    "description!"
+                    "Gain a random {C:dark}Negative{}",
+                    "{C:blue}Planet{} card when a",
+                    "non-{C:dark}Negative{} {C:blue}Planet{} card",
+                    "is used"
                 }
             },
             b_shen_sedmadeck = {
                 name = "Sedma Deck",
                 text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_grabberdeck = {
-                name = "Grabber Deck",
-                text = {
-                    "description",
-                    "description!"
+                    "Start run without",
+                    "cards {C:attention}2{} through {C:attention}6{}",
+                    "in your deck"
                 }
             },
             b_shen_acrobatdeck = {
                 name = "Acrobat Deck",
                 text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altreddeck = {
-                name = "Alt. Red Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altbluedeck = {
-                name = "Alt. Blue Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altgreendeck = {
-                name = "Alt. Green Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altyellowdeck = {
-                name = "Alt. Yellow Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altblackdeck = {
-                name = "Alt. Black Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altpurpledeck = {
-                name = "Alt. Purple Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_altgreydeck = {
-                name = "Alt. Grey Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_alttealdeck = {
-                name = "Alt. Teal Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_purpledeck = {
-                name = "Purple Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_greydeck = {
-                name = "Grey Deck",
-                text = {
-                    "description",
-                    "description!"
-                }
-            },
-            b_shen_tealdeck = {
-                name = "Teal Deck",
-                text = {
-                    "description",
-                    "description!"
+                    "Earn {C:money}$1{} for each {C:attention}40%{}",
+                    "of required chips scored",
+                    "over required chips",
+                    "{C:inactive}(up to $10){}"
                 }
             },
             b_shen_treasuredeck = {
                 name = "Treasure Deck",
                 text = {
-                    "description",
-                    "description!"
+                    "When you purchase a card",
+                    "add a card to the shop"
                 }
             },
             b_shen_throwbackdeck = {
                 name = "Throwback Deck",
                 text = {
-                    "description",
-                    "description!"
+                    "Enter the {C:attention}shop{}",
+                    "when skipping a {C:attention}Blind{}",
+                    "{C:inactive}(once per Ante){}"
                 }
             },
             b_shen_steamdeck = {
                 name = "Steam Deck",
                 text = {
-                    "description",
-                    "description!"
+                    "After defeating each",
+                    "{C:attention}Boss Blind{}, gain a",
+                    "{C:attention,T:tag_coupon}#1#{}"
                 }
             },
         }

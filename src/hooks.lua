@@ -1,4 +1,4 @@
-local foil_ref = G.P_CENTERS['e_foil'].loc_vars --jank
+local foil_ref = G.P_CENTERS['e_foil'].loc_vars --this is extremely silly
 local holo_ref = G.P_CENTERS['e_holo'].loc_vars
 local polychrome_ref = G.P_CENTERS['e_polychrome'].loc_vars
 G.P_CENTERS['e_foil'].loc_vars = function(self, info_queue, card)
@@ -52,6 +52,26 @@ function G.FUNCS.discard_cards_from_highlighted(e, hook)
     return r_val
 end
 
+local ref_buy_from_shop = G.FUNCS.buy_from_shop
+function G.FUNCS.buy_from_shop(e)
+    local b = ref_buy_from_shop(e)
+    if G.GAME.starting_params.treasuredeck and b ~= false then
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.11,
+            func = function()
+                local new_shop_card = create_card_for_shop(G.shop_jokers)
+                G.shop_jokers:emplace(new_shop_card)
+                new_shop_card:juice_up()
+                G.shop_jokers.T.w = math.min(#G.shop_jokers.cards * 1.02 * G.CARD_W, 4.08 * G.CARD_W)
+                G.shop:recalculate()
+                return true
+            end
+        }))
+    end
+    return b
+end
+
 local ref_play_cards_from_highlighted = G.FUNCS.play_cards_from_highlighted
 function G.FUNCS.play_cards_from_highlighted(e)
     if (G.GAME.hands_played + 1) % 9 == 0 and G.GAME.starting_params.cloud9sleeve then
@@ -82,12 +102,12 @@ function ease_dollars(mod, instant)
         if G.GAME.dollars + mod >= 0 then
             if not G.GAME.starting_params.vagabonddeck_positive then
                 G.GAME.starting_params.vagabonddeck_positive = true
-                G.GAME.bankrupt_at = G.GAME.bankrupt_at - 2147483647
+                G.GAME.bankrupt_at = G.GAME.bankrupt_at - 1e200
             end
         else
             if G.GAME.starting_params.vagabonddeck_positive then
                 G.GAME.starting_params.vagabonddeck_positive = false
-                G.GAME.bankrupt_at = G.GAME.bankrupt_at + 2147483647
+                G.GAME.bankrupt_at = G.GAME.bankrupt_at + 1e200
             end
         end
     end
@@ -99,7 +119,7 @@ local ref_use_card = G.FUNCS.use_card
 G.FUNCS.use_card = function(e, mute, nosave)
     if G.GAME.starting_params.campfiredeck and pseudorandom('campfiredeck', 1, 4) == 4 then
         local card = e.config.ref_table
-        if --[[card.ability.set == 'Tarot' or card.ability.set == 'Planet' or card.ability.set == 'Spectral']] card.ability.consumeable then
+        if card.ability.consumeable then
             local prev_state = G.STATE
             if (prev_state == G.STATES.TAROT_PACK or prev_state == G.STATES.PLANET_PACK or
                     prev_state == G.STATES.SPECTRAL_PACK or prev_state == G.STATES.STANDARD_PACK or
@@ -142,6 +162,11 @@ function calculate_reroll_cost(skip_increment)
             G.GAME.current_round.reroll_cost = 0
         end
     end
+    if G.GAME.starting_params.steamsleeve then
+        if G.GAME.current_round.reroll_cost > 0 then
+            G.GAME.current_round.reroll_cost = math.ceil(G.GAME.current_round.reroll_cost / 2)
+        end
+    end
     return r_val
 end
 
@@ -156,6 +181,11 @@ end
 
 local ref_emplace = CardArea.emplace
 function CardArea.emplace(self, card, location, stay_flipped)
+    if G.GAME.starting_params.hydrogenbombdeck and self == G.play then
+        if (card.facing == "back") then
+            card.the_bomb = true
+        end
+    end
     if G.GAME.starting_params.giftdeck and self == G.shop_jokers and card.ability.set == 'Joker' then
         local p_key = 'p_buffoon_normal_1'
         if card:is_rarity("Common") then
@@ -192,8 +222,120 @@ function CardArea.emplace(self, card, location, stay_flipped)
     ref_emplace(self, card, location, stay_flipped)
 end
 
+local ref_card_open = Card.open
+function Card:open()
+    if G.GAME.starting_params.showmansleeve then
+        G.GAME.starting_params.first_card_in_pack = true
+    end
+    return ref_card_open(self)
+end
+
+SMODS.Booster:take_ownership_by_kind('Standard', {
+    create_card = function(self, card, i)
+        if not G.GAME.starting_params.first_card_in_pack then
+            local _edition = poll_edition('standard_edition' .. G.GAME.round_resets.ante, 2, true) -- default behavior
+            local _seal = SMODS.poll_seal({ mod = 10 })
+            return {
+                set = (pseudorandom(pseudoseed('stdset' .. G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or
+                    "Base",
+                edition = _edition,
+                seal = _seal,
+                area = G.pack_cards,
+                skip_materialize = true,
+                soulable = true,
+                key_append =
+                "sta"
+            }
+        else
+            return {
+                set = "Base",
+                area = G.pack_cards,
+                skip_materialize = true,
+                soulable = true,
+                key_append =
+                "sta"
+            }       --don't get random seal/edition when copying for the showmman sleeve
+        end
+    end,
+}, true)
+
+local ref_skip_blind = G.FUNCS.skip_blind
+function G.FUNCS.skip_blind(e)
+    if G.GAME.starting_params.throwbackdeck then --if done in skip_blind context packs bug out. it works here i'll leave it here haha
+        if G.GAME.starting_params.throwback_shop_available then
+            G.GAME.starting_params.throwback_shop_available = false
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                delay = 0.2,
+                func = function()
+                    G.blind_prompt_box.alignment.offset.y = -10
+                    G.blind_select.alignment.offset.y = 40
+                    G.blind_select.alignment.offset.x = 0
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({     -- from G.FUNCS.cash_out
+                trigger = 'immediate',
+                func = function()
+                    if G.round_eval then
+                        G.round_eval:remove()
+                        G.round_eval = nil
+                    end
+                    G.GAME.current_round.jokers_purchased = 0
+                    G.GAME.current_round.discards_left = math.max(0,
+                        G.GAME.round_resets.discards + G.GAME.round_bonus.discards)
+                    G.GAME.current_round.hands_left = (math.max(1, G.GAME.round_resets.hands + G.GAME.round_bonus.next_hands))
+                    G.STATE = G.STATES.SHOP
+                    G.GAME.shop_free = nil
+                    G.GAME.shop_d6ed = nil
+
+                    G.blind_select:remove() -- from somewhere else
+                    G.blind_prompt_box:remove()
+                    G.blind_select = nil
+
+                    G.STATE_COMPLETE = false
+                    return true
+                end
+            }))
+        end
+    end
+    return ref_skip_blind(e)
+end
+
 local ref_create_card = create_card
 function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+    if G.GAME.starting_params.showmansleeve and area == G.pack_cards then
+        if G.GAME.starting_params.first_card_in_pack then
+            G.GAME.starting_params.first_card_in_pack = false
+            local options = {}
+            for q = 1, #G.jokers.cards do
+                if G.jokers.cards[q].ability.set == _type then
+                    table.insert(options, G.jokers.cards[q])
+                end
+            end
+            for q = 1, #G.consumeables.cards do
+                if G.consumeables.cards[q].ability.set == _type then
+                    table.insert(options, G.consumeables.cards[q])
+                end
+            end
+            if _type == "Default" or _type == "Enhanced" or _type == "Base" then
+                for q = 1, #G.playing_cards do
+                    table.insert(options, G.playing_cards[q])
+                end
+            end
+
+            if #options > 0 then
+                local f_created = pseudorandom_element(options, pseudoseed('showmansleeve'))
+                local card
+                if f_created.ability.set == "Default" or f_created.ability.set == "Enhanced" or f_created.ability.set == "Base" then
+                    card = copy_card(f_created, nil, nil, G.playing_card, nil)
+                else
+                    card = copy_card(f_created, nil, nil, nil, nil)
+                end
+                return card
+            end
+        end
+    end
     local r_val = ref_create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
     if G.GAME.starting_params.freakydeck then
         if _type == "Joker" then
@@ -396,6 +538,20 @@ function Card:calculate_joker(context)
         end
     end
     return r_val
+end
+
+local ref_update = Card.update
+function Card:update(dt)
+    if G.GAME.starting_params.coughingbabysleeve == true then
+        if G.jokers and #G.jokers.cards > 1 and self == G.jokers.cards[2] then
+            if G.GAME.last_baby_debuff and G.GAME.last_baby_debuff ~= self then
+                SMODS.debuff_card(G.GAME.last_baby_debuff, false, "baby")
+            end
+            G.GAME.last_baby_debuff = self
+            SMODS.debuff_card(self, true, "baby")
+        end
+    end
+    return ref_update(self, dt)
 end
 
 local ref_debuff_hand = Blind.debuff_hand

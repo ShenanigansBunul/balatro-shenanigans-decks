@@ -44,63 +44,6 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = "card.lua"
-pattern = '''pack_cards[i] = card'''
-position = "at"
-payload = '''if G.GAME.starting_params.showmansleeve and showmanned then
-    pack_cards[i+1] = card -- this is so hacky lmao
-else
-    pack_cards[i] = card -- todo better way to replace 1st card in pack??
-end'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "card.lua"
-pattern = '''            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 1.3*math.sqrt(G.SETTINGS.GAMESPEED), blockable = false, blocking = false, func = function()
-                local _size = self.ability.extra'''
-position = "after"
-payload = '''
-local showmanned = false
-if G.GAME.starting_params.showmansleeve then
-    local mappings = {{"Arcana", "Tarot"},
-     {"Celestial", "Planet"},
-    {"Spectral", "Spectral"},
-    {"Buffoon", "Joker"}}
-    local found_mapping = nil
-    local f_key = nil
-    for y = 1, #mappings do
-        if self.ability.name:find(mappings[y][1]) then
-            found_mapping = mappings[y]
-            local options = {}
-            for q = 1, #G.jokers.cards do
-                if G.jokers.cards[q].ability.set == mappings[y][2] then
-                    table.insert(options, G.jokers.cards[q].config.center.key)
-                end
-            end
-            for q = 1, #G.consumeables do
-                if G.consumeables[q].ability.set == mappings[y][2] then
-                    table.insert(options, G.consumeables[q].config.center.key)
-                end
-            end
-            if #options > 0 then
-                f_key = pseudorandom_element(options, pseudoseed('showmansleeve'))
-                local card = create_card(found_mapping[2], G.pack_cards, nil, nil, true, true, f_key, 'showman_sleeve')
-                card.T.x = self.T.x
-                card.T.y = self.T.y
-                card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)
-                pack_cards[#pack_cards+1] = card
-                _size = _size - 1
-                showmanned = true
-            end
-        end
-    end
-end
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
 target = "functions/button_callbacks.lua"
 pattern = '''calculate_reroll_cost(final_free)'''
 position = "after"
@@ -120,6 +63,36 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = "card.lua"
+pattern = '''elseif self.ability.name:find('Standard') then'''
+position = "at"
+payload = '''
+elseif self.ability.name:find('Standard') and G.GAME.starting_params.first_card_in_pack then --smods doesn't seem to get here anyway, this toml patch might be useless
+    card = create_card((pseudorandom(pseudoseed('stdset'..G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or "Base", G.pack_cards, nil, nil, nil, true, nil, 'sta')
+elseif self.ability.name:find('Standard') then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''if keep then card_protos[#card_protos+1] = {s=_s,r=_r,e=_e,d=_d,g=_g} end'''
+position = "before"
+payload = '''
+if G.GAME.starting_params.sedmadeck then
+    local removies = {'2', '3', '4', '5', '6'}
+    for kk, vv in pairs(removies) do
+        if vv == v.value then
+            keep = false
+            break
+        end
+    end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
 target = "functions/state_events.lua"
 pattern = '''for _, area in ipairs(SMODS.get_card_areas('jokers')) do
             for _, _card in ipairs(area.cards) do
@@ -133,7 +106,12 @@ if G.GAME.starting_params.cloud9deck and G.GAME.starting_params.hand_delta ~= 0 
     pitch = pitch + 0.06
     dollars = dollars + G.GAME.starting_params.hand_delta
 end
-if G.GAME.starting_params.vagabonddeck then
+if G.GAME.starting_params.acrobatdeck and G.GAME.acrobat_deck_bonus ~= 0 then
+    add_round_eval_row({dollars = G.GAME.acrobat_deck_bonus, bonus = true, name='custom', number = G.GAME.acrobat_deck_bonus, text = "Acrobat Deck", pitch = pitch})
+    pitch = pitch + 0.06
+    dollars = dollars + G.GAME.acrobat_deck_bonus
+end
+if G.GAME.starting_params.vagabondsleeve then
     local dolla = G.GAME.levels_lost_this_round * 3
     if G.GAME.dollars < 0 and not G.GAME.modifiers.no_interest then
         dolla = dolla + G.GAME.interest_amount*(G.GAME.interest_cap/5)
